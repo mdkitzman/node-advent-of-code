@@ -1,0 +1,29 @@
+{
+  "name": "node-advent-of-code",
+  "version": "1.0.0",
+  "description": "Advent of code - https://adventofcode.com/",
+  "main": "index.ts",
+  "scripts": {
+    "execute": "ts-node",
+    "init-day": "ts-node src/init-day.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mike Kitzman",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@types/commander": "2.12.2",
+    "@types/lodash": "^4.14.176",
+    "@types/node": "^14.14.7",
+    "commander": "8.3.0",
+    "es-iter": "1.1.2",
+    "graphology": "0.22.1",
+    "graphology-traversal": "0.2.2",
+    "graphology-types": "0.21.1",
+    "infix-to-postfix": "0.0.3",
+    "lodash": "4.17.21",
+    "nearley": "2.20.1",
+    "rpn": "1.0.4",
+    "ts-node": "10.4.0",
+    "typescript": "^4.4.4"
+  }
+}
