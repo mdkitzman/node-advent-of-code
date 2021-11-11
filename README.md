@@ -29,7 +29,7 @@ npm run init-day -- -d <day> -y [year]
 The `year` parameter will default to the current year, but the `day` parameter is required.
 
 ```
-npm run init-day -- --d 1 -y 2019
+npm run init-day -- -d 1 -y 2019
 ```
 
 Will create a new directory in `./src/2019/day-1`.  In that directory will be an `index.ts` file and a `README.md` file.
