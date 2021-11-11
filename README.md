@@ -1,4 +1,4 @@
-# node-advent-of-
+# node-advent-of-code
 
 Node project containing problems for several years of the [Advent of Code](https://adventofcode.com/).
 
