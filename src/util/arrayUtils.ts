@@ -8,3 +8,4 @@ export const max = (prev: number, cur: number) => Math.max(prev, cur)
 export const min = (prev: number, cur: number) => Math.min(prev, cur)
 
 export const toCharCodes = (input:string):number[] => input.split('').map(c => c.charCodeAt(0));
+export const chunk = (arr: any[], n: number) => arr.length ? [arr.slice(0, n), ...chunk(arr.slice(n), n)] : [];
