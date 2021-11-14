@@ -12,13 +12,7 @@ const main = async () => {
 };
 
 class Point {
-  readonly x: number;
-  readonly y: number;
-
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
+  constructor(readonly x: number, readonly y: number) {}
 
   distanceTo(p: Point): number {
     return Math.sqrt((Math.pow(this.x - p.x, 2) + Math.pow(this.y - p.y, 2)));
@@ -27,7 +21,7 @@ class Point {
 
 function doPart1(wire1: Point[], wire2: Point[], intersections: Point[]) {
   const shortestDistance = intersections
-    .map(point => Math.abs(point.x) + Math.abs(point.y))
+    .map(point => Math.abs(point.x) + Math.abs(point.y)) // Calculating the manhattan distance between 0,0 and x,y = abs(x) + abs(y)
     .filter(len => len > 0)
     .reduce(min);
   
@@ -110,14 +104,19 @@ function computeH(a: Point, b: Point, c: Point, d: Point): number {
   return ((a.x - c.x) * p.x + (a.y - c.y) * p.y) / intersection;
 }
 
+const between0and1 = isBetween.bind(null, 0, 1);
+
 function computeIntersection(a:Point, b:Point, c:Point, d:Point): Point | undefined {
   const h1 = computeH(a, b, c, d);
   const h2 = computeH(c, d, a, b);
+
   const isParallel = isNaN(h1) || isNaN(h2);
-  const intersect = h1 >= 0 && h1 <= 1 && h2 >= 0 && h2 <= 1;
-  if (isParallel || !intersect)
+  if (isParallel)
     return;
-  
+
+  const intersect = between0and1(h1) && between0and1(h2);
+  if (!intersect)
+    return;
   const f = {x: d.x-c.x, y: d.y-c.y }
   return new Point(c.x + f.x * h1, c.y + f.y * h1);
 }
