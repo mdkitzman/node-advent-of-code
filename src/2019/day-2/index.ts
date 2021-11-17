@@ -1,26 +1,6 @@
 import fs from 'fs';
 import Iter from 'es-iter';
-
-const execute = (memory:number[], noun:number, verb:number):number => {
-  memory[1] = noun;
-  memory[2] = verb;
-
-  for (let opIdx = 0; memory[opIdx] != 99; opIdx += 4) {
-    const operation = memory[opIdx];
-    switch(operation) {
-      case 1:
-        memory[memory[opIdx+3]] = memory[memory[opIdx+1]] + memory[memory[opIdx+2]];
-        break;
-      case 2:
-        memory[memory[opIdx+3]] = memory[memory[opIdx+1]] * memory[memory[opIdx+2]];
-        break;
-      case 99:
-      default:
-        break;
-    }
-  }
-  return memory[0];
-};
+import { execute } from '../intcode-computer';
 
 const doPart1 = (input: string) => {
   const memory:number[] = input.split(',').map(val => parseInt(val, 10));
