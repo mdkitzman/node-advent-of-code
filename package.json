@@ -25,5 +25,8 @@
     "rpn": "1.0.4",
     "ts-node": "10.4.0",
     "typescript": "^4.4.4"
+  },
+  "devDependencies": {
+    "graphology-shortest-path": "1.5.2"
   }
 }
