@@ -1,4 +1,4 @@
-import readline from 'readline';
+import EventEmitter from 'events';
 
 export enum CompMode {
   POSITIONAL = 0,
@@ -20,15 +20,14 @@ enum OpCode {
 type Operation = (memory: number[], opIdx: number) => Promise<number>;
 type InstructionSet = 'basic' | 'expanded';
 
-export class IntComp {
-  private readonly lineReader: readline.Interface;
+export class IntComp extends EventEmitter {
   private readonly opcodeMap: Map<OpCode, Operation>;
   
   constructor(instructionSet: InstructionSet = 'basic'){
-    this.lineReader = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
+    super({
+      captureRejections: false
     });
+
     this.opcodeMap = new Map<OpCode, Operation>([
       [OpCode.ADD, this.add.bind(this)],
       [OpCode.MULTIPLY, this.mult.bind(this)],
@@ -60,7 +59,6 @@ export class IntComp {
       }
       increment = await doOperation(memory, opIdx);
     }
-    this.lineReader.close();
     return memory[0];
   }
 
@@ -91,6 +89,7 @@ export class IntComp {
   }
 
   private async terminate(memory: number[], opIdx: number): Promise<number> {
+    this.emit("terminate");
     return NaN;
   }
 
@@ -109,17 +108,20 @@ export class IntComp {
   private async input(memory: number[], opIdx: number): Promise<number> {
     const [idxr] = this.getParameterIndices(memory, opIdx, 1);
     return new Promise((resolve) => {
-      this.lineReader.question('Enter an input please', (value) => {
-        memory[idxr] = parseInt(value);
+      const onInput = (value) => {
+        memory[idxr] = parseInt(value, 10);
         resolve(2);
-      });
+        this.off("input", onInput);
+      };
+      this.on("input", onInput);
+      this.emit("needsInput");
     });
   }
 
   private async output(memory: number[], opIdx: number): Promise<number> {
     const [idxa] = this.getParameterIndices(memory, opIdx, 1);
     const value = memory[idxa];
-    console.log(`Diagnostic Code: ${value}`);
+    this.emit("output", value);
     return 2;
   }
 

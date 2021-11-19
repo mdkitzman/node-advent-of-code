@@ -10,14 +10,28 @@ const main = async () => {
 async function doPart1(input: string) {
   const memory:number[] = input.split(',').map(val => parseInt(val, 10));
   const computer = new IntComp();
-  const finalValue = await computer.execute(memory);
+  computer.on("needsInput", () => {
+    computer.emit("input", 1);
+  });
+  let finalValue = 0;
+  computer.on("output", (value: number) => {
+    finalValue = value;
+  });
+  await computer.execute(memory);
   console.log(`Computation final value is ${finalValue}`);
 };
 
 async function doPart2(input: string) {
   const memory:number[] = input.split(',').map(val => parseInt(val, 10));
   const computer = new IntComp('expanded');
-  const finalValue = await computer.execute(memory);
+  computer.on("needsInput", () => {
+    computer.emit("input", 5);
+  });
+  let finalValue = 0;
+  computer.on("output", (value: number) => {
+    finalValue = value;
+  });
+  await computer.execute(memory);
   console.log(`Computation final value is ${finalValue}`);
 };
 
