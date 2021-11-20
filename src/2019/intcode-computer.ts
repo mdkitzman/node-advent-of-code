@@ -1,8 +1,9 @@
 import EventEmitter from 'events';
 
-export enum CompMode {
-  POSITIONAL = 0,
-  IMMEDIEATE = 1
+export enum ParamMode {
+  ADDRESS = 0,
+  IMMEDIEATE = 1,
+  RELATIVE = 2,
 };
 
 enum OpCode {
@@ -14,14 +15,34 @@ enum OpCode {
   JMPIFFALSE,
   LESSTHAN,
   EQUALS,
+  RELATIVE_BASE_OFFSET,
   TERMINATE = 99
 }
 
 type Operation = (memory: number[], opIdx: number) => Promise<number>;
 type InstructionSet = 'basic' | 'expanded';
 
+const autoExpander: ProxyHandler<number[]> = {
+  get: function(target: number[], prop: string | Symbol, receiver) {
+    const index = Number(prop);
+    if (index >= target.length)
+      target.push(...new Array(index - target.length + 1).fill(0));
+    return target[index];
+  },
+  set: function(target: number[], prop: string | Symbol, value:number) {
+    const index = Number(prop);
+    if (index >= target.length)
+      target.push(...new Array(index - target.length + 1).fill(0));
+    target[index] = value;
+    return true;
+  }
+};
+
+export const program = (input: string) => input.split(',').map(ch => parseInt(ch, 10));
+
 export class IntComp extends EventEmitter {
   private readonly opcodeMap: Map<OpCode, Operation>;
+  private relativeBase: number = 0;
   
   constructor(instructionSet: InstructionSet = 'basic'){
     super({
@@ -40,26 +61,29 @@ export class IntComp extends EventEmitter {
       this.opcodeMap.set(OpCode.JMPIFFALSE, this.jumpIfFalse.bind(this));
       this.opcodeMap.set(OpCode.LESSTHAN, this.lessThan.bind(this));
       this.opcodeMap.set(OpCode.EQUALS, this.equals.bind(this));
+      this.opcodeMap.set(OpCode.RELATIVE_BASE_OFFSET, this.relativeBaseOffset.bind(this));
     }
   }
 
   async execute(memory:number[]):Promise<number> {
+    const memoryProxy = new Proxy(memory, autoExpander);
+
     let increment = 0;
     for (let opIdx = 0; isFinite(increment); opIdx += increment) {
-      const opCode = this.opCode(memory, opIdx);
+      const opCode = this.opCode(memoryProxy, opIdx);
       let doOperation = this.opcodeMap.get(opCode);
       if (!doOperation) {
         console.log({
           opCode,
           opIdx,
           increment,
-          memory: memory.slice(opIdx, opIdx + 5)
+          memory: memoryProxy.slice(opIdx, opIdx + 5)
         }, 'Unable to find a proper op code');
         doOperation = this.terminate;
       }
-      increment = await doOperation(memory, opIdx);
+      increment = await doOperation(memoryProxy, opIdx);
     }
-    return memory[0];
+    return memoryProxy[0];
   }
 
   private opCode(memory:number[], index: number): OpCode {
@@ -69,19 +93,22 @@ export class IntComp extends EventEmitter {
 
   private getParameterIndices(memory:number[], opIdx: number, paramCount = 0): number[] {
     // rightmost 2 digits are the opCode.  Everything else is parameter mode
-    const paramModes = memory[opIdx].toString(10).slice(0, -2).split('').map(ch => parseInt(ch, 10) as CompMode);
+    const paramModes = memory[opIdx].toString(10).slice(0, -2).split('').map(ch => parseInt(ch, 10) as ParamMode);
     const paramIndicies: number[] = [];
     let paramIdx = opIdx;
     while (paramCount-- > 0) {
       paramIdx++;
       const mode = paramModes.pop();
       switch(mode) {
-        case CompMode.POSITIONAL:
+        case ParamMode.ADDRESS:
         default:
           paramIndicies.push(memory[paramIdx]);
           break;
-        case CompMode.IMMEDIEATE:
+        case ParamMode.IMMEDIEATE:
           paramIndicies.push(paramIdx);
+          break;
+        case ParamMode.RELATIVE:
+          paramIndicies.push(this.relativeBase + memory[paramIdx]);
           break;
       }
     }
@@ -110,8 +137,8 @@ export class IntComp extends EventEmitter {
     return new Promise((resolve) => {
       const onInput = (value) => {
         memory[idxr] = parseInt(value, 10);
-        resolve(2);
         this.off("input", onInput);
+        resolve(2);
       };
       this.on("input", onInput);
       this.emit("needsInput");
@@ -153,6 +180,12 @@ export class IntComp extends EventEmitter {
     const [idxa, idxb, idxc] = this.getParameterIndices(memory, opIdx, 3);
     memory[idxc] = Number(memory[idxa] === memory[idxb]);
     return 4;
+  }
+
+  private async relativeBaseOffset(memory: number[], opIdx: number): Promise<number> {
+    const [ idxValue ] = this.getParameterIndices(memory, opIdx, 1);
+    this.relativeBase += memory[idxValue];
+    return 2;
   }
 }
 
