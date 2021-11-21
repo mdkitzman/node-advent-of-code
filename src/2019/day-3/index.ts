@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { min } from '../../util/arrayUtils';
+import { Point } from '../../util/point';
 
 const main = async () => {
   const allInput = await fs.promises.readFile('./src/2019/day-3/input', { encoding: 'utf-8'});
@@ -10,14 +11,6 @@ const main = async () => {
   doPart1(wire1, wire2, intersectionPoints); // 768
   doPart2(wire1, wire2, intersectionPoints); // 8684
 };
-
-class Point {
-  constructor(readonly x: number, readonly y: number) {}
-
-  distanceTo(p: Point): number {
-    return Math.sqrt((Math.pow(this.x - p.x, 2) + Math.pow(this.y - p.y, 2)));
-  }
-}
 
 function doPart1(wire1: Point[], wire2: Point[], intersections: Point[]) {
   const shortestDistance = intersections
