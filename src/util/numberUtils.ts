@@ -25,4 +25,6 @@ export const gcd = (x:number, y:number):number => {
  return x;
 }
 
+// % is not a modulo function, but rather a remainder function, which will allow
+// for negative values to be returned, i.e. -1 % 4 => -1.
 export const absoluteModulo = (a:number, b:number):number => ((a % b) + b) % b;

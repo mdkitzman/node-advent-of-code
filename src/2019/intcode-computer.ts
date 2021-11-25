@@ -38,7 +38,7 @@ const autoExpander: ProxyHandler<number[]> = {
   }
 };
 
-export const program = (input: string) => input.split(',').map(ch => parseInt(ch, 10));
+export const readProgram = (input: string) => input.split(',').map(ch => parseInt(ch, 10));
 
 export class IntComp extends EventEmitter {
   private readonly opcodeMap: Map<OpCode, Operation>;

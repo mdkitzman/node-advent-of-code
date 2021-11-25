@@ -1,5 +1,5 @@
 import fs  from 'fs';
-import { IntComp, program } from '../intcode-computer';
+import { IntComp, readProgram } from '../intcode-computer';
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
@@ -8,7 +8,7 @@ const main = async () => {
 };
 
 async function doPart1(input: string) {
-  const memory = program(input);
+  const memory = readProgram(input);
   const computer = new IntComp('expanded');
   computer.on("needsInput", () => {
     computer.emit("input", 1);
@@ -20,7 +20,7 @@ async function doPart1(input: string) {
 };
 
 async function doPart2(input: string) {
-  const memory = program(input);
+  const memory = readProgram(input);
   const computer = new IntComp('expanded');
   computer.on("needsInput", () => {
     computer.emit("input", 2);
