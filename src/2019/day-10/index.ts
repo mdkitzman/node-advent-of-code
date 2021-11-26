@@ -1,5 +1,5 @@
 import fs  from 'fs';
-import { Point, rotate } from '../../util/point';
+import { Point2D, rotate } from '../../util/point';
 import { groupBy, orderBy, uniq } from 'lodash';
 
 const main = async () => {
@@ -10,22 +10,22 @@ const main = async () => {
   console.log(`The 200th asteroid is at (${p.originalPoint.x}, ${p.originalPoint.y}), with value of ${p.originalPoint.x * 100 + p.originalPoint.y}`); // 317
 };
 
-function getAteroids(input:string): Point[] {
-  const asteroids: Point[] = input
+function getAteroids(input:string): Point2D[] {
+  const asteroids: Point2D[] = input
     .split('\n')
     .map((line, y) => 
       line
         .split('')
-        .map((val, x) => val !== '.' ? new Point(x, y) : new Point(-1, -1))
+        .map((val, x) => val !== '.' ? new Point2D(x, y) : new Point2D(-1, -1))
         .filter(pt => pt.x >= 0 && pt.y >= 0)
     ).flat();
   return asteroids;
 }
 
 function doPart1(input: string) {
-  const asteroids: Point[] = getAteroids(input);
+  const asteroids: Point2D[] = getAteroids(input);
   
-  function findVisibilityCount(asteroid: Point): { asteroid: Point, visibleCount: number} {
+  function findVisibilityCount(asteroid: Point2D): { asteroid: Point2D, visibleCount: number} {
     const angles = asteroids
       .filter(a => !a.equals(asteroid))
       .map(a => ({ x: a.x, y: a.y, angle: asteroid.angle(a)}));
@@ -48,8 +48,8 @@ going down where the origin is bottom left.
 Translate all other points to the new center asteroid as the origin.
 Rotate all of the points 90 degrees counter clockwise.
 */
-function doPart2(input: string, centerAsteroid: Point) {
-  const asteroids: Point[] = getAteroids(input);
+function doPart2(input: string, centerAsteroid: Point2D) {
+  const asteroids: Point2D[] = getAteroids(input);
   const otherAsteroids = asteroids
       .filter(a => !a.equals(centerAsteroid))
       .map(asteroid => rotate(asteroid, Math.PI/2, centerAsteroid))  // rotate all points 90 degrees clockwise
@@ -63,7 +63,7 @@ function doPart2(input: string, centerAsteroid: Point) {
   angles.sort((a,b) => b - a);
   const layers = groupBy(orderBy(otherAsteroids, ["angle", "dist"], ['asc', 'desc']), "angle");
 
-  const orderedAsteroids: {originalPoint: Point, angle: number, dist: number}[] = [];
+  const orderedAsteroids: {originalPoint: Point2D, angle: number, dist: number}[] = [];
   let iAngle = 0;
   while (orderedAsteroids.length < otherAsteroids.length) {
     const maybeVal = layers[angles[iAngle]].pop();

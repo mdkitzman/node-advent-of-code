@@ -1,6 +1,6 @@
 import fs  from 'fs';
 import { sum } from '../../util/arrayUtils';
-import { Point } from '../../util/point';
+import { Point2D } from '../../util/point';
 import { PainterRobot } from './painter-robot';
 
 const main = async () => {
@@ -23,7 +23,7 @@ async function doPart2(input: string) {
     .from(robot.grid.data.keys())
     .map(str => {
       const [x, y] = str.split(',').map(v => parseInt(v, 10));
-      return new Point(x,y);
+      return new Point2D(x,y);
     });
   const left   = points.map(p => p.x).reduce((x1, x2) => x1 <= x2 ? x1 : x2);
   const top    = points.map(p => p.y).reduce((y1, y2) => y1 >= y2 ? y1 : y2);

@@ -1,4 +1,4 @@
-import { Point } from '../../util/point';
+import { Point2D } from '../../util/point';
 import { InfiniteGrid } from '../../util/infinite-grid';
 import { absoluteModulo } from '../../util/numberUtils';
 import { IntComp, readProgram } from '../intcode-computer';
@@ -20,7 +20,7 @@ export class PainterRobot {
     initialColor: 'white' | 'black' = 'black',
     private computer = new IntComp('expanded'),
     public grid = new InfiniteGrid<GridValue>({ painted: false, color: 'black'}),
-    private currentPos = new Point(0,0),
+    private currentPos = new Point2D(0,0),
     private direction: Direction = Direction.NORTH,
   ){
     this.gridValue.color = initialColor
@@ -66,16 +66,16 @@ export class PainterRobot {
   private moveForward(steps: number = 1) {
     switch (this.direction) {
       case Direction.NORTH:
-        this.currentPos = new Point(this.currentPos.x, this.currentPos.y+steps)
+        this.currentPos.y += steps;
         break;
       case Direction.SOUTH:
-        this.currentPos = new Point(this.currentPos.x, this.currentPos.y-steps)
+        this.currentPos.y -= steps;
         break;
       case Direction.EAST:
-        this.currentPos = new Point(this.currentPos.x+steps, this.currentPos.y)
+        this.currentPos.x += steps;
         break;
       case Direction.WEST:
-        this.currentPos = new Point(this.currentPos.x-steps, this.currentPos.y)
+        this.currentPos.x -= steps
         break;
     }
   }
