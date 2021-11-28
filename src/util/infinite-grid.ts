@@ -2,9 +2,10 @@ import { Point2D } from './point';
 import { cloneDeep } from 'lodash'
 
 export class InfiniteGrid<T> {
+  public readonly data = new Map<string, T>();
+  
   constructor(
     private defaultValue: T,
-    public readonly data = new Map<string, T>()
   ){}
 
   private key(point: Point2D):string {

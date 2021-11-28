@@ -1,5 +1,7 @@
 import fs  from 'fs';
 import { chunk } from '../../util/arrayUtils';
+import { InfiniteGrid } from '../../util/infinite-grid';
+import { Point2D } from '../../util/point';
 
 const main = async () => {
   const allInput = await fs.promises.readFile('./src/2019/day-8/input', { encoding: 'utf-8'});
@@ -24,19 +26,18 @@ function doPart1(input: string, x: number, y: number) {
 };
 
 function doPart2(input: string, x: number, y: number) {
-  const layers:number[][] = chunk(input.split('').map(ch => parseInt(ch, 10)), x * y)
-  const result:number[] = [];
+  const layers:number[][] = chunk(input.split('').map(ch => parseInt(ch, 10)), x * y);
+  const result = new InfiniteGrid<number>(0);
   for(let iPixel = 0; iPixel < layers[0].length; iPixel++) {
     let pixel = -1;
     let iLayer = 0;
     do {
       pixel = layers[iLayer++][iPixel];
     } while (pixel == 2 && iLayer < layers.length);
-    result.push(pixel);
+    const point = new Point2D(iPixel % x, y - 1 - Math.floor(iPixel / x));
+    result.set(point, pixel);
   }
-
-  console.dir({ result: chunk(result, x )
-      .map(layer => layer.map(px => px === 1 ? '█' : ' ').join('')) }, { depth: null});
+  result.print((pixel) => pixel === 1 ? '█' : ' ');
 };
 
 main();
