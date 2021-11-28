@@ -19,26 +19,7 @@ async function doPart1(input: string) {
 async function doPart2(input: string) {
   const robot = new PainterRobot('white');
   await robot.run(input);
-  const points = Array
-    .from(robot.grid.data.keys())
-    .map(str => {
-      const [x, y] = str.split(',').map(v => parseInt(v, 10));
-      return new Point2D(x,y);
-    });
-  const left   = points.map(p => p.x).reduce((x1, x2) => x1 <= x2 ? x1 : x2);
-  const top    = points.map(p => p.y).reduce((y1, y2) => y1 >= y2 ? y1 : y2);
-  const right  = points.map(p => p.x).reduce((x1, x2) => x1 >= x2 ? x1 : x2);
-  const bottom = points.map(p => p.y).reduce((y1, y2) => y1 <= y2 ? y1 : y2);
-  
-  for (let y = top; y >= bottom; y--) {
-    let row = '';
-    for (let x = left; x <= right; x++) {
-      const value = robot.grid.data.get(`${x},${y}`);
-      row += value?.color === 'white' ? '█' : ' ';
-    }
-    console.log(row);
-    row = '';
-  }
+  robot.grid.print((value) => value.color === 'white' ? '█' : ' ');
 };
 
 main();
