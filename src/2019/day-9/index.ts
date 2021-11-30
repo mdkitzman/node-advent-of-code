@@ -9,7 +9,7 @@ const main = async () => {
 
 async function doPart1(input: string) {
   const memory = readProgram(input);
-  const computer = new IntComp('expanded');
+  const computer = new IntComp();
   computer.on("needsInput", () => {
     computer.emit("input", 1);
   });
@@ -21,7 +21,7 @@ async function doPart1(input: string) {
 
 async function doPart2(input: string) {
   const memory = readProgram(input);
-  const computer = new IntComp('expanded');
+  const computer = new IntComp();
   computer.on("needsInput", () => {
     computer.emit("input", 2);
   });

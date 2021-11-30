@@ -19,9 +19,9 @@ export enum JoystickPosition {
 export class Arcade {
   private ballPos?: Point2D;
   private paddlePos?: Point2D;
-  
+
   private readonly grid: InfiniteGrid<TileType> = new InfiniteGrid<TileType>(TileType.EMPTY);
-  private readonly computer: IntComp = new IntComp('expanded');
+  private readonly computer: IntComp = new IntComp();
   private readonly outputQueue: number[] = [];
   private _score: number = 0;
   private nextMove: JoystickPosition = JoystickPosition.NEUTRAL;

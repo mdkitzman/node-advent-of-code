@@ -23,7 +23,7 @@ async function doPart1(input: string) {
 
 async function doPart2(input: string) {
   const memory:number[] = input.split(',').map(val => parseInt(val, 10));
-  const computer = new IntComp('expanded');
+  const computer = new IntComp();
   computer.on("needsInput", () => {
     computer.emit("input", 5);
   });

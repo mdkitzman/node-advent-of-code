@@ -1,27 +1,9 @@
 import EventEmitter from 'events';
 
-export enum ParamMode {
-  ADDRESS = 0,
-  IMMEDIEATE = 1,
-  RELATIVE = 2,
-};
-
-enum OpCode {
-  ADD = 1,
-  MULTIPLY,
-  INPUT,
-  OUTPUT,
-  JMPIFTRUE,
-  JMPIFFALSE,
-  LESSTHAN,
-  EQUALS,
-  RELATIVE_BASE_OFFSET,
-  TERMINATE = 99
-}
-
-type Operation = (memory: number[], opIdx: number) => Promise<number>;
-type InstructionSet = 'basic' | 'expanded';
-
+/**
+ * This is a proxy handler for a number[] that will automatically expand
+ * the array when trying to index something out of bounds. 
+ */
 const autoExpander: ProxyHandler<number[]> = {
   get: function(target: number[], prop: string | Symbol, receiver) {
     const index = Number(prop);
@@ -40,11 +22,12 @@ const autoExpander: ProxyHandler<number[]> = {
 
 export const readProgram = (input: string) => input.split(',').map(ch => parseInt(ch, 10));
 
+type Operation = (memory: number[], opIdx: number) => Promise<number>;
 export class IntComp extends EventEmitter {
   private readonly opcodeMap: Map<OpCode, Operation>;
   private relativeBase: number = 0;
   
-  constructor(instructionSet: InstructionSet = 'basic'){
+  constructor(){
     super({
       captureRejections: false
     });
@@ -54,21 +37,20 @@ export class IntComp extends EventEmitter {
       [OpCode.MULTIPLY, this.mult.bind(this)],
       [OpCode.INPUT, this.input.bind(this)],
       [OpCode.OUTPUT, this.output.bind(this)],
-      [OpCode.TERMINATE, this.terminate.bind(this)]
+      [OpCode.JMPIFTRUE, this.jumpIfTrue.bind(this)],
+      [OpCode.JMPIFFALSE, this.jumpIfFalse.bind(this)],
+      [OpCode.LESSTHAN, this.lessThan.bind(this)],
+      [OpCode.EQUALS, this.equals.bind(this)],
+      [OpCode.RELATIVE_BASE_OFFSET, this.relativeBaseOffset.bind(this)],
+      [OpCode.TERMINATE, this.terminate.bind(this)],
     ]);
-    if (instructionSet === 'expanded') {
-      this.opcodeMap.set(OpCode.JMPIFTRUE, this.jumpIfTrue.bind(this));
-      this.opcodeMap.set(OpCode.JMPIFFALSE, this.jumpIfFalse.bind(this));
-      this.opcodeMap.set(OpCode.LESSTHAN, this.lessThan.bind(this));
-      this.opcodeMap.set(OpCode.EQUALS, this.equals.bind(this));
-      this.opcodeMap.set(OpCode.RELATIVE_BASE_OFFSET, this.relativeBaseOffset.bind(this));
-    }
   }
 
   async execute(memory:number[]):Promise<number> {
     const memoryProxy = new Proxy(memory, autoExpander);
 
     let increment = 0;
+    // increment will either be a number to increment the opcode pointer by or NaN, indicating that we're done.
     for (let opIdx = 0; isFinite(increment); opIdx += increment) {
       const opCode = this.opCode(memoryProxy, opIdx);
       let doOperation = this.opcodeMap.get(opCode);
@@ -91,6 +73,24 @@ export class IntComp extends EventEmitter {
     return parseInt(code, 10);
   }
 
+  /**
+   * Extracts the desired number of parameters from memory at the given index.
+   * 
+   * Parameter modes for each parameter are stored in the same value as the instruction's opcode.
+   * The opcode is a two-digit number based only on the ones and tens digit of the value, that is,
+   * the opcode is the rightmost two digits of the first value in an instruction.
+   * 
+   * Parameter modes are single digits, one per parameter, read right-to-left from the opcode:
+   *  - The first parameter's mode is in the hundreds digit
+   *  - The second parameter's mode is in the thousands digit 
+   *  - The third parameter's mode is in the ten-thousands digit
+   *  - Etc.
+   * Any missing modes are 0.
+   * @param memory - The program
+   * @param opIdx - the index of the current operation
+   * @param paramCount - How many parameters do you want to extract
+   * @returns the indicies of the location in memory of each parameter
+   */
   private getParameterIndices(memory:number[], opIdx: number, paramCount = 0): number[] {
     // rightmost 2 digits are the opCode.  Everything else is parameter mode
     const paramModes = memory[opIdx].toString(10).slice(0, -2).split('').map(ch => parseInt(ch, 10) as ParamMode);
@@ -158,7 +158,7 @@ export class IntComp extends EventEmitter {
       const jumpPoint = memory[idxb];
       return jumpPoint - opIdx; // return where we want the opIdx to jump to
     }
-    return 3 // increment the instruction pointer.
+    return 3; // increment the instruction pointer.
   }
 
   private async jumpIfFalse(memory: number[], opIdx: number): Promise<number> {
@@ -167,7 +167,7 @@ export class IntComp extends EventEmitter {
       const jumpPoint = memory[idxb];
       return jumpPoint - opIdx; // return where we want the opIdx to jump to
     }
-    return 3 // increment the instruction pointer.
+    return 3; // increment the instruction pointer.
   }
   
   private async lessThan(memory: number[], opIdx: number): Promise<number> {
@@ -219,3 +219,22 @@ export const execute = (memory:number[], noun:number, verb:number):number => {
   }
   return memory[0];
 };
+
+enum ParamMode {
+  ADDRESS = 0,
+  IMMEDIEATE = 1,
+  RELATIVE = 2,
+};
+
+enum OpCode {
+  ADD = 1,
+  MULTIPLY,
+  INPUT,
+  OUTPUT,
+  JMPIFTRUE,
+  JMPIFFALSE,
+  LESSTHAN,
+  EQUALS,
+  RELATIVE_BASE_OFFSET,
+  TERMINATE = 99
+}

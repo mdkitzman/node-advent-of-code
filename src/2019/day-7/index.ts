@@ -12,7 +12,7 @@ const main = async () => {
 };
 
 async function doPart1(input: string) {
-  const computer = new IntComp('expanded');
+  const computer = new IntComp();
   const program = input.split(',').map(val => parseInt(val, 10));  
   
   const outputValues: { output: number, combo: number[] }[] = [];
@@ -51,7 +51,7 @@ class Amp extends EventEmitter {
 
   constructor(phaseMode: number){
     super();
-    this.computer = new IntComp('expanded');
+    this.computer = new IntComp();
     this.readBuffer.unshift(phaseMode);  
     this.computer.on("output", (value:number) => {
       this.emit("output", value);

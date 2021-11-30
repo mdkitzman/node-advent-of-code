@@ -18,7 +18,7 @@ enum Direction {
 export class PainterRobot {
   constructor(
     initialColor: 'white' | 'black' = 'black',
-    private computer = new IntComp('expanded'),
+    private computer = new IntComp(),
     public grid = new InfiniteGrid<GridValue>({ painted: false, color: 'black'}),
     private currentPos = new Point2D(0,0),
     private direction: Direction = Direction.NORTH,
