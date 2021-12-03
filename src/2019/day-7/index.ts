@@ -12,30 +12,24 @@ const main = async () => {
 };
 
 async function doPart1(input: string) {
-  const computer = new IntComp();
   const program = input.split(',').map(val => parseInt(val, 10));  
   
   const outputValues: { output: number, combo: number[] }[] = [];
   const settingsCombos: number[][] = Iter.range(5).permutations().toArray();
   for(const phaseSettings of settingsCombos) {
-    let previousOutput = 0;
+    let lastOutput = 0;
     for(const setting of phaseSettings) {
-      const input = [setting, previousOutput];
-      const sendInput = () => {
-        computer.emit("input", input.shift());
-      };
-      const onOutput = (value:number) => {
-        previousOutput = value;
-      };
-
-      computer.on("needsInput", sendInput);
-      computer.on("output", onOutput);
-      await computer.execute([...program]);
-      computer.off("output", onOutput);
-      computer.off("needsInput", sendInput);
+      const amp = new Amp(setting);
+      // initial input is set to the last output
+      amp.addInput(lastOutput);
+      
+      // wire the input to its own output
+      amp.wireTo(amp)
+      amp.on("output", value => lastOutput = value);
+      await amp.execute([...program]);
     }
     outputValues.push({
-      output: previousOutput,
+      output: lastOutput,
       combo: phaseSettings
     });
   }
@@ -43,49 +37,6 @@ async function doPart1(input: string) {
   const maxOutput = outputValues.map(v => v.output).reduce(max);
   console.log(`Max output is ${maxOutput}`);
 };
-
-class Amp extends EventEmitter {
-  private computer: IntComp;
-  private writeBuffer: number[] = [];
-  private readBuffer: number[] = [];
-
-  constructor(phaseMode: number){
-    super();
-    this.computer = new IntComp();
-    this.readBuffer.unshift(phaseMode);  
-    this.computer.on("output", (value:number) => {
-      this.emit("output", value);
-      const i = setImmediate(() => {
-        this.writeBuffer.unshift(value);
-        clearImmediate(i);
-      });
-    });
-    this.computer.on("needsInput", () => {
-      const waiter = setInterval(() => {
-        if (this.readBuffer.length > 0) {
-          const value = this.readBuffer.pop();
-          clearInterval(waiter);
-          const i = setImmediate(() => {
-            this.computer.emit("input", value);
-            clearImmediate(i);
-          });
-        }  
-      }, 10);
-    });
-  }
-
-  public addInput(input: number) {
-    this.readBuffer.unshift(input);
-  }
-
-  public wireTo(other: Amp) {
-    this.writeBuffer = other.readBuffer;
-  }
-
-  public async execute(program: number[]): Promise<number> {
-    return this.computer.execute(program);
-  }
-}
 
 async function doPart2(input: string) {
   const program = input.split(',').map(val => parseInt(val, 10));  
@@ -124,5 +75,47 @@ async function doPart2(input: string) {
   const maxOutput = outputValues.map(v => v.output).reduce(max);
   console.log(`Max output is ${maxOutput}`);
 };
+
+class Amp extends EventEmitter {
+  private computer: IntComp = new IntComp();
+  private writeBuffer: number[] = [];
+  private readBuffer: number[] = [];
+
+  constructor(phaseMode: number){
+    super();
+    this.addInput(phaseMode);
+    
+    this.computer.on("output", (value:number) => {
+      this.emit("output", value);
+      // insert this value at the beginning if the write buffer
+      this.writeBuffer.unshift(value);
+    });
+    this.computer.on("needsInput", () => {
+      // The computer needs input, and we may need to wait until 
+      // our read buffer has some input.
+      const waiter = setInterval(() => {
+        if (this.readBuffer.length > 0) {
+          // We have some input!
+          // pop it out of the buffer, stop our wait interval, and send it along 
+          const value = this.readBuffer.pop();
+          clearInterval(waiter);
+          this.computer.emit("input", value);
+        }  
+      }, 1);
+    });
+  }
+
+  public addInput(input: number) {
+    this.readBuffer.unshift(input);
+  }
+
+  public wireTo(other: Amp) {
+    this.writeBuffer = other.readBuffer;
+  }
+
+  public async execute(program: number[]): Promise<number> {
+    return this.computer.execute(program);
+  }
+}
 
 main();
