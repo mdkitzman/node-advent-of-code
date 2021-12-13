@@ -1,6 +1,5 @@
 import fs  from 'fs';
 import { sum } from '../../util/arrayUtils';
-import { Point2D } from '../../util/point';
 import { PainterRobot } from './painter-robot';
 
 const main = async () => {
@@ -19,7 +18,7 @@ async function doPart1(input: string) {
 async function doPart2(input: string) {
   const robot = new PainterRobot('white');
   await robot.run(input);
-  robot.grid.print((value) => value.color === 'white' ? '█' : ' ');
+  robot.grid.print((value) => value?.color === 'white' ? '█' : ' ');
 };
 
 main();

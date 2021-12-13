@@ -25,6 +25,11 @@ export class Grid<T> {
     this.data.set(key, value);
   }
 
+  public delete(point: Point2D) {
+    const key = Grid.toKey(point);
+    this.data.delete(key);
+  }
+
   public forEach(action:(key: Point2D, value: T)=>void) {
     Array
       .from(this.data.entries())
@@ -33,7 +38,7 @@ export class Grid<T> {
       );
   }
 
-  public print(verticalStart: 'high'|'low' = 'high', printValue: (value?: T)=>string) {
+  public print(printValue: (value?: T)=>string, verticalStart: 'high'|'low' = 'high') {
     const points = Array
       .from(this.data.keys())
       .map(Grid.toPoint);
@@ -45,8 +50,8 @@ export class Grid<T> {
     const bottom = points.map(p => p.y).reduce((y1, y2) => y1 <= y2 ? y1 : y2);
 
     const yRange:number[] = verticalStart === 'high'
-      ? range(top, bottom)
-      : range(bottom, top);
+      ? range(top, bottom-1)
+      : range(bottom, top+1);
     
     yRange.forEach(y => {
       let row = '';
