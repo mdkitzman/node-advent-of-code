@@ -1,5 +1,6 @@
 export const bitAnd = (prev: number, cur: number) => prev & cur;
 export const sum = (prev: number, cur: number) => prev + cur;
+export const diff = (prev: number, cur: number) => prev - cur;
 export const multiply = (prev: number, cur: number) => prev * cur;
 export const allTrue = (prev: boolean, cur:boolean) => prev && cur;
 export const anyTrue = (prev: boolean, cur:boolean) => prev || cur;
