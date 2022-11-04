@@ -1,7 +1,7 @@
 import fs  from 'fs';
 import Graph from 'graphology';
 import { dfsFromNode } from "graphology-traversal";
-import shortestPath from 'graphology-shortest-path/unweighted';
+import { bidirectional } from 'graphology-shortest-path/unweighted';
 
 const main = async () => {
   const allInput = await fs.promises.readFile('./src/2019/day-6/input', { encoding: 'utf-8'});
@@ -34,7 +34,7 @@ function doPart1(graph: Graph) {
 };
 
 function doPart2(graph: Graph) {
-  const path = shortestPath(graph, 'YOU', 'SAN');
+  const path = bidirectional(graph, 'YOU', 'SAN');
   if (path && path.length > 1) {
     // subtract 3: 1 for YOU, 1 for SAN, and 1 for the path that YOU is currently already attached to
     console.log({ shortestLen: path.length - 3 });

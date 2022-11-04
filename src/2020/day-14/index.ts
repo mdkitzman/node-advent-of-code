@@ -49,9 +49,9 @@ const part2 = (input:string) => {
               case '0': return iVal;
               default: return mask[index];
             }
-          });
-        const numXs = strValueBin
-
+          })
+          .join('');
+        
         const addr = parseInt(addrStr, 10);
         memory[memIndex] = parseInt(strValueBin, 2);
       }

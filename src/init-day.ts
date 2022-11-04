@@ -1,40 +1,51 @@
 import { Command } from 'commander';
-import fs, { PathLike } from 'fs';
-const program = new Command();
+import {
+  promises as fs,
+  createReadStream,
+  createWriteStream,
+  writeFileSync,
+  Stats
+} from 'fs';
 
 const toNumber = (val: string, prev: number): number => parseInt(val, 10);
 
-program
-  .requiredOption<number>('-d, --day <day>', 'What day is this for?', toNumber)
-  .option<number>('-y, --year [year]', 'What year should this be created for?', toNumber, new Date().getUTCFullYear());
-program.parse(process.argv);
+const ensureFile = async (filePath: string, fn: ()=>void): Promise<void> => {
+  let stats: Stats | null = null;
+  try {
+    stats = await fs.stat(filePath); 
+  } catch (err) {}
+  if (!stats || !stats.isFile()) {
+    fn();
+  }
+};
 
-const {
-  day, year
-} = program.opts();
+type Options = {
+  day: number,
+  year: number
+};
 
-const newPath = `./src/${year}/day-${day}`;
-
-fs.mkdir(newPath, { recursive: true }, (err, path) => {
-  if(err) {
-    console.error({err}, 'Unable to make new directory 😭');
-    return;
+const run = async ({ day, year}: Options) => {
+  const newPath = `${__dirname}/${year}/day-${day}`;
+  
+  try {
+    await fs.mkdir(newPath, { recursive: true });
+  } catch (err) {
+    return console.error({err}, 'Unable to make new directory 😭');
   }
   const newFilePath = `${newPath}/index.ts`;
   const readmePath = `${newPath}/README.md`;
-  fs.access(newFilePath, () => {
-    fs.stat(newFilePath, (err, stats) => {
-      if (!stats || !stats.isFile()) {
-        fs.createReadStream('./src/day-template.ts').pipe(fs.createWriteStream(newFilePath));
-      }
-    });
-  });
-  fs.access(readmePath, () => {
-    fs.stat(newFilePath, (err, stats) => {
-      if (!stats || !stats.isFile()) {
-        fs.writeFileSync(readmePath, `# Day ${day}\n\n## Part 1\n\n## Part 2`);
-      }
-    });
-  });
 
-});
+  await ensureFile(newFilePath, () => createReadStream(`${__dirname}/day-template.ts`).pipe(createWriteStream(newFilePath)));
+  await ensureFile(readmePath, () => writeFileSync(readmePath, `# Day ${day}\n\n## Part 1\n\n## Part 2`));  
+}
+
+const setupProgram = (program: Command): void => {
+  program
+    .command('init-day')
+    .description('Will create the folders and files necessary to start an AOC day')
+    .requiredOption<number>('-d, --day <day>', 'What day is this for?', toNumber)
+    .option<number>('-y, --year [year]', 'What year should this be created for?', toNumber, new Date().getUTCFullYear())
+    .action(run);
+}
+
+export default setupProgram;

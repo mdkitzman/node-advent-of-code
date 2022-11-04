@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import { isEmpty } from 'lodash';
-import { allTrue, anyTrue, multiply, sum } from '../../util/arrayUtils';
-import { inRange } from './../util/numberUtils';
+import { allTrue, multiply, sum } from '../../util/arrayUtils';
+import { inRange } from '../../util/numberUtils';
 
 type Field = {
   name:string;

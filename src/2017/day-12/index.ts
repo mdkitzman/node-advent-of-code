@@ -21,7 +21,7 @@ const part1 = (input:string) => {
   const graph = getGraph(input);
   
   let counter = 0;
-  bfsFromNode(graph, '0', () => counter++);
+  bfsFromNode(graph, '0', () => { counter++ });
 
   console.log(`Part 1 : from 0 - ${counter}`);
 };

@@ -3,11 +3,12 @@ import { promises as fs } from 'fs';
 const makeIterator = (initialVal:number[]) => {
   const seen:Map<number, number[]> = new Map();
   const seenHandler = {
-    get: function(target:Map<number, number[]>, prop:number) {
-      if(!target.has(prop)){
-        target.set(prop, []);
+    get: function(target:Map<number, number[]>, prop:string) {
+      const key = parseInt(prop, 10);
+      if(!target.has(key)){
+        target.set(key, []);
       } 
-      return target.get(prop);
+      return target.get(key);
     }
   };
   const safeSeen = new Proxy(seen, seenHandler);
