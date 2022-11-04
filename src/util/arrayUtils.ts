@@ -37,3 +37,15 @@ export const windowed = <T>(k: number, arr: T[]): T[][]=>
     i <= arr.length - k
       ? [arr.slice(i, i + k)]
       : []);
+
+/**
+ * A generator function that will infinitely loop over a finite array of data.
+ * @param input Any kind of array
+ */
+export const infiniteLoop = function*<T>(input: T[]) {
+  let i = 0;
+  while (input.length) {
+    yield input[i];
+    i = i + 1 === input.length ? 0 : i+1;
+  }
+};
