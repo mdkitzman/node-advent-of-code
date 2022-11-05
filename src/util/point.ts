@@ -9,6 +9,10 @@ export class Point2D {
     return Math.sqrt(Math.pow(this.x - p.x, 2) + Math.pow(this.y - p.y, 2));
   }
 
+  manhattenDistance(p: Point2D): number {
+    return Math.abs(this.x - p.x) + Math.abs(this.y - p.y);
+  }
+
   slope(p: Point2D): number {
     // This slope is assuming a top-left origin
     const deltaX = p.x - this.x;
