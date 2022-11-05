@@ -30,6 +30,10 @@ export class Point2D {
   horizontallyAligned(p: Point2D): boolean {
     return this.x === p.x;
   }
+
+  get coordinates() {
+    return [this.x, this.y];
+  }
 }
 
 export class Point3D {
