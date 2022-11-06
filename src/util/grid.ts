@@ -30,6 +30,12 @@ export class Grid<T> {
     this.data.delete(key);
   }
 
+  public iterable(): Array<[Point2D, T]> {
+    return Array
+      .from(this.data.entries())
+      .map(([key, value]) => [Grid.toPoint(key), value as T]);
+  }
+
   public forEach(action:(key: Point2D, value: T)=>void) {
     Array
       .from(this.data.entries())

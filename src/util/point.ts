@@ -35,6 +35,11 @@ export class Point2D {
     return this.x === p.x;
   }
 
+  add(p: Point2D): void {
+    this.x += p.x;
+    this.y += p.y;
+  }
+
   get coordinates() {
     return [this.x, this.y];
   }
