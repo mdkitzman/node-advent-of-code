@@ -1,5 +1,32 @@
 import { range } from "lodash";
 import { Point2D } from "./point";
+import { cloneDeep } from 'lodash'
+
+/**
+ * Will generate coordinate values for n-dimensions from the origin
+ * to the coordinates specified.
+ *
+ * Accepts the size of each dimension. e.g. a 1x2x3 3D grid:
+ *  generateCoords(1, 2, 3) ->
+ *  [ 0, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ], [ 0, 1, 1 ], [ 0, 0, 2 ], [ 0, 1, 2 ]
+ */
+export function* generateCoords(...dimensionSizes: number[]) {
+  const dimCount = dimensionSizes.length;
+  const coords = new Array(dimCount).fill(0);
+
+  while (true) {
+    yield coords;
+
+    let carry = 0;
+    while (++coords[carry] === dimensionSizes[carry]) {
+      coords[carry] = 0;
+      ++carry;
+      if (carry === dimCount) {
+        return;
+      }
+    }
+  }
+}
 
 export class Grid<T> {
   public readonly data = new Map<string, T>();
@@ -68,5 +95,21 @@ export class Grid<T> {
       console.log(row);
       row = '';
     });
+  }
+}
+
+export class InfiniteGrid<T> extends Grid<T> {
+  constructor(
+    private defaultValue: T,
+  ){
+    super();
+  }
+
+  public get(point: Point2D): T {
+    const key = Grid.toKey(point);
+    if (!this.data.has(key)) {
+      this.data.set(key, cloneDeep(this.defaultValue));  
+    }
+    return this.data.get(key)!;
   }
 }
