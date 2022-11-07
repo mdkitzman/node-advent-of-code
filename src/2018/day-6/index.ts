@@ -2,7 +2,7 @@ import fs  from 'fs';
 import { max, min, sum } from '../../util/arrayUtils';
 import { Point2D } from '../../util/point';
 import lodash from 'lodash';
-import { InfiniteGrid } from '../../util/infinite-grid';
+import { InfiniteGrid } from '../../util/grid';
 import Iter from 'es-iter';
 
 const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');

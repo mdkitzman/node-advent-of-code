@@ -113,3 +113,11 @@ export class InfiniteGrid<T> extends Grid<T> {
     return this.data.get(key)!;
   }
 }
+
+export const neighborArray: number[][] = [
+  [-1, -1], [0, -1], [+1, -1],
+  [-1,  0],          [+1,  0],
+  [-1, +1], [0, +1], [+1, +1],
+];
+
+

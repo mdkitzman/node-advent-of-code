@@ -1,5 +1,4 @@
-import { generateCoords } from '../../util/grid';
-import { InfiniteGrid } from '../../util/infinite-grid';
+import { InfiniteGrid, generateCoords } from '../../util/grid';
 import { Point2D } from '../../util/point';
 
 const gridSize = 300;

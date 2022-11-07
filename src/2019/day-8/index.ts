@@ -1,6 +1,6 @@
 import fs  from 'fs';
 import { chunk } from '../../util/arrayUtils';
-import { InfiniteGrid } from '../../util/infinite-grid';
+import { InfiniteGrid } from '../../util/grid';
 import { Point2D } from '../../util/point';
 
 const main = async () => {

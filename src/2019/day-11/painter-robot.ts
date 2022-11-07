@@ -1,5 +1,5 @@
 import { Point2D } from '../../util/point';
-import { InfiniteGrid } from '../../util/infinite-grid';
+import { InfiniteGrid } from '../../util/grid';
 import { absoluteModulo } from '../../util/numberUtils';
 import { IntComp, readProgram } from '../intcode-computer';
 

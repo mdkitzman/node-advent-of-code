@@ -1,5 +1,5 @@
 import fs  from 'fs';
-import { Grid } from '../../util/grid';
+import { Grid, neighborArray as adjacent } from '../../util/grid';
 import { Point2D } from '../../util/point';
 
 const main = async () => {
@@ -43,11 +43,7 @@ function doPart2(input: string) {
   console.log(`It took ${iteration} iterations to synchronize`);
 };
 
-const neighborArray = [
-  [-1, -1], [0, -1], [+1, -1],
-  [-1,  0],          [+1,  0],
-  [-1, +1], [0, +1], [+1, +1],
-].map(([x,y]) => new Point2D(x,y));
+const neighborArray = adjacent.map(([x,y]) => new Point2D(x,y));
 
 function simulateFlashes(grid: Grid<number>, steps: number):number {
   let flashCount = 0;

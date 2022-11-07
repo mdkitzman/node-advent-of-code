@@ -1,13 +1,9 @@
 import fs  from 'fs';
-import { InfiniteGrid } from '../../util/infinite-grid';
+import { InfiniteGrid, neighborArray } from '../../util/grid';
 import { Point2D } from '../../util/point';
 
 const starLine = /position=<\s*(-?\d+),\s*(-?\d+)> velocity=<\s*(-?\d+),\s*(-?\d+)>/;
-const surround = [
-  [-1, -1], [ 0, -1], [ 1, -1],
-  [-1,  0],           [ 1,  0],
-  [-1,  1], [ 0,  1], [ 1,  1]
-].map(([x,y]) => new Point2D(x,y));
+const surround = neighborArray.map(([x,y]) => new Point2D(x,y));
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});

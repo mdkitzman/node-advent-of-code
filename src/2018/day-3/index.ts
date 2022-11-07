@@ -1,6 +1,6 @@
 import fs  from 'fs';
 import lodash from 'lodash';
-import { InfiniteGrid } from '../../util/infinite-grid';
+import { InfiniteGrid } from '../../util/grid';
 import { Point2D } from '../../util/point';
 
 class Claim {

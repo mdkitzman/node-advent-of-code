@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import { inRange } from 'lodash';
+import { neighborArray } from '../../util/grid';
 
 enum Item {
   floor = '.',
@@ -55,12 +56,6 @@ const fillSeats = (grid:Item[][], seatFinder:SeatSeeker, occupiedTolerance:numbe
   return occupiedSeats;
 }
 
-const adjacentWindow = [
-  [-1, -1], [0, -1], [+1, -1],
-  [-1,  0],          [+1,  0],
-  [-1, +1], [0, +1], [+1, +1],
-]
-
 const print = (grid:Item[][]):string => {
   return grid.map(row => row.join('')).join('\n');
 };
@@ -73,7 +68,7 @@ const part1 = (input:string) => {
   const height = grid.length;
   const isValid = inGrid(width, height);  
 
-  const visibleSeats = (grid:Item[][], iRow:number, iCol:number) => adjacentWindow
+  const visibleSeats = (grid:Item[][], iRow:number, iCol:number) => neighborArray
     .map(([dCol, dRow]) => [iCol + dCol, iRow + dRow])
     .filter(([col, row]) => isValid(row, col))
     .map(([col, row]) => grid[row][col])
@@ -93,7 +88,7 @@ const part2 = (input:string) => {
 
   const addPoints = (row1:number, col1:number, row2:number, col2:number):number[] => [row1 + row2, col1 + col2];
 
-  const visibleSeats = (grid:Item[][], iRow:number, iCol:number):number => adjacentWindow
+  const visibleSeats = (grid:Item[][], iRow:number, iCol:number):number => neighborArray
     .map(([dCol, dRow]) => {
       let [row, col] = addPoints(iRow, iCol, dRow, dCol);
       while (true) {
