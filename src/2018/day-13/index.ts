@@ -42,6 +42,8 @@ class Car {
   constructor(public pos: Point2D, public dir: string){}
 
   public move(grid: Grid<TrackType>) {
+    if (this.rekt)
+      return;
     // move
     this.pos.add(carDirMap[this.dir]);
     const currentTrack = grid.get(this.pos)!;
@@ -74,6 +76,16 @@ class Car {
         break;
     }
   }
+
+  public checkCollissions(cars: Car[]) {
+    if (this.rekt)
+      return;
+    const other = cars.find(other => !other.rekt && other !== this && other.pos.equals(this.pos), this);
+    if (other) {
+      other.rekt = true;
+      this.rekt = true;
+    }
+  }
 }
 
 const getCarsAndMap = (input:string): [Car[], Grid<TrackType>] => {
@@ -94,46 +106,33 @@ const getCarsAndMap = (input:string): [Car[], Grid<TrackType>] => {
   return [cars, map];
 }
 
-const gridOrder = (a: Car, b: Car) => a.pos.y - b.pos.y || a.pos.x - b.pos.x;
+const driveCars = (cars: Car[], map: Grid<TrackType>, keepDriving: () => boolean): void => {
+  const gridOrder = (a: Car, b: Car) => a.pos.y - b.pos.y || a.pos.x - b.pos.x;
+  do {
+    cars.sort(gridOrder)
+    for (const car of cars) {
+      car.move(map);
+      car.checkCollissions(cars);
+    }
+  } while (keepDriving());
+}
 
 function doPart1(input: string) {
   const [cars, map] = getCarsAndMap(input);
+  const keepDriving = () => cars.filter(c => c.rekt).length === 0
+  driveCars(cars, map, keepDriving);
 
-  let colided: number[][] = [];
-  do {
-    cars.sort(gridOrder)
-    
-    for (const car of cars) {
-      car.move(map);
-      if (cars.filter(c => c !== car).some(c => c.pos.equals(car.pos))) {
-        colided.push(car.pos.coordinates);
-        break;
-      }
-    }
-  } while (colided.length === 0);
-  const [[x,y]] = colided;
+  const [[x,y]] = cars.filter(c => c.rekt).map(c=>c.pos.coordinates);
   console.log(`The locaion of the first crash is ${x},${y}`)
 };
 
 function doPart2(input: string) {
   const [cars, map] = getCarsAndMap(input);
+  const keepGoing = () => cars.filter(c => !c.rekt).length > 1;
+  driveCars(cars, map, keepGoing);
 
-  do {
-    cars.sort(gridOrder)
-    for (const car of cars) {
-      if (car.rekt)
-        continue;
-      car.move(map);
-      const iColision = cars
-        .findIndex(c => !c.rekt && c !== car && c.pos.equals(car.pos));
-      if (iColision > -1) {
-        car.rekt = true;
-        cars[iColision].rekt = true;
-      }
-    }
-  } while (cars.filter(c => !c.rekt).length > 1);
-  const [remainingCar] = cars.filter(c => !c.rekt);
-  console.log(`The last car standing is at ${remainingCar.pos.x},${remainingCar.pos.y}`);
+  const [[x,y]] = cars.filter(c => !c.rekt).map(c => c.pos.coordinates);
+  console.log(`The last car standing is at ${x},${y}`);
 };
  
 main();
