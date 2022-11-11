@@ -1,6 +1,6 @@
 import fs  from 'fs';
-import { InfiniteGrid, neighborArray } from '../../util/grid';
-import { Point2D } from '../../util/point';
+import { InfiniteGrid } from '../../util/grid';
+import { Point2D, neighborArray } from '../../util/point';
 
 const starLine = /position=<\s*(-?\d+),\s*(-?\d+)> velocity=<\s*(-?\d+),\s*(-?\d+)>/;
 const surround = neighborArray.map(([x,y]) => new Point2D(x,y));

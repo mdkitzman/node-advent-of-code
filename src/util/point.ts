@@ -65,3 +65,15 @@ export const rotate = (p: Point2D, radians: number, origin: Point2D): Point2D =>
   const y = sin * (origin.x - p.x) + cos * (origin.y - p.y) + origin.y;
   return new Point2D(Math.round(x), Math.round(y));
 }
+
+export const neighborArray: number[][] = [
+  [-1, -1], [0, -1], [+1, -1],
+  [-1,  0],          [+1,  0],
+  [-1, +1], [0, +1], [+1, +1],
+];
+
+export const cardinalNeighbors: number[][] = [
+            [0, -1],
+  [-1,  0],          [+1,  0],
+            [0, +1]
+];

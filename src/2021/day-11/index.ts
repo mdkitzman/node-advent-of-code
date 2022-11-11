@@ -1,6 +1,6 @@
 import fs  from 'fs';
-import { Grid, neighborArray as adjacent } from '../../util/grid';
-import { Point2D } from '../../util/point';
+import { Grid } from '../../util/grid';
+import { Point2D, neighborArray as adjacent } from '../../util/point';
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});

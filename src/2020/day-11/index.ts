@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import { inRange } from 'lodash';
-import { neighborArray } from '../../util/grid';
+import { neighborArray } from '../../util/point';
 
 enum Item {
   floor = '.',
