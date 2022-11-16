@@ -71,10 +71,10 @@ export class Grid<T> {
       );
   }
 
-  public print(printValue: (value?: T)=>string, verticalStart: 'high'|'low' = 'high') {
+  public get dimensions() {
     const points = Array
-      .from(this.data.keys())
-      .map(Grid.toPoint);
+    .from(this.data.keys())
+    .map(Grid.toPoint);
     
     const left   = points.map(p => p.x).reduce((x1, x2) => x1 <= x2 ? x1 : x2);
     const right  = points.map(p => p.x).reduce((x1, x2) => x1 >= x2 ? x1 : x2);
@@ -82,6 +82,19 @@ export class Grid<T> {
     const top    = points.map(p => p.y).reduce((y1, y2) => y1 >= y2 ? y1 : y2);
     const bottom = points.map(p => p.y).reduce((y1, y2) => y1 <= y2 ? y1 : y2);
 
+    return {
+      top,
+      left,
+      right,
+      bottom,
+      width: Math.abs(left - right)+1,
+      height: Math.abs(top - bottom)+1,
+    };
+  }
+
+  public print(printValue: (value?: T)=>string, verticalStart: 'high'|'low' = 'high') {
+    const { left, right, top, bottom } = this.dimensions;
+    
     const yRange:number[] = verticalStart === 'high'
       ? range(top, bottom-1)
       : range(bottom, top+1);
