@@ -4,8 +4,9 @@ import { Point2D } from '../../util/point';
 import lodash from 'lodash';
 import { InfiniteGrid } from '../../util/grid';
 import Iter from 'es-iter';
+import { alphabet, ALPHABET, digits } from '../../util/stringUtils';
 
-const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+const letters = (alphabet+ALPHABET+digits).split('');
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});

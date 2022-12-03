@@ -1,7 +1,9 @@
 import fs  from 'fs';
 import { sum, chunk } from '../../util/arrayUtils';
+import { alphabet, ALPHABET, cut } from '../../util/stringUtils';
 
-const letterValue: Record<string, number> = Object.fromEntries('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((ltr, i) => [ltr, i+1]));
+const letterValue: Record<string, number> = Object.fromEntries((alphabet+ALPHABET).split('').map((ltr, i) => [ltr, i+1]));
+const cutInHalf = (str:string) => cut(str, str.length/2);
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
@@ -11,22 +13,18 @@ const main = async () => {
 
 const findCommon = (strings: string[]): number => {
   const [first, ...rest] = strings;
-  for(const ltr of first) {
-    const found = rest.map(str => str.indexOf(ltr)).every(idx => idx >= 0);
-    if(found) {
-      return letterValue[ltr];
-    }
-  }
-  return 0;
+  const matchingLetter = first
+    .split('')
+    .find(ltr => rest.map(str => str.indexOf(ltr)).every(val => val >= 0));
+  return matchingLetter
+    ? letterValue[matchingLetter]
+    : 0;
 }
 
 function doPart1(input: string) {
   const total = input
     .split('\n')
-    .map(line => {
-      const middle = line.length / 2;
-      return [line.substring(0, middle), line.substring(middle, line.length)];
-    })
+    .map(cutInHalf)
     .map(findCommon)
     .reduce(sum);
   console.log(total);

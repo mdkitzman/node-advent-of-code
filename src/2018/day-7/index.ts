@@ -2,6 +2,7 @@ import fs  from 'fs';
 import Graph from 'graphology';
 import { min } from '../../util/arrayUtils';
 import lodash  from 'lodash';
+import { ALPHABET } from '../../util/stringUtils';
 
 const stepRegex = /Step (\S) must be finished before step (\S) can begin./;
 
@@ -61,7 +62,7 @@ function doPart2(input: string, workerCount:number, baseTime: number) {
   const graph = buildGraph(input);
   const workers: Job[] = [];
   const done:string[] = [];
-  const timeChart = Object.fromEntries('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((ltr, id) => [ltr, id + 1 + baseTime]));
+  const timeChart = Object.fromEntries(ALPHABET.split('').map((ltr, id) => [ltr, id + 1 + baseTime]));
   let totalTime = 0;
   
   const candidates = graph.nodes().filter(n => graph.inNeighbors(n).length === 0).sort();

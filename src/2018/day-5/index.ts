@@ -1,5 +1,6 @@
 import fs  from 'fs';
 import { min } from '../../util/arrayUtils';
+import { alphabet } from '../../util/stringUtils';
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
@@ -34,7 +35,7 @@ function doPart1(input: string) {
 };
 
 function doPart2(input: string) {
-  const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  const letters = alphabet.split('');
   const smallest = letters
     .map(letter => input.replace(new RegExp(`${letter}`, 'ig'), ''))
     .map(doReaction)
