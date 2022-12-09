@@ -1,6 +1,7 @@
 import { range } from "lodash";
 import { Point2D } from "./point";
 import { cloneDeep } from 'lodash'
+import { max, min } from "./arrayUtils";
 
 /**
  * Will generate coordinate values for n-dimensions from the origin
@@ -27,6 +28,13 @@ export function* generateCoords(...dimensionSizes: number[]) {
     }
   }
 }
+
+const minMax = (a: number[], acc: number[]): number[] => ([
+  Math.min(a[0], acc[0]),
+  Math.max(a[1], acc[1])
+]);
+
+const toPair = (key: 'x'|'y') => (p: Point2D): number[] => ([p[key], p[key]]);
 
 export class Grid<T> {
   public readonly data = new Map<string, T>();
@@ -76,11 +84,8 @@ export class Grid<T> {
     .from(this.data.keys())
     .map(Grid.toPoint);
     
-    const left   = points.map(p => p.x).reduce((x1, x2) => x1 <= x2 ? x1 : x2);
-    const right  = points.map(p => p.x).reduce((x1, x2) => x1 >= x2 ? x1 : x2);
-    
-    const top    = points.map(p => p.y).reduce((y1, y2) => y1 >= y2 ? y1 : y2);
-    const bottom = points.map(p => p.y).reduce((y1, y2) => y1 <= y2 ? y1 : y2);
+    const [left, right] = points.map(toPair('x')).reduce(minMax);
+    const [top, bottom] = points.map(toPair('y')).reduce(minMax);
 
     return {
       top,
@@ -93,11 +98,11 @@ export class Grid<T> {
   }
 
   public print(printValue: (value?: T)=>string, verticalStart: 'high'|'low' = 'high') {
-    const { left, right, top, bottom } = this.dimensions;
+    const { top, left, right, height } = this.dimensions;
     
-    const yRange:number[] = verticalStart === 'high'
-      ? range(top, bottom-1)
-      : range(bottom, top+1);
+    const yRange:number[] = new Array(height).fill(0).map((v, i) => i + top);
+    if (verticalStart === 'low')
+      yRange.reverse();
     
     yRange.forEach(y => {
       let row = '';
