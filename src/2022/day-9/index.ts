@@ -14,7 +14,7 @@ R 2`
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput);
+  doPart1(allInput); // 6087
   doPart2(allInput);
 };
 
@@ -28,9 +28,9 @@ const unitPoint = (dir: Dir): Point2D => {
     case 'R': return new Point2D(1, 0);
   }
 };
-
+const touchPoints = [[0,0], ...neighborArray];
 const touching = (a: Point2D, b: Point2D):boolean => {
-  return neighborArray.map(([x,y]) => new Point2D(x+a.x, y+a.y)).some(p => p.equals(b));
+  return touchPoints.map(([x,y]) => new Point2D(x+a.x, y+a.y)).some(p => p.equals(b));
 }
 
 function doPart1(input: string) {
