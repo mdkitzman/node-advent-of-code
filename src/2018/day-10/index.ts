@@ -29,7 +29,7 @@ function doPart1And2(input: string) {
         ));
     if (candidate) {
       console.log(`Clock tick ${i}`);
-      sky.print(v => v ? "#":'.', 'low');
+      sky.printBlocks(v => Boolean(v));
       console.log();
     }
     stars.forEach(([star, velocity]) => star.add(velocity));    

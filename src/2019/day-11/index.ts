@@ -18,7 +18,7 @@ async function doPart1(input: string) {
 async function doPart2(input: string) {
   const robot = new PainterRobot('white');
   await robot.run(input);
-  robot.grid.print((value) => value?.color === 'white' ? '█' : ' ');
+  robot.grid.printBlocks((value) => value?.color === 'white', 'low');
 };
 
 main();

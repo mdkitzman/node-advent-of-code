@@ -37,7 +37,7 @@ function doPart2(input: string, x: number, y: number) {
     const point = new Point2D(iPixel % x, y - 1 - Math.floor(iPixel / x));
     result.set(point, pixel);
   }
-  result.print((pixel) => pixel === 1 ? '█' : ' ');
+  result.printBlocks((pixel) => pixel === 1, 'low');
 };
 
 main();

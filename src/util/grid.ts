@@ -97,6 +97,10 @@ export class Grid<T> {
     };
   }
 
+  public printBlocks(printValue: (value?: T) => boolean, verticalStart?: 'high'|'low') {
+    this.print(v => printValue(v) ? '█' : ' ', verticalStart);
+  }
+
   public print(printValue: (value?: T)=>string, verticalStart: 'high'|'low' = 'high') {
     const { top, left, right, height } = this.dimensions;
     
