@@ -39,7 +39,7 @@ export class Arcade {
 
   public display() {
     console.log(`The score is ${this._score}`);
-    this.grid.print(tile => {
+    console.log(this.grid.print(tile => {
       switch (tile) {
         case TileType.BALL:   return 'o';
         case TileType.BLOCK:  return '□';
@@ -48,7 +48,7 @@ export class Arcade {
         default:
         case TileType.EMPTY:  return ' ';
       }
-    });
+    }));
   }
 
   public get tileset(): TileType[] {

@@ -21,7 +21,7 @@ function doPart2(input: string) {
 
   folds.forEach(fold => doFold(grid, fold));
 
-  grid.printBlocks(value => Boolean(value));
+  console.log(grid.printBlocks(value => Boolean(value)));
 };
 
 function doFold(grid: InfiniteGrid<boolean>, fold: Fold) {

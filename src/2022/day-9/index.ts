@@ -45,7 +45,7 @@ function doPart1(input: string) {
   incrementPosCount(tail);
 
   const print = () => {
-    tailPositions.print(v => v ? v.toString() : '.', 'high');
+    console.log(tailPositions.print(v => v ? v.toString() : '.', 'high'));
     console.log('');
   }
 

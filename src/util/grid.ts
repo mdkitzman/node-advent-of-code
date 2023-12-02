@@ -97,26 +97,27 @@ export class Grid<T> {
     };
   }
 
-  public printBlocks(printValue: (value?: T) => boolean, verticalStart?: 'high'|'low') {
-    this.print(v => printValue(v) ? '█' : ' ', verticalStart);
+  public printBlocks(printValue: (value?: T) => boolean, verticalStart?: 'high'|'low'):string {
+    return this.print(v => printValue(v) ? '█' : ' ', verticalStart);
   }
 
-  public print(printValue: (value?: T)=>string, verticalStart: 'high'|'low' = 'high') {
+  public print(printValue: (value?: T)=>string, verticalStart: 'high'|'low' = 'high'):string {
     const { top, left, right, height } = this.dimensions;
-    
+
     const yRange:number[] = new Array(height).fill(0).map((v, i) => i + top);
     if (verticalStart === 'low')
       yRange.reverse();
     
-    yRange.forEach(y => {
-      let row = '';
-      for (let x = left; x <= right; x++) {
-        const value:T|undefined = this.data.get(`${x},${y}`);
-        row += printValue(value);
-      }
-      console.log(row);
-      row = '';
-    });
+    return yRange
+      .map(y => {
+        let row = '';
+        for (let x = left; x <= right; x++) {
+          const value:T|undefined = this.data.get(`${x},${y}`);
+          row += printValue(value);
+        }
+        return row;
+      })
+      .join('\n');
   }
 }
 
