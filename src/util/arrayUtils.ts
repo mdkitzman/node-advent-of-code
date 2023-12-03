@@ -49,3 +49,32 @@ export const infiniteLoop = function*<T>(input: T[]) {
     i = i + 1 === input.length ? 0 : i+1;
   }
 };
+
+/**
+ * Used in combination with discriminated union types and filtering arrays which allows
+ * the subsequent methods to know the reduced type.
+ * 
+ * ```ts
+ * type Foo = { type: "Foo" };
+ * type Goo = { type: "Goo" };
+ * type Union = Foo | Goo;
+ *  
+ * const arr: Union[] = [];
+ *  
+ * const foo = arr.find(discriminate("type", "Foo")); // Foo | undefined 
+ * const goos = arr.filter(discriminate("type", "Goo"));  // Goo[]
+ * ```
+ * Source: https://stackoverflow.com/a/59054248
+ * 
+ * @param discriminantKey: The name of the parameter to discriminate on
+ * @param discriminantValue: The value to discriminate with
+ * @returns 
+ */
+export function discriminate<K extends PropertyKey, V extends string | number | boolean>(
+  discriminantKey: K, discriminantValue: V
+) {
+  return <T extends Record<K, any>>(
+      obj: T & Record<K, V extends T[K] ? T[K] : V>
+  ): obj is Extract<T, Record<K, V>> =>
+      obj[discriminantKey] === discriminantValue;
+}
