@@ -42,7 +42,7 @@ const sumLines = (input: string, tokenize: (line:string)=>string[]) =>
     .reduce(sum);
 
 function doPart1(input: string) {
-  const tokenizer = (line:string): string[] => [...line.matchAll(/\d/g)].flat();
+  const tokenizer = (line:string): string[] => line.replaceAll(/\D/g, "").split('');
   const sum = sumLines(input, tokenizer)
   console.log(sum); // 55816
 };
