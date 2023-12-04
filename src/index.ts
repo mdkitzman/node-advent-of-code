@@ -14,4 +14,8 @@ Object.values(APPS).forEach(app => app(program as unknown as Command));
 // parse and execute the desire application
 program
   .addHelpText('before', banner)
-  .parse(process.argv);
+  .parseAsync(process.argv)
+  .catch(e => console.error(e))
+  .finally(() => {
+    console.log('all done')
+  });
