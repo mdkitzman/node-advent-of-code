@@ -1,4 +1,5 @@
 #!/usr/bin/env ts-node-script
+import 'dotenv/config';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import figlet from 'figlet';

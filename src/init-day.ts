@@ -6,16 +6,18 @@ import {
   writeFileSync,
   Stats
 } from 'fs';
+import { getReadme, getPuzzleInput } from './aocClient';
+
 
 const toNumber = (val: string, prev: number): number => parseInt(val, 10);
 
-const ensureFile = async (filePath: string, fn: ()=>void): Promise<void> => {
+const ensureFile = async (filePath: string, fn: ()=>Promise<void>): Promise<void> => {
   let stats: Stats | null = null;
   try {
     stats = await fs.stat(filePath); 
   } catch (err) {}
   if (!stats || !stats.isFile()) {
-    fn();
+    await fn();
   }
 };
 
@@ -34,9 +36,20 @@ const run = async ({ day, year}: Options) => {
   }
   const newFilePath = `${newPath}/index.ts`;
   const readmePath = `${newPath}/README.md`;
-
-  await ensureFile(newFilePath, () => createReadStream(`${__dirname}/day-template.ts`).pipe(createWriteStream(newFilePath)));
-  await ensureFile(readmePath, () => writeFileSync(readmePath, `# Day ${day}\n\n## Part 1\n\n## Part 2`));  
+  const inputPath = `${newPath}/input`;
+  await Promise.all([
+    ensureFile(newFilePath, async () => {
+      createReadStream(`${__dirname}/day-template.ts`).pipe(createWriteStream(newFilePath))
+    }),
+    ensureFile(readmePath, async () => {
+      const mdData = await getReadme(day, year);
+      writeFileSync(readmePath, mdData)
+    }),
+    ensureFile(inputPath, async() => {
+      const input = await getPuzzleInput(day, year);
+       writeFileSync(inputPath, input)
+    }),
+  ]);
 }
 
 const setupProgram = (program: Command): void => {
