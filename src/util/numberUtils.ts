@@ -21,3 +21,9 @@ export const gcd = (x:number, y:number):number => {
 // % is not a modulo function, but rather a remainder function, which will allow
 // for negative values to be returned, i.e. -1 % 4 => -1.
 export const absoluteModulo = (a:number, b:number):number => ((a % b) + b) % b;
+
+export function* generateRange(start: number, end: number) {
+  for (let i = start; i <= end; i++) {
+    yield i;
+  }
+}

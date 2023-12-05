@@ -47,7 +47,7 @@ const run = async ({ day, year}: Options) => {
     }),
     ensureFile(inputPath, async() => {
       const input = await getPuzzleInput(day, year);
-       writeFileSync(inputPath, input)
+      writeFileSync(inputPath, input)
     }),
   ]);
 }
