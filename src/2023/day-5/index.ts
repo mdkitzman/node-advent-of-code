@@ -1,19 +1,17 @@
 import fs  from 'fs';
 import { pipe } from '../../util/pipe';
-import { chunk, min, minMax, windowed } from '../../util/arrayUtils';
+import { chunk, min } from '../../util/arrayUtils';
 import { generateRange, inRange } from '../../util/numberUtils';
+import timeFn from '../../util/timeFn';
 
-const time = (name: string, fn, ...args) => {
-  console.time(name);
-  fn(...args);
-  console.timeEnd(name);
-}
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
   
-  time("part1", doPart1, allInput);
-  time("part2", doPart2, allInput);
+  timedPart1(allInput);
+  timedPart2(allInput);
 };
 
 const isInRange = (source:number) => (([,src, rng]: number[]) => inRange(src, src+rng)(source));
