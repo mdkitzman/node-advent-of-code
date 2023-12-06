@@ -27,3 +27,24 @@ export function* generateRange(start: number, end: number) {
     yield i;
   }
 }
+
+export const quadratic = (a:number, b:number): number => {
+  // d(x) := x * (a - x) > b, (inverted parabola)
+  const x1 = (a - Math.sqrt(a ** 2 - 4 * b)) / 2;
+  const x2 = (a + Math.sqrt(a ** 2 - 4 * b)) / 2;
+  return Math.floor(x2) - Math.ceil(x1) + 1;
+}
+
+export const findFactorPairs = (n: number): number[][] => {
+  const pairs: number[][] = [];
+  for (var i = 1; i < n; i++){
+    if (n % i === 0) {
+      const [a, b] = [i, n / i];
+      pairs.push([a,b]);
+      if (a >= b){
+        break;
+      } 
+    }
+  }
+  return pairs;
+}
