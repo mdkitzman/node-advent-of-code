@@ -16,7 +16,4 @@ Object.values(APPS).forEach(app => app(program as unknown as Command));
 program
   .addHelpText('before', banner)
   .parseAsync(process.argv)
-  .catch(e => console.error(e))
-  .finally(() => {
-    console.log('all done')
-  });
+  .catch(e => console.error(e));
