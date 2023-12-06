@@ -1,9 +1,14 @@
 import fs  from 'fs';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput);
-  doPart2(allInput);
+  
+  timedPart1(allInput);
+  timedPart2(allInput);
 };
 
 function doPart1(input: string) {
