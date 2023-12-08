@@ -1,6 +1,7 @@
 import { countBy } from "lodash";
 import { isEqual } from "lodash";
 import { leftpad } from "../../util/stringUtils";
+import { max } from "../../util/arrayUtils";
 
 type HandTest = (hand:string)=>boolean;
 
@@ -12,13 +13,13 @@ const numericCards = (hand:string): number[] => hand.split("").map(card => value
 const numericCardValue = (hand:string) => parseInt(numericCards(hand).map(String).map(v => leftpad(v, 2)).join(''), 10);
 
 const handValue = {
-  "fiveOfAKind": 10*10000000000,
-  "fourOfAKind": 9 *10000000000,
-  "fullHouse":   8 *10000000000,
-  "threeOfAKind":7 *10000000000,
-  "twoPair":     6 *10000000000,
-  "onePair":     5 *10000000000,
-  "highCard":    4 *10000000000,
+  "fiveOfAKind": 10*100000000000,
+  "fourOfAKind": 9 *100000000000,
+  "fullHouse":   8 *100000000000,
+  "threeOfAKind":7 *100000000000,
+  "twoPair":     6 *100000000000,
+  "onePair":     5 *100000000000,
+  "highCard":    4 *100000000000,
 }
 
 const handTests: HandTest[] = [
@@ -55,16 +56,16 @@ const handTests: HandTest[] = [
   }
 ];
 
-export const handStrength = (hand:string): number => {
+export const handScore = (hand:string): number => {
   const handTest = handTests.find(test => test(hand));
   
   return handValue[handTest!.name] + numericCardValue(hand);
 }
 
-export const handStrengthWild = (hand:string): number => {
+export const handScoreWild = (hand:string): number => {
  
-  const makeHands = (hand:string[], start = 0):string[] => {
-    const hands: string[] = [];
+  const makeHands = (hand:string[], start = 0):string[][] => {
+    const hands: string[][] = [];
     for(let iCard = start; iCard < hand.length; iCard++) {
       if (hand[iCard] !== "J") 
         continue;
@@ -72,12 +73,15 @@ export const handStrengthWild = (hand:string): number => {
         const newHand = [...hand];
         newHand.splice(iCard, 1, card);
         return newHand;
-      }).map(newHand => makeHands(newHand, iCard+1));
-      hands.push(...newHands.flat());
+      })
+      .map(newHand => makeHands(newHand, iCard+1))
+      .flat();
+      for(const h of newHands){
+        hands.push(h);
+      }
     }
-    return hands;
+    return [hand, ...hands];
   }
   const hands = makeHands(hand.split(""));
-  console.log(hands);
-  return 0;
+  return hands.map(hand => handScore(hand.join(''))).reduce(max)
 }
