@@ -46,29 +46,20 @@ export class IntComp extends EventEmitter {
     ]);
   }
 
-  async execute(memory:number[]):Promise<number> {
-    const memoryProxy = new Proxy(memory, autoExpander);
+  async execute(program:number[]):Promise<number> {
+    const programProxy = new Proxy(program, autoExpander);
 
     let increment = 0;
     // increment will either be a number to increment the opcode pointer by or NaN, indicating that we're done.
     for (let opIdx = 0; isFinite(increment); opIdx += increment) {
-      const opCode = this.opCode(memoryProxy, opIdx);
-      let doOperation = this.opcodeMap.get(opCode);
-      if (!doOperation) {
-        console.log({
-          opCode,
-          opIdx,
-          increment,
-          memory: memoryProxy.slice(opIdx, opIdx + 5)
-        }, 'Unable to find a proper op code');
-        doOperation = this.terminate;
-      }
-      increment = await doOperation(memoryProxy, opIdx);
+      const opCode = this.nextOpCode(programProxy, opIdx);
+      const doOperation = this.opcodeMap.get(opCode) || this.terminate.bind(this);
+      increment = await doOperation(programProxy, opIdx);
     }
-    return memoryProxy[0];
+    return programProxy[0];
   }
 
-  private opCode(memory:number[], index: number): OpCode {
+  private nextOpCode(memory:number[], index: number): OpCode {
     const code = memory[index].toString(10).slice(-2);
     return parseInt(code, 10);
   }
@@ -188,37 +179,6 @@ export class IntComp extends EventEmitter {
     return 2;
   }
 }
-
-export const execute = (memory:number[], noun:number, verb:number):number => {
-  memory[1] = noun;
-  memory[2] = verb;
-
-  let increment = 0;
-  for (let opIdx = 0; memory[opIdx] != 99; opIdx += increment) {
-    const operation = memory[opIdx];
-    switch(operation) {
-      case 1: // Add
-        memory[memory[opIdx+3]] = memory[memory[opIdx+1]] + memory[memory[opIdx+2]];
-        increment = 4;
-        break;
-      case 2: // Multiply
-        memory[memory[opIdx+3]] = memory[memory[opIdx+1]] * memory[memory[opIdx+2]];
-        increment = 4;
-        break;
-      case 3: // Store input
-        increment = 2;
-        break;
-      case 4: // output value
-        increment = 2;
-        break;
-      case 99: // Terminate
-      default:
-        increment = 0;
-        break;
-    }
-  }
-  return memory[0];
-};
 
 enum ParamMode {
   ADDRESS = 0,
