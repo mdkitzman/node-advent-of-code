@@ -1,5 +1,5 @@
 import { range } from "lodash";
-import { Point2D } from "./point";
+import { Point2D, cardinalNeighbors } from "./point";
 import { cloneDeep } from 'lodash'
 import { max, min } from "./arrayUtils";
 
@@ -118,6 +118,16 @@ export class Grid<T> {
         return row;
       })
       .join('\n');
+  }
+
+  public cardinalNeighbors(key: Point2D): Point2D[] {
+    return cardinalNeighbors
+      .map(([x,y]) => {
+        const neighbor = new Point2D(x,y);
+        neighbor.add(key);
+        return neighbor;
+      })
+      .filter(pos => this.get(pos));
   }
 }
 
