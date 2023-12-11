@@ -43,6 +43,10 @@ export class Point2D {
   get coordinates() {
     return [this.x, this.y];
   }
+
+  toString() {
+    return `${this.x},${this.y}`
+  }
 }
 
 export class Point3D {

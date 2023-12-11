@@ -1,7 +1,6 @@
 import fs  from 'fs';
 import timeFn from '../../util/timeFn';
 import { sum, windowed } from '../../util/arrayUtils';
-import { lcm } from '../../util/numberUtils';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
@@ -26,20 +25,22 @@ const sumPredictedValues = (input:string, predicter: (history:number[])=>number)
 
 function doPart1(input: string) {
   const part1 = sumPredictedValues(input, determineNextTailValue);
-  console.log(part1);
+  console.log(part1, part1 === 1974913025 ? '✅' : '❌');
 };
 
 function doPart2(input: string) {
   const part2 = sumPredictedValues(input, determineNextHeadValue);
-  console.log(part2);
+  console.log(part2, part2 === 884 ? '✅' : '❌');
 };
 
 function determineNextValue(side: "tail" | "head", history:number[]):number {
   if (history.every(v => v === 0)) {
     return 0;
   }
-  const diffDir = side === "tail" ? ([a,b]: number[]):number => b-a : ([a,b]: number[]):number => a-b
-  const differences = windowed(2, history).map(diffDir);
+  const difference = side === "tail"
+    ? ([a,b]: number[]):number => b - a
+    : ([a,b]: number[]):number => a - b
+  const differences = windowed(2, history).map(difference);
   const nextValue = determineNextValue(side, differences);
   const [lastValue] = side === "tail" ? history.slice(-1) : history;
   return lastValue + nextValue;

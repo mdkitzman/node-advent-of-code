@@ -46,23 +46,16 @@ export class Grid<T> {
     return new Point2D(x,y);
   }
 
-  static toKey(point: Point2D): string {
-    return `${point.x},${point.y}`;
-  }
-
   public get(point: Point2D): T | undefined {
-    const key = Grid.toKey(point);
-    return this.data.get(key)!;
+    return this.data.get(point.toString())!;
   }
 
   public set(point: Point2D, value: T): void {
-    const key = Grid.toKey(point);
-    this.data.set(key, value);
+    this.data.set(point.toString(), value);
   }
 
   public delete(point: Point2D) {
-    const key = Grid.toKey(point);
-    this.data.delete(key);
+    this.data.delete(point.toString());
   }
 
   public iterable(): Array<[Point2D, T]> {
@@ -139,7 +132,7 @@ export class InfiniteGrid<T> extends Grid<T> {
   }
 
   public get(point: Point2D): T {
-    const key = Grid.toKey(point);
+    const key = point.toString();
     if (!this.data.has(key)) {
       this.data.set(key, cloneDeep(this.defaultValue));  
     }

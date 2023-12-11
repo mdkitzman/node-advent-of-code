@@ -35,7 +35,7 @@ function findPath(grid: number[][]) {
   // Construct the graph with weights
   grid.forEach((row, y) => {
     row.forEach((value, x) => {
-      const from = Grid.toKey(new Point2D(x,y));
+      const from = new Point2D(x,y).toString();
       graph.mergeNode(from, { cost: value })
       neighbors
         .map(([dx, dy]) => [x+dx, y+dy])
@@ -43,15 +43,15 @@ function findPath(grid: number[][]) {
           const neighborVal = grid[ny]?.[nx];
           if (neighborVal === undefined)
             return;
-          const to = Grid.toKey(new Point2D(nx, ny));
+          const to = new Point2D(nx, ny).toString();
           graph.mergeNode(to, { cost: neighborVal })
           graph.mergeEdge(from, to, { weight: value + neighborVal });
         });        
     });
   });
 
-  const start = Grid.toKey(new Point2D(0,0));
-  const end = Grid.toKey(new Point2D(grid[0].length -1, grid.length -1));
+  const start = new Point2D(0,0).toString();
+  const end = new Point2D(grid[0].length -1, grid.length -1).toString();
   const path = dijkstra.bidirectional(graph, start, end, 'weight');
 
   if (path === null) {
