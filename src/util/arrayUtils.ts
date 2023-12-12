@@ -2,13 +2,13 @@ export const bitAnd = (prev: number, cur: number) => prev & cur;
 export const sum = (prev: number, cur: number) => prev + cur;
 export const diff = (prev: number, cur: number) => prev - cur;
 export const multiply = (prev: number, cur: number) => prev * cur;
-export const allTrue = (prev: boolean, cur:boolean) => prev && cur;
-export const anyTrue = (prev: boolean, cur:boolean) => prev || cur;
+export const allTrue = (prev: boolean, cur: boolean) => prev && cur;
+export const anyTrue = (prev: boolean, cur: boolean) => prev || cur;
 
 export const max = (prev: number, cur: number) => Math.max(prev, cur)
 export const min = (prev: number, cur: number) => Math.min(prev, cur)
 
-export const toCharCodes = (input:string):number[] => input.split('').map(c => c.charCodeAt(0));
+export const toCharCodes = (input: string): number[] => input.split('').map(c => c.charCodeAt(0));
 export const chunk = <T>(arr: T[], n: number): T[][] => arr.length ? [arr.slice(0, n), ...chunk(arr.slice(n), n)] : [];
 
 export const minMax = (arr: number[]): [number, number] => [
@@ -32,7 +32,7 @@ export const minMax = (arr: number[]): [number, number] => [
  * @param arr - The array to create the window over
  * @returns 
  */
-export const windowed = <T>(k: number, arr: T[]): T[][]=>
+export const windowed = <T>(k: number, arr: T[]): T[][] =>
   arr.flatMap((_, i) =>
     i <= arr.length - k
       ? [arr.slice(i, i + k)]
@@ -46,7 +46,7 @@ export const infiniteLoop = function*<T>(input: T[]) {
   let i = 0;
   while (input.length) {
     yield input[i];
-    i = i + 1 === input.length ? 0 : i+1;
+    i = i + 1 === input.length ? 0 : i + 1;
   }
 };
 
@@ -78,3 +78,27 @@ export function discriminate<K extends PropertyKey, V extends string | number | 
   ): obj is Extract<T, Record<K, V>> =>
       obj[discriminantKey] === discriminantValue;
 }
+
+const chooseRecurse = <T>(arr: T[], k: number, prefix:T[] = []):T[][] => {
+  if (k == 0) return [prefix];
+  return arr.flatMap((v, i) =>
+    chooseRecurse(arr.slice(i+1), k-1, [...prefix, v])
+  );
+}
+
+/**
+ * Will generate an array of arrays of size `k` of combinations of the elements
+ * in the provided array.
+ * 
+ * ```ts
+ * console.log(choose([1,2,3,4], 2))
+ * // [[1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]
+ * console.log(choose([1,2,3,4], 3))
+ * // [[1, 2, 3], [1, 2, 4], [1, 3, 4], [2, 3, 4]]
+ * ```
+ * @param arr: The Array to generate combinations of
+ * @param k: How many to choose for each combination
+ * @returns Combination array
+ * @author https://stackoverflow.com/a/74115113
+ */
+export const choose = <T>(arr: T[], k:number): T[][] => chooseRecurse(arr, k);
