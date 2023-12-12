@@ -7,9 +7,13 @@ const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const part1Expected = 1974913025;
+  const part2Expected = 884;
   
-  timedPart1(allInput);
-  timedPart2(allInput);
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 const determineNextTailValue = determineNextValue.bind(null, "tail");
@@ -24,13 +28,11 @@ const sumPredictedValues = (input:string, predicter: (history:number[])=>number)
 }
 
 function doPart1(input: string) {
-  const part1 = sumPredictedValues(input, determineNextTailValue);
-  console.log(part1, part1 === 1974913025 ? '✅' : '❌');
+  return sumPredictedValues(input, determineNextTailValue);  
 };
 
 function doPart2(input: string) {
-  const part2 = sumPredictedValues(input, determineNextHeadValue);
-  console.log(part2, part2 === 884 ? '✅' : '❌');
+  return sumPredictedValues(input, determineNextHeadValue);
 };
 
 function determineNextValue(side: "tail" | "head", history:number[]):number {

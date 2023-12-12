@@ -2,7 +2,6 @@ import fs  from 'fs';
 import timeFn from '../../util/timeFn';
 import { Grid } from '../../util/grid';
 import { Point2D, cardinalNeighbors } from '../../util/point';
-import { assert } from 'console';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
@@ -27,9 +26,13 @@ const nexPossibleDirections: Record<string, Point2D[]> = Object.freeze({
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const part1Expected = 6738;
+  const part2Expected = null;
   
-  timedPart1(allInput);
-  timedPart2(allInput);
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 function doPart1(input: string) {
@@ -43,13 +46,14 @@ function doPart1(input: string) {
     distance++;
   } while (pipeGrid.get(next) !== "S")
 
-  console.log(Math.floor(distance/2)); // 6738
+  return Math.floor(distance/2);
 };
 
 function doPart2(input: string) {
   const pipeGrid = getPipes(input);
   
   const [start] = pipeGrid.iterable().find(([, pipe]) => pipe === "S")!;
+  return 0;
 };
 
 function getPipes(input:string): Grid<string> {
