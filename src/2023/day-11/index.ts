@@ -4,9 +4,12 @@ import { Grid } from '../../util/grid';
 import { Point2D } from '../../util/point';
 import { difference } from 'lodash';
 import { choose, sum } from '../../util/arrayUtils';
+import { gridBuilder } from '../../util/inputParsers';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
+
+const getGrid = gridBuilder(ch => ch === "#", ch => ch);
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
@@ -59,16 +62,6 @@ function expandGrid(grid: Grid<string>, expansion = 2) {
   return newGrid;
 }
 
-function getGrid(input:string): Grid<string> {
-  const grid = new Grid<string>();
-  input.split("\n")
-    .forEach((row, y) => {
-      row.split("").forEach((ch, x) => {
-        if (ch === "#")
-          grid.set(new Point2D(x,y), ch);
-      });
-    });
-  return grid;
-}
+
 
 main();

@@ -2,6 +2,7 @@ import fs  from 'fs';
 import timeFn from '../../util/timeFn';
 import { Grid } from '../../util/grid';
 import { Point2D, cardinalNeighbors } from '../../util/point';
+import { gridBuilder } from '../../util/inputParsers';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
@@ -23,6 +24,7 @@ const nexPossibleDirections: Record<string, Point2D[]> = Object.freeze({
   ["7"] : [SOUTH, WEST],
   ["F"] : [SOUTH, EAST],
 });
+const getPipes = gridBuilder(ch => ch !== ".", ch => ch);
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
@@ -55,19 +57,6 @@ function doPart2(input: string) {
   const [start] = pipeGrid.iterable().find(([, pipe]) => pipe === "S")!;
   return 0;
 };
-
-function getPipes(input:string): Grid<string> {
-  const pipeGrid = new Grid<string>();
-  input.split("\n")
-    .forEach((row, y) => {
-      row.split("").forEach((ch, x) => {
-        if (ch === ".")
-          return;
-        pipeGrid.set(new Point2D(x,y), ch);
-      });
-    });
-  return pipeGrid;
-}
 
 function walkPipes(prev: Point2D, pos: Point2D, grid: Grid<string>): Point2D {
   const [left, right] = nextPipes(pos, grid);
