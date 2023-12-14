@@ -27,12 +27,14 @@ function doTheThing(input:string, strengthFn:(hand:string)=>number) {
 }
 
 function doPart1(input: string) {
-  const part1 = doTheThing(input, handScore);
+  const cards = "23456789TJQKA";
+  const part1 = doTheThing(input, handScore(cards));
   console.log(part1);
 };
 
 function doPart2(input: string) {
-  const part2 = doTheThing(input, handScoreWild);
+  const cards = "J23456789TQKA";
+  const part2 = doTheThing(input, handScoreWild(cards));
   console.log(part2); // 246213569 too high
 };
 

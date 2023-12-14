@@ -1,25 +1,23 @@
-import { countBy } from "lodash";
+import { countBy, memoize } from "lodash";
 import { isEqual } from "lodash";
 import { leftpad } from "../../util/stringUtils";
 import { max } from "../../util/arrayUtils";
+import wildPermutations from '../../util/permutation';
 
 type HandTest = (hand:string)=>boolean;
 
-const cards = "23456789TJQKA";
-const cardsNoWild = cards.split("").filter(c => c !== "J");
-
-const valueMap = cards.split("").map((card, i) => ({[card]: i+2})).reduce((acc, cur) => ({ ...acc, ...cur}));
-const numericCards = (hand:string): number[] => hand.split("").map(card => valueMap[card] || 0);
-const numericCardValue = (hand:string) => parseInt(numericCards(hand).map(String).map(v => leftpad(v, 2)).join(''), 10);
+const valueMap = memoize((cards:string) => cards.split("").map((card, i) => ({[card]: i+2})).reduce((acc, cur) => ({ ...acc, ...cur})));
+const numericCards = memoize((cards:string) => (hand:string): number[] => hand.split("").map(card => valueMap(cards)[card] || 0));
+const numericCardValue = memoize((cards:string) => (hand:string) => parseInt(numericCards(cards)(hand).map(String).map(v => leftpad(v, 2)).join(''), 10));
 
 const handValue = {
-  "fiveOfAKind": 10*100000000000,
-  "fourOfAKind": 9 *100000000000,
-  "fullHouse":   8 *100000000000,
-  "threeOfAKind":7 *100000000000,
-  "twoPair":     6 *100000000000,
-  "onePair":     5 *100000000000,
-  "highCard":    4 *100000000000,
+  "fiveOfAKind": 10*10_00_00_00_00_00,
+  "fourOfAKind": 9 *10_00_00_00_00_00,
+  "fullHouse":   8 *10_00_00_00_00_00,
+  "threeOfAKind":7 *10_00_00_00_00_00,
+  "twoPair":     6 *10_00_00_00_00_00,
+  "onePair":     5 *10_00_00_00_00_00,
+  "highCard":    4 *10_00_00_00_00_00,
 }
 
 const handTests: HandTest[] = [
@@ -56,32 +54,18 @@ const handTests: HandTest[] = [
   }
 ];
 
-export const handScore = (hand:string): number => {
+export const handScore = (cards:string) => (hand:string): number => {
   const handTest = handTests.find(test => test(hand));
   
-  return handValue[handTest!.name] + numericCardValue(hand);
+  return handValue[handTest!.name] + numericCardValue(cards)(hand);
 }
 
-export const handScoreWild = (hand:string): number => {
- 
-  const makeHands = (hand:string[], start = 0):string[][] => {
-    const hands: string[][] = [];
-    for(let iCard = start; iCard < hand.length; iCard++) {
-      if (hand[iCard] !== "J") 
-        continue;
-      const newHands = cardsNoWild.map(card => {
-        const newHand = [...hand];
-        newHand.splice(iCard, 1, card);
-        return newHand;
-      })
-      .map(newHand => makeHands(newHand, iCard+1))
-      .flat();
-      for(const h of newHands){
-        hands.push(h);
-      }
-    }
-    return [hand, ...hands];
+const wildPermutator = wildPermutations("23456789TQKA", "J");
+export const handScoreWild = (cards:string) => (hand:string): number => {
+  const scorer = handScore(cards);
+  let maxScore = 0;
+  for (const h of wildPermutator(hand)) {
+    maxScore = max(scorer(h!), maxScore);
   }
-  const hands = makeHands(hand.split(""));
-  return hands.map(hand => handScore(hand.join(''))).reduce(max)
+  return maxScore;
 }

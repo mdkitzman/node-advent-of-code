@@ -2,12 +2,12 @@ import fs  from 'fs';
 import timeFn from '../../util/timeFn';
 import { sum } from '../../util/arrayUtils';
 import { zip } from 'lodash';
-import permutationScope from './permutation';
+import wildPermutations from '../../util/permutation';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
 
-const permuator = permutationScope(".#", "?");
+const permuator = wildPermutations(".#", "?");
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
   const part1Expected = 6958;
