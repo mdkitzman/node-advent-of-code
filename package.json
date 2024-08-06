@@ -23,7 +23,7 @@
     "@types/lodash": "4.17.7",
     "@types/luxon": "3.4.2",
     "@types/node": "14.18.33",
-    "axios": "1.7.2",
+    "axios": "1.7.3",
     "chalk": "4.1.2",
     "commander": "9.4.1",
     "dotenv": "16.4.5",
