@@ -19,7 +19,7 @@
   "dependencies": {
     "@types/chalk": "2.2.0",
     "@types/commander": "2.12.2",
-    "@types/figlet": "1.5.8",
+    "@types/figlet": "1.7.0",
     "@types/lodash": "4.17.13",
     "@types/luxon": "3.4.2",
     "@types/node": "14.18.33",
@@ -29,7 +29,7 @@
     "dotenv": "16.4.5",
     "es-iter": "1.1.2",
     "fast-astar": "1.0.6",
-    "figlet": "1.7.0",
+    "figlet": "1.8.0",
     "graphology": "0.25.4",
     "graphology-shortest-path": "2.1.0",
     "graphology-traversal": "0.3.1",
