@@ -1,12 +1,13 @@
 import { Command } from 'commander';
 import {
   promises as fs,
-  createReadStream,
   createWriteStream,
   writeFileSync,
   Stats
 } from 'fs';
+import { Readable } from 'stream';
 import { getReadme, getPuzzleInput } from './aocClient';
+import { template } from 'lodash';
 
 
 const toNumber = (val: string, prev: number): number => parseInt(val, 10);
@@ -36,18 +37,17 @@ const run = async ({ day, year}: Options) => {
   }
   const newFilePath = `${newPath}/index.ts`;
   const readmePath = `${newPath}/README.md`;
-  const inputPath = `${newPath}/input`;
+
   await Promise.all([
     ensureFile(newFilePath, async () => {
-      createReadStream(`${__dirname}/day-template.ts`).pipe(createWriteStream(newFilePath))
+      const fileData = await fs.readFile(`${__dirname}/day-template.ts`, { encoding: 'utf-8'});
+      const compiled = template(fileData)({ day, year });
+
+      Readable.from(compiled).pipe(createWriteStream(newFilePath));
     }),
     ensureFile(readmePath, async () => {
       const mdData = await getReadme(day, year);
       writeFileSync(readmePath, mdData)
-    }),
-    ensureFile(inputPath, async() => {
-      const input = await getPuzzleInput(day, year);
-      writeFileSync(inputPath, input)
     }),
   ]);
 }

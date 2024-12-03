@@ -1,13 +1,13 @@
-import fs  from 'fs';
 import timeFn from '../../util/timeFn';
 import { allTrue, pairwise } from '../../util/arrayUtils';
 import { inRange } from '../../util/numberUtils';
+import { getPuzzleInput } from '../../aocClient';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(2, 2024);
   const part1Expected = 549;
   const part2Expected = 589;
   

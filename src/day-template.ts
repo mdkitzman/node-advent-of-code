@@ -1,11 +1,11 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
 import timeFn from '../../util/timeFn';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(${day}, ${year});
   const part1Expected = null;
   const part2Expected = null;
   

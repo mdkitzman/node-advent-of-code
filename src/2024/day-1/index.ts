@@ -1,13 +1,14 @@
 import fs  from 'fs';
 import timeFn from '../../util/timeFn';
-import { zip, unzip } from 'lodash';
+import { zip, unzip, groupBy } from 'lodash';
 import { sum } from '../../util/arrayUtils';
+import { getPuzzleInput } from '../../aocClient';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(1, 2024);
   const part1Expected = 1666427;
   const part2Expected = 24316233;
   
@@ -26,17 +27,16 @@ const getLists = (input:string): [number[], number[]] => {
 }
 
 function doPart1(input: string) {
-  const [left, right] = getLists(input);
+  const [left, right] = getLists(input)
+    .map(list => list.sort((a, b) => a - b));
     
-  left.sort((a, b) => a-b);
-  right.sort((a, b) => a -b);
   return zip(left, right).map(([a, b]) => Math.abs(a!-b!)).reduce(sum);
 };
 
 function doPart2(input: string) {
   const [left, right] = getLists(input);
-  
-  const counts = left.map(l => right.filter(r => l === r).length);
+
+  const counts = left.map(leftEntry => right.filter(r => leftEntry === r).length);
   return zip(left, counts).map(([l, c]) => l! * c!).reduce(sum);
 };
 
