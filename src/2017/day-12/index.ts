@@ -1,7 +1,23 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import Graph from 'graphology';
 import {bfsFromNode} from 'graphology-traversal'
 import { subGraphCount } from '../../util/hash';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(12, 2017);
+  const part1Expected = 145;
+  const part2Expected = 207;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const getGraph = (input:string):Graph => {
   const graph = new Graph();
@@ -17,27 +33,20 @@ const getGraph = (input:string):Graph => {
   return graph;
 }
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const graph = getGraph(input);
   
   let counter = 0;
   bfsFromNode(graph, '0', () => { counter++ });
 
-  console.log(`Part 1 : from 0 - ${counter}`);
+  return counter;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const graph = getGraph(input);
 
   const count = subGraphCount(graph);
+  return count;
+};
 
-  console.log(`Part 2 : Therea are ${count} graphs found`)
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2017/day-12/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2017/day-12/test', { encoding: 'utf-8'});
-  
-  part1(allInput); // 145
-  part2(allInput); // 207
-})();
+main();

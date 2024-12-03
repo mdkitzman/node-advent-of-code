@@ -1,22 +1,38 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
 import { sum } from '../../util/arrayUtils';
+import timeFn from '../../util/timeFn';
 
-const part1 = (phrases:string[]) => {
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
+const main = async () => {
+  const allInput = await getPuzzleInput(4, 2017);
+  const part1Expected = 383;
+  const part2Expected = 265;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
+function doPart1(input: string) {
   const isValidPassphrase = (phrase:string): boolean => {
     const words = phrase.split(' ');
     const uniqueWords = new Set(words);
     return uniqueWords.size === words.length;
   }
   
+  const phrases = input.split('\n');
   const countValid = phrases
     .map(isValidPassphrase)
     .map(valid => valid ? 1 : 0)
     .reduce(sum, 0);
-  console.log(`Part 1 : There are ${countValid} vailid passphrases out of ${phrases.length}`);
+  return countValid;
 };
 
-const part2 = (phrases:string[]) => {
+function doPart2(input: string) {
   const isValidPassphrase = (phrase:string): boolean => {
     const words = phrase.split(' ')
       .map(word => Array.from(word).sort().join(''))
@@ -24,19 +40,12 @@ const part2 = (phrases:string[]) => {
     return uniqueWords.size === words.length;
   }
 
+  const phrases = input.split('\n');
   const countValid = phrases
     .map(isValidPassphrase)
     .map(valid => valid ? 1 : 0)
     .reduce(sum, 0);
-  console.log(`Part 2 : There are ${countValid} vailid passphrases out of ${phrases.length}`);
-}
+  return countValid;
+};
 
-(async () => {
-
-  const allPhrases = await fs.readFile('./src/2017/day-4/input', { encoding: 'utf-8'});
-  const phrases = allPhrases.split('\n');
-
-  part1(phrases);
-  part2(phrases);
-
-})();
+main();

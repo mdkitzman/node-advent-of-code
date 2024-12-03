@@ -1,5 +1,21 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { max } from '../../util/arrayUtils';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(13, 2017);
+  const part1Expected = 1_728;
+  const part2Expected = 3_946_838;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 class Entity {
   patrolLength:number;
@@ -48,8 +64,7 @@ class Player extends Entity{
 
 }
 
-const part1 = (input:string) => {
-
+function doPart1(input: string) {
   const layers = input.split('\n').map(line => line.split(': '));
   const maxLayer = layers.map(layer => layer[0]).map(v => parseInt(v, 10)).reduce(max);
 
@@ -73,10 +88,10 @@ const part1 = (input:string) => {
     Object.entries(scanners).forEach(([_, scannedLayer]) => scannedLayer.scanner.step() );
   }
 
-  console.log(`Part 1 : Total cost of the trip was ${cost}`);
+  return cost;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const layers = input.split('\n').map(line => line.split(': '));
   const maxLayer = layers.map(layer => layer[0]).map(v => parseInt(v, 10)).reduce(max);
 
@@ -108,15 +123,9 @@ const part2 = (input:string) => {
       player.reset(delay);
       Object.entries(scanners).forEach(([_, scannedLayer]) => scannedLayer.scanner.reset(delay) );
     }
-  } while (caught)
+  } while (caught);
 
-  console.log(`Part 2 : Delay the packet by ${delay} picoseconds to not get caught` )
-}
+  return delay;
+};
 
-(async () => { 
-  const allInput = await fs.readFile('./src/2017/day-13/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2017/day-13/test', { encoding: 'utf-8'});
-
-  part1(allInput); // cost of 1728
-  part2(allInput); // delay by 3,946,838 picoseconds
-})();
+main();

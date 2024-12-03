@@ -1,7 +1,24 @@
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import Graph from 'graphology';
 import { knotHash, subGraphCount } from '../../util/hash';
 import { sum } from '../../util/arrayUtils';
 import { dec2bin } from '../../util/numberUtils';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(14, 2017);
+  const part1Expected = 8226;
+  const part2Expected = 1128;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const hexHash2bin = (hash:string):string[] => hash.split('')
     .map(hex => parseInt(hex, 16))
@@ -9,7 +26,7 @@ const hexHash2bin = (hash:string):string[] => hash.split('')
     .map(binStr => binStr.split(''))
     .flat();
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   let count = 0;
   for(let i = 0; i < 128; i++) {
     const hash = knotHash(`${input}-${i}`);
@@ -18,11 +35,10 @@ const part1 = (input:string) => {
       .map(num => parseInt(num, 10))
       .reduce(sum, 0)
   }
-
-  console.log(`Part 1 : The number of used squares is ${count}`);
+  return count;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const grid:string[][] = [];
   const graph = new Graph();
 
@@ -61,13 +77,7 @@ const part2 = (input:string) => {
   // count the number of graphs
   const count = subGraphCount(graph);
 
-  console.log(`Part 2 : There are ${count} regions present`)
-}
+  return count;
+};
 
-(async () => {
-  const allInput = 'wenycdww';
-  const test = 'flqrgnkx';
-
-  part1(allInput); // 8226
-  part2(allInput); // 1128
-})();
+main();

@@ -1,6 +1,23 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { sum } from '../../util/arrayUtils';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
 type inputLine = [string, number, string[]|undefined];
+
+const main = async () => {
+  const allInput = await getPuzzleInput(7, 2017);
+  const part1Expected = "gynfwly";
+  const part2Expected = 1526;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const lineMatcher = /([a-z]+) \((\d+)\)(?:$| -> (.*)$)/;
 class Node {
@@ -91,13 +108,12 @@ const parseTree = (input:string): Node => {
   return realRoot;
 }
 
-const part1 = (input) => {
+function doPart1(input: string) {
   const root = parseTree(input);
-  
-  console.log(`Part 1 : Root of the program is ${root.name}`);
+  return root.name;
 };
 
-const part2 = (input) => {
+function doPart2(input: string) {
   const root = parseTree(input);
   
   const findUnbalanced = (node:Node):Node|undefined => {
@@ -126,13 +142,7 @@ const part2 = (input) => {
   const nonUniqueWeight = childrenWeights.filter(w => w !== uniqueWeight)[0];
 
   const diff = nonUniqueWeight - uniqueWeight;
-  
-  console.log(`Part 2 : To balance the tree, add ${diff} to '${problemNode.name}' for an individual weight of ${problemNode.individualWeight + diff}`)
-}
+  return problemNode.individualWeight + diff;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2017/day-7/input', { encoding: 'utf-8'});
-  
-  part1(allInput);
-  part2(allInput);
-})();
+main();

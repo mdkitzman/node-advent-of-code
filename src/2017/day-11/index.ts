@@ -1,4 +1,20 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(11, 2017);
+  const part1Expected = 685;
+  const part2Expected = 1457;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 enum HexDirection {
   // These map to the doubleheight_directions 
@@ -25,19 +41,17 @@ const cartesianDistance = (a:CartesianCoord, b:CartesianCoord):number =>{
     return dx + Math.max(0, (dy - dx) / 2);
 }
 
-const part1 = (input:string) => {
-
+function doPart1(input: string) {
   const path:HexDirection[] = input.split(',').map(dir => HexDirection[dir]);
   
   const start:CartesianCoord = {row:0, col:0};
   const end:CartesianCoord = path
                               .map(dir => doubleheight_directions[dir])
                               .reduce(addPoints, start);
-  
-  console.log(`Part 1 : End is ${JSON.stringify(end)} with a distance of ${cartesianDistance(start, end)}`);
+  return cartesianDistance(start, end);
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const path:HexDirection[] = input.split(',').map(dir => HexDirection[dir]);
   
   let maxDistance = 0;
@@ -50,13 +64,8 @@ const part2 = (input:string) => {
       const dist = cartesianDistance(start, curPos);
       maxDistance = Math.max(maxDistance, dist);
     });
+  
+  return maxDistance;
+};
 
-  console.log(`Part 2 : Max distance of ${maxDistance}`);
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2017/day-11/input', { encoding: 'utf-8'});
-    
-  part1(allInput); // distance of 685
-  part2(allInput); // max distance of 1457
-})();
+main();

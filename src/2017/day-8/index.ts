@@ -1,4 +1,20 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(8, 2017);
+  const part1Expected = 4832;
+  const part2Expected = 5443;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const forContext = (context:{[k:string]:number}) => (code:string) => {
   return Function('context', `with (context) { return ${code} }`)(context);
@@ -21,7 +37,7 @@ const parseInput = (input:string): Instruction[] => {
     });
 };
 
-const part1 = (input) => {
+function doPart1(input: string) {
   const registers:{[k:string]:number} = {};
 
   const evaluator = forContext(registers);
@@ -34,12 +50,11 @@ const part1 = (input) => {
     if(evaluator(condition))
       evaluator(operation)
   })
-  const [registerName, value] = Object.entries(registers).reduce((prev, curr) => prev[1] >= curr[1] ? prev : curr)
-  
-  console.log(`Part 1 : register ${registerName} has the highest value of ${value}`);
+  const [, value] = Object.entries(registers).reduce((prev, curr) => prev[1] >= curr[1] ? prev : curr)
+  return value;
 };
 
-const part2 = (input) => {
+function doPart2(input: string) {
   const registers:{[k:string]:number} = {};
 
   const evaluator = forContext(registers);
@@ -56,13 +71,7 @@ const part2 = (input) => {
     maxValue = Math.max(maxValue, value);
   });
 
-  console.log(`Part 2 : The largest value held in a register is ${maxValue}`)
-}
+  return maxValue;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2017/day-8/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2017/day-8/test', { encoding: 'utf-8'});
-
-  part1(allInput);
-  part2(allInput);
-})();
+main();

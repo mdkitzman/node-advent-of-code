@@ -1,19 +1,31 @@
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { knotNumbers, knotHash } from '../../util/hash';
 
-const part1 = (input:number[]) => {
-  const [numbers] = knotNumbers(input);
-  const result = numbers[0] * numbers[1];
-  console.log(`Part 1 : first two numbers multiplied is ${result}`);
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(10, 2017);
+  const part1Expected = 6952;
+  const part2Expected = "28e7c4360520718a5dc811d3942cf1fd";
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
-const part2 = (input:string) => {
-  const hash = knotHash(input);
-  console.log(`Part 2 : Hash result is ${hash}`);
-}
+function doPart1(input: string) {
+  const data = input.split(",").map(d => parseInt(d, 10));
+  const [numbers] = knotNumbers(data);
+  const result = numbers[0] * numbers[1];
+  return result;
+};
 
-(async () => {
-  const allInput = "31,2,85,1,80,109,35,63,98,255,0,13,105,254,128,33"; 
-  
-  part1(allInput.split(',').map(v => parseInt(v, 10))); // 6952
-  part2(allInput); // 28e7c4360520718a5dc811d3942cf1fd
-})();
+function doPart2(input: string) {
+  return knotHash(input);
+};
+
+main();

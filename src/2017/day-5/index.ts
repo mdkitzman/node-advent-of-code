@@ -1,6 +1,23 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 
-const part1 = (instructions:number[]) => {
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(5, 2017);
+  const part1Expected = 394829;
+  const part2Expected = 31150702;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
+function doPart1(input: string) {
+  const instructions = input.split('\n').map(val => parseInt(val, 10));
   let stepCount = 0;
   for(
     let iPos = 0, jmp = 0;
@@ -10,10 +27,11 @@ const part1 = (instructions:number[]) => {
     jmp = instructions[iPos];
     instructions[iPos] = jmp+1;
   }
-  console.log(`Part 1 : took ${stepCount} steps to exit`);
+  return stepCount;
 };
 
-const part2 = (instructions:number[]) => {
+function doPart2(input: string) {
+  const instructions = input.split('\n').map(val => parseInt(val, 10));
   let stepCount = 0;
   for(
     let iPos = 0, jmp = 0;
@@ -23,14 +41,7 @@ const part2 = (instructions:number[]) => {
     jmp = instructions[iPos];
     instructions[iPos] = jmp >= 3 ? jmp - 1 : jmp + 1;
   }
-  console.log(`Part 2 : took ${stepCount} steps to exit`)
-}
+  return stepCount;
+};
 
-(async () => {
-
-  const allInstructions = await fs.readFile('./src/2017/day-5/input', { encoding: 'utf-8'});
-  const initialList = allInstructions.split('\n').map(val => parseInt(val, 10));
-  
-  part1([...initialList]);
-  part2([...initialList]);
-})();
+main();

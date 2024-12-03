@@ -1,11 +1,28 @@
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { sum } from '../../util/arrayUtils';
 
-const part1 = () => {
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(3, 2017);
+  const part1Expected = 552;
+  const part2Expected = 330785;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
+function doPart1(input: string) {
   const east  = (radius:number):number => Math.pow(((radius * 2) - 1), 2) + radius;
   const north = (radius:number):number => east(radius) + 2*radius;
   const west  = (radius:number):number => east(radius) + 4*radius;
   const south = (radius:number):number => east(radius) + 6*radius;
-  
+
   const maxRadius = (value:number):number => {
     let maxRadius = 0;
     let eastNum = 0;
@@ -14,10 +31,10 @@ const part1 = () => {
     } 
     return maxRadius;
   }
-  
+
   const optimalDistanceTo1 = (fromValue:number):number => {
     const r = maxRadius(fromValue);
-  
+
     const minDiffMinus1 = Math.min(...[north(r-1), south(r-1), east(r-1), west(r-1)].map(directionValue => Math.abs(directionValue - fromValue)));
     const minDiff = Math.min(...[north(r), south(r), east(r), west(r)].map(directionValue => Math.abs(directionValue - fromValue)));
     
@@ -25,27 +42,12 @@ const part1 = () => {
     
     const distanceTo1 = optimalRadius + Math.min(minDiffMinus1, minDiff);
     return distanceTo1;
-  }
+  };
 
-  const input1: [number, number][] = [
-    [ 1, 0 ],
-    [ 12, 3 ],
-    [23, 2],
-    [1024, 31],
-    [325489, -1]
-  ];
-  input1.forEach(([value, expectedDistance]) => {
-    const minDistance = optimalDistanceTo1(value);
-    if(expectedDistance >= 0) {
-      const isEqual = minDistance === expectedDistance;
-      console.log(`Input 1 '${value}' has an optimal distance of ${expectedDistance}: ${isEqual}`);
-    } else {
-      console.log(`Input 1 '${value}' has an optimal distance of ${minDistance}`);
-    }
-  });
+  return optimalDistanceTo1(parseInt(input, 10));
 };
 
-const part2 = () => {
+function doPart2(input: string) {
   const isCorner = (pos: number): boolean => {
     const root = Math.sqrt(pos);
     return Number.isInteger(root) || Math.pow(Math.floor(root),2) + Math.floor(root) === pos;
@@ -145,24 +147,10 @@ const part2 = () => {
     } while (squareNumbers[i++] <= limit);
     return squareNumbers;
   }
-
-  const input2: [number, number][] = [
-    [1, 2],
-    [134, 142],
-    [620, 747],
-    [325489, -1]
-  ];
-  input2.forEach(([limit, expectedValue]) => {
-    const values = constructSquare(limit);
-    const largestValue = values.pop();
-    if(expectedValue >= 0) {
-      const isEqual = expectedValue === largestValue;
-      console.log(`Input 2 limit of '${limit}' wrote ${largestValue} as the largest value: ${isEqual}`);
-    } else {
-      console.log(`Input 2 limit of'${limit}' wrote ${largestValue} as the largest value`);
-    }
-  })
+  
+  const values = constructSquare(parseInt(input, 10));
+  const largestValue = values.pop();
+  return largestValue;
 };
 
-part1();
-part2();
+main();

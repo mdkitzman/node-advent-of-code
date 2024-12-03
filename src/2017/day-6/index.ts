@@ -1,4 +1,21 @@
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import crypto from 'crypto';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(6, 2017);
+  const part1Expected = 11137;
+  const part2Expected = 1037;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const hash = (input:number[]):string => crypto.createHash('sha256').update(Buffer.from(input)).digest('hex');
 
@@ -20,7 +37,8 @@ const redistribute = (input:number[]) => {
   }
 };
 
-const part1 = (input:number[]) => {
+function doPart1(data: string) {
+  const input = data.split(/\s/).map(d => parseInt(d, 10));
   const seen = new Set();
   seen.add(hash(input));
 
@@ -31,11 +49,11 @@ const part1 = (input:number[]) => {
       break;
     seen.add(stateHash);
   } 
-
-  console.log(`Part 1 : Infinite loop detected after ${seen.size} iterations`);
+  return seen.size;
 };
 
-const part2 = (input:number[]) => {
+function doPart2(data: string) {
+  const input = data.split(/\s/).map(d => parseInt(d, 10));
   let repeatIndex = -1;
   const seen:string[] = []
   seen.push(hash(input));
@@ -48,12 +66,7 @@ const part2 = (input:number[]) => {
     seen.push(stateHash);
   } 
   const cycleLength = seen.length - repeatIndex;
-  console.log(`Part 2 : Infinite loop cycle length : ${cycleLength}`);
-}
+  return cycleLength;
+};
 
-(async () => {
-  const input = [14,0,15,12,11,11,3,5,1,6,8,4,9,1,8,4];
-  
-  part1([...input]);
-  part2([...input]);
-})();
+main();

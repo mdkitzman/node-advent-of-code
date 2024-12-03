@@ -1,4 +1,21 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import { parseNumber } from '../../util/stringUtils';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(15, 2017);
+  const part1Expected = 612;
+  const part2Expected = 285;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const makeGen = (initialVal:number, multiplicand:number) => {
   return function* generator() {
@@ -24,9 +41,11 @@ const multipleGen = (initialVal:number, multiplicand:number, multipleOf: number)
   };
 };
 
-const part1 = (aStart:number, bStart:number) => {
-  const genA = makeGen(aStart, 16807)();
-  const genB = makeGen(bStart, 48271)();
+function doPart1(input: string) {
+  const [aStart, bStart] = input.split('\n').map(parseNumber)
+
+  const genA = makeGen(aStart!, 16807)();
+  const genB = makeGen(bStart!, 48271)();
   
   let judge = 0;
   for(let i = 0; i < 40000000; i++) {
@@ -35,12 +54,14 @@ const part1 = (aStart:number, bStart:number) => {
       judge++;
   }
 
-  console.log(`Part 1 : Found ${judge} matches`);
+  return judge;
 };
 
-const part2 = (aStart:number, bStart:number) => {
-  const genA = multipleGen(aStart, 16807, 4)();
-  const genB = multipleGen(bStart, 48271, 8)();
+function doPart2(input: string) {
+  const [aStart, bStart] = input.split('\n').map(parseNumber)
+
+  const genA = multipleGen(aStart!, 16807, 4)();
+  const genB = multipleGen(bStart!, 48271, 8)();
   
   let judge = 0;
   for(let i = 0; i < 5000000; i++) {
@@ -48,16 +69,8 @@ const part2 = (aStart:number, bStart:number) => {
     if((a & 0xffff) === (b & 0xffff))
       judge++;
   }
-  console.log(`Part 2 : Found ${judge} matches`)
-}
 
-(async () => {
-  const allInput = await fs.readFile('./src/2017/day-15/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2017/day-15/test', { encoding: 'utf-8'});
-  
-  const [aStart, bStart] = allInput.split('\n').map(val => parseInt(val, 10))
-  const [aTest, bTest] = test.split('\n').map(val => parseInt(val, 10))
+  return judge;
+};
 
-  part1(aStart, bStart); // 612
-  part2(aStart, bStart); // 285
-})();
+main();

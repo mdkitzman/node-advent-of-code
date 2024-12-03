@@ -1,5 +1,21 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import {sum} from '../../util/arrayUtils';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(9, 2017);
+  const part1Expected = 9662;
+  const part2Expected = 4903;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const scoreRow = (line:string):number[] => {
   let wasBang = false;
@@ -58,27 +74,20 @@ const scoreRow = (line:string):number[] => {
   return [scoreClean(cleanLine), garbageCount];
 }
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const score = input.split('\n')
     .map(scoreRow)
     .map(scoreAndGarbage => scoreAndGarbage[0])
     .reduce(sum, 0);
-
-  console.log(`Part 1 : score for all rows is ${score}`);
+  return score;
 };
 
-const part2 = (input) => {
+function doPart2(input: string) {
   const gCount = input.split('\n')
     .map(scoreRow)
     .map(scoreAndGarbage => scoreAndGarbage[1])
     .reduce(sum, 0);
+  return gCount;
+};
 
-  console.log(`Part 2 : the count of all of the garbage is ${gCount}`)
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2017/day-9/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2017/day-9/test', { encoding: 'utf-8'});
-  part1(allInput);
-  part2(allInput);
-})();
+main();
