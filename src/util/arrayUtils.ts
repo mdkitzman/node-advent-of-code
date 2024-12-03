@@ -61,6 +61,7 @@ export const windowed = <T>(k: number, arr: T[]): T[][] =>
       ? [arr.slice(i, i + k)]
       : []);
 
+export const pairwise = <T>(arr: T[]): T[][] => windowed(2, arr);
 /**
  * A generator function that will infinitely loop over a finite array of data.
  * @param input Any kind of array
