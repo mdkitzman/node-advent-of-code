@@ -17,6 +17,29 @@ export const minMax = (arr: number[]): [number, number] => [
 ];
 
 /**
+ * Used to create a Proxy handler for arrays so that accessing
+ * values in the array will not access anything out of bounds.
+ */
+export const SafeArray = <T>(defaultVal: T) => {
+  const autoExpander: ProxyHandler<T[]> = {
+    get: function(target: T[], prop: string | Symbol, receiver) {
+      const index = Number(prop);
+      if (index >= target.length)
+        target.push(...new Array(index - target.length + 1).fill(defaultVal));
+      return target[index];
+    },
+    set: function(target: T[], prop: string | Symbol, value:T) {
+      const index = Number(prop);
+      if (index >= target.length)
+        target.push(...new Array(index - target.length + 1).fill(defaultVal));
+      target[index] = value;
+      return true;
+    }
+  };
+  return autoExpander;
+}
+
+/**
  * Creates an array of k sized windows over the provided array
  * i.e.
  * windowed(2, [1,2,3,4,5])

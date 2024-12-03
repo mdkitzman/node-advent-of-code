@@ -1,24 +1,5 @@
 import EventEmitter from 'events';
-
-/**
- * This is a proxy handler for a number[] that will automatically expand
- * the array when trying to index something out of bounds. 
- */
-const autoExpander: ProxyHandler<number[]> = {
-  get: function(target: number[], prop: string | Symbol, receiver) {
-    const index = Number(prop);
-    if (index >= target.length)
-      target.push(...new Array(index - target.length + 1).fill(0));
-    return target[index];
-  },
-  set: function(target: number[], prop: string | Symbol, value:number) {
-    const index = Number(prop);
-    if (index >= target.length)
-      target.push(...new Array(index - target.length + 1).fill(0));
-    target[index] = value;
-    return true;
-  }
-};
+import { SafeArray } from '../util/arrayUtils';
 
 export const readProgram = (input: string) => input.split(',').map(ch => parseInt(ch, 10));
 
@@ -33,35 +14,35 @@ export class IntComp extends EventEmitter {
     });
 
     this.opcodeMap = new Map<OpCode, Operation>([
-      [OpCode.ADD, this.add.bind(this)],
-      [OpCode.MULTIPLY, this.mult.bind(this)],
-      [OpCode.INPUT, this.input.bind(this)],
-      [OpCode.OUTPUT, this.output.bind(this)],
-      [OpCode.JMPIFTRUE, this.jumpIfTrue.bind(this)],
-      [OpCode.JMPIFFALSE, this.jumpIfFalse.bind(this)],
-      [OpCode.LESSTHAN, this.lessThan.bind(this)],
-      [OpCode.EQUALS, this.equals.bind(this)],
-      [OpCode.RELATIVE_BASE_OFFSET, this.relativeBaseOffset.bind(this)],
-      [OpCode.TERMINATE, this.terminate.bind(this)],
+      [OpCode.ADD, this.add],
+      [OpCode.MULTIPLY, this.mult],
+      [OpCode.INPUT, this.input],
+      [OpCode.OUTPUT, this.output],
+      [OpCode.JMPIFTRUE, this.jumpIfTrue],
+      [OpCode.JMPIFFALSE, this.jumpIfFalse],
+      [OpCode.LESSTHAN, this.lessThan],
+      [OpCode.EQUALS, this.equals],
+      [OpCode.RELATIVE_BASE_OFFSET, this.relativeBaseOffset],
+      [OpCode.TERMINATE, this.terminate],
     ]);
   }
 
   async execute(program:number[]):Promise<number> {
-    const programProxy = new Proxy(program, autoExpander);
+    const programProxy = new Proxy(program, SafeArray<number>(OpCode.TERMINATE));
 
     let increment = 0;
     // increment will either be a number to increment the opcode pointer by or NaN, indicating that we're done.
     for (let opIdx = 0; isFinite(increment); opIdx += increment) {
-      const opCode = this.nextOpCode(programProxy, opIdx);
-      const doOperation = this.opcodeMap.get(opCode) || this.terminate.bind(this);
-      increment = await doOperation(programProxy, opIdx);
+      const operation = this.nextOperation(programProxy, opIdx);
+      increment = await operation(programProxy, opIdx);
     }
     return programProxy[0];
   }
 
-  private nextOpCode(memory:number[], index: number): OpCode {
+  private nextOperation(memory:number[], index: number): Operation {
     const code = memory[index].toString(10).slice(-2);
-    return parseInt(code, 10);
+    const opCode = parseInt(code, 10);
+    return this.opcodeMap.get(opCode) || this.terminate;
   }
 
   /**
@@ -106,24 +87,24 @@ export class IntComp extends EventEmitter {
     return paramIndicies;
   }
 
-  private async terminate(memory: number[], opIdx: number): Promise<number> {
+  private terminate = async (memory: number[], opIdx: number): Promise<number> => {
     this.emit("terminate");
     return NaN;
   }
 
-  private async add(memory: number[], opIdx: number): Promise<number> {
+  private add = async (memory: number[], opIdx: number): Promise<number> => {
     const [idxa, idxb, idxr] = this.getParameterIndices(memory, opIdx, 3);
     memory[idxr] = memory[idxa] + memory[idxb];
     return 4;
   }
 
-  private async mult(memory: number[], opIdx: number): Promise<number> {
+  private mult = async (memory: number[], opIdx: number): Promise<number> => {
     const [idxa, idxb, idxr] = this.getParameterIndices(memory, opIdx, 3);
     memory[idxr] = memory[idxa] * memory[idxb];
     return 4;
   }
 
-  private async input(memory: number[], opIdx: number): Promise<number> {
+  private input = async (memory: number[], opIdx: number): Promise<number> => {
     const [idxr] = this.getParameterIndices(memory, opIdx, 1);
     return new Promise((resolve) => {
       const onInput = (value) => {
@@ -136,14 +117,14 @@ export class IntComp extends EventEmitter {
     });
   }
 
-  private async output(memory: number[], opIdx: number): Promise<number> {
+  private output = async (memory: number[], opIdx: number): Promise<number> => {
     const [idxa] = this.getParameterIndices(memory, opIdx, 1);
     const value = memory[idxa];
     this.emit("output", value);
     return 2;
   }
 
-  private async jumpIfTrue(memory: number[], opIdx: number): Promise<number> {
+  private jumpIfTrue = async (memory: number[], opIdx: number): Promise<number> => {
     const [idxa, idxb] = this.getParameterIndices(memory, opIdx, 2);
     if (memory[idxa] !== 0) {
       const jumpPoint = memory[idxb];
@@ -152,7 +133,7 @@ export class IntComp extends EventEmitter {
     return 3; // increment the instruction pointer.
   }
 
-  private async jumpIfFalse(memory: number[], opIdx: number): Promise<number> {
+  private jumpIfFalse = async (memory: number[], opIdx: number): Promise<number> => {
     const [idxa, idxb] = this.getParameterIndices(memory, opIdx, 2);
     if (memory[idxa] === 0) {
       const jumpPoint = memory[idxb];
@@ -161,19 +142,19 @@ export class IntComp extends EventEmitter {
     return 3; // increment the instruction pointer.
   }
   
-  private async lessThan(memory: number[], opIdx: number): Promise<number> {
+  private lessThan = async (memory: number[], opIdx: number): Promise<number> => {
     const [idxa, idxb, idxc] = this.getParameterIndices(memory, opIdx, 3);
     memory[idxc] = Number(memory[idxa] < memory[idxb]);
     return 4;
   }
 
-  private async equals(memory: number[], opIdx: number): Promise<number> {
+  private equals = async (memory: number[], opIdx: number): Promise<number> => {
     const [idxa, idxb, idxc] = this.getParameterIndices(memory, opIdx, 3);
     memory[idxc] = Number(memory[idxa] === memory[idxb]);
     return 4;
   }
 
-  private async relativeBaseOffset(memory: number[], opIdx: number): Promise<number> {
+  private relativeBaseOffset = async (memory: number[], opIdx: number): Promise<number> => {
     const [ idxValue ] = this.getParameterIndices(memory, opIdx, 1);
     this.relativeBase += memory[idxValue];
     return 2;

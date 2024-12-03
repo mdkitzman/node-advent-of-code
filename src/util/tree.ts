@@ -1,10 +1,9 @@
 export abstract class TreeNode<T extends TreeNode<T>> {
-  children:T[];
+  children:T[] = [];
   parent?:T
 
-  constructor(children:T[] = [], parent?:T){
-    this.children = children;
-    this.parent = parent;
+  constructor(children:T[] = []){
+    children.forEach(this.addChild);
   }
 
   protected get thisNode():T {
