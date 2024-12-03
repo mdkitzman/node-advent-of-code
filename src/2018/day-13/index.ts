@@ -1,12 +1,22 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import lodash from 'lodash';
 import { Grid } from '../../util/grid';
 import { cardinalNeighbors, Point2D } from '../../util/point';
 
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 14,42
-  doPart2(allInput); // 8,7
+  const allInput = await getPuzzleInput(13, 2018);
+  const part1Expected = "14,42";
+  const part2Expected = "8,7";
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 // rotations right and left
@@ -123,7 +133,8 @@ function doPart1(input: string) {
   driveCars(cars, map, keepDriving);
 
   const [[x,y]] = cars.filter(c => c.rekt).map(c=>c.pos.coordinates);
-  console.log(`The locaion of the first crash is ${x},${y}`)
+
+  return `${x},${y}`;
 };
 
 function doPart2(input: string) {
@@ -132,7 +143,8 @@ function doPart2(input: string) {
   driveCars(cars, map, keepGoing);
 
   const [[x,y]] = cars.filter(c => !c.rekt).map(c => c.pos.coordinates);
-  console.log(`The last car standing is at ${x},${y}`);
+
+  return `${x},${y}`;
 };
- 
+
 main();

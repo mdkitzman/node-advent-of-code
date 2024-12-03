@@ -1,11 +1,21 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import lodash from 'lodash';
 import Iter from 'es-iter';
 
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 6150
-  doPart2(allInput); // rteotyxzbodglnpkudawhijsc
+  const allInput = await getPuzzleInput(2, 2018);
+  const part1Expected = 6150;
+  const part2Expected = "rteotyxzbodglnpkudawhijsc";
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 function doPart1(input: string) {
@@ -20,7 +30,8 @@ function doPart1(input: string) {
   const threes = words
     .filter(word => wordWithNLetters(3, word))
     .length;
-  console.log(`Checksum value is ${twos * threes}`);
+  const checksum = twos * threes;
+  return checksum;
 };
 
 function doPart2(input: string) {
@@ -41,8 +52,7 @@ function doPart2(input: string) {
     return str1.length - word.length === 1
   })) || [];
   const word = similarLetters(word1, word2);
-
-  console.log(`Common box letters : ${word}`);
+  return word;
 };
 
 main();

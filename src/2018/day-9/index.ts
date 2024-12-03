@@ -1,13 +1,23 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { ListNode, LinkedList } from '../../util/linked-list';
 
-const inputParser = /(\d+) players; last marble is worth (\d+) points/;
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 390093
-  doPart2(allInput); // 3150377341
+  const allInput = await getPuzzleInput(9, 2018);
+  const part1Expected = 390093;
+  const part2Expected = 3150377341;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
+
+const inputParser = /(\d+) players; last marble is worth (\d+) points/;
 
 const playGame = (playerCount: number, maxRounds: number):number => {
   const scores = new Array(playerCount).fill(0);
@@ -47,14 +57,14 @@ function doPart1(input: string) {
   const [ playerCount, maxRounds ] = inputParser.exec(input)!.slice(1, 3).map(val => parseInt(val, 10));
   const score = playGame(playerCount, maxRounds);
 
-  console.log(`Max high score is ${score}`);
+  return score;
 };
 
 function doPart2(input: string) {
   const [ playerCount, maxRounds ] = inputParser.exec(input)!.slice(1, 3).map(val => parseInt(val, 10));
   const score = playGame(playerCount, maxRounds * 100);
-
-  console.log(`Max high score is ${score}`);
+  
+  return score;
 };
 
 main();

@@ -1,11 +1,21 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { min } from '../../util/arrayUtils';
 import { alphabet } from '../../util/stringUtils';
 
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 11252
-  doPart2(allInput); // 6118
+  const allInput = await getPuzzleInput(5, 2018);
+  const part1Expected = 11252;
+  const part2Expected = 6118;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 const polarPair = (a: string, b:string): boolean => 
@@ -31,7 +41,7 @@ const doReaction = (input: string): string => {
 
 function doPart1(input: string) {
   const data = doReaction(input);
-  console.log(`There are ${data.length} units left`);
+  return data.length;
 };
 
 function doPart2(input: string) {
@@ -41,7 +51,7 @@ function doPart2(input: string) {
     .map(doReaction)
     .map(str => str.length)
     .reduce(min)
-  console.log(`The smallest reaction was length ${smallest}`);
+  return smallest;
 };
 
 main();

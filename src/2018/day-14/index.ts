@@ -1,7 +1,19 @@
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
 const main = async () => {
-  const input = "768071";
-  doPart1(input); // 6548103910
-  doPart2(input); // 20198090
+  const allInput = await getPuzzleInput(14, 2018);
+  const part1Expected = 6_548_103_910;
+  const part2Expected = 20_198_090;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 function doPart1(input: string) {
@@ -22,7 +34,8 @@ function doPart1(input: string) {
   } while (recipies.length < limit + 10)
 
   const score = recipies.slice(limit, limit+10).map(c => c.toString(10)).join('');
-  console.log(score);
+
+  return parseInt(score, 10);
 };
 
 function doPart2(input: string) {
@@ -56,7 +69,8 @@ function doPart2(input: string) {
     }
     
   } while (!count)
-  console.log(count);
+
+  return count;
 };
 
 main();

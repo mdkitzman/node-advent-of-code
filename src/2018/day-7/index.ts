@@ -1,4 +1,5 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import Graph from 'graphology';
 import { min } from '../../util/arrayUtils';
 import lodash  from 'lodash';
@@ -6,10 +7,19 @@ import { ALPHABET } from '../../util/stringUtils';
 
 const stepRegex = /Step (\S) must be finished before step (\S) can begin./;
 
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // CFMNLOAHRKPTWBJSYZVGUQXIDE
-  doPart2(allInput, 5, 60); // 971
+  const allInput = await getPuzzleInput(7, 2018);
+  const part1Expected = "CFMNLOAHRKPTWBJSYZVGUQXIDE";
+  const part2Expected = 971;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 const buildGraph = (input: string) => {
@@ -47,7 +57,8 @@ function doPart1(input: string) {
     // sort by alphabetical priority
     candidates.sort();
   };
-  console.log(visited.join(''));
+
+  return visited.join('');
 };
 
 type Job = {
@@ -58,7 +69,10 @@ type Job = {
 const hasJob = (j:Job) => j.node !== null;
 const jobCount = (workers: Job[]) => workers.filter(hasJob).length;
 
-function doPart2(input: string, workerCount:number, baseTime: number) {
+function doPart2(input: string) {
+  const workerCount = 5;
+  const baseTime = 60;
+  
   const graph = buildGraph(input);
   const workers: Job[] = [];
   const done:string[] = [];
@@ -96,7 +110,8 @@ function doPart2(input: string, workerCount:number, baseTime: number) {
       }))
     ).sort());    
   }
-  console.log(`Total time would be ${totalTime}`);
+
+  return totalTime;
 };
 
 main();

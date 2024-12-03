@@ -1,10 +1,20 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { sum } from '../../util/arrayUtils';
 
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 46096
-  doPart2(allInput); // 24820
+  const allInput = await getPuzzleInput(8, 2018);
+  const part1Expected = 46096;
+  const part2Expected = 24820;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 type Node = {
@@ -37,7 +47,8 @@ function doPart1(input: string) {
     return node.children.map(sumMetadata).reduce(sum, 0) + node.metadata.reduce(sum, 0);
   };
   const total = sumMetadata(root);
-  console.log(`Total metadata is ${total}`);
+
+  return total;
 };
 
 function doPart2(input: string) {
@@ -56,7 +67,8 @@ function doPart2(input: string) {
     return value;
   }
   const value = nodeValue(root);
-  console.log(`Total node value is ${value}`);
+
+  return value;
 };
 
 main();

@@ -1,31 +1,23 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { sum } from '../../util/arrayUtils';
 
 const initial = /initial state: (.+)/;
 const mutator = /(.{5}) => (.)/
 
-// ...## -> ##...
-const test = `initial state: #..#.#..##......###...###
-
-...## => #
-..#.. => #
-.#... => #
-.#.#. => #
-.#.## => #
-.##.. => #
-.#### => #
-#.#.# => #
-#.### => #
-##.#. => #
-##.## => #
-###.. => #
-###.# => #
-####. => #`;
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 3405
-  doPart2(allInput); // 3350000000000
+  const allInput = await getPuzzleInput(12, 2018);
+  const part1Expected = 3405;
+  const part2Expected = 3_350_000_000_000;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 type Mutator = {
@@ -98,12 +90,12 @@ const scorePlants = (input: string, generations: number): number => {
 
 function doPart1(input: string) {
   const score = scorePlants(input, 20);
-  console.log(`Total score is ${score}`);
+  return score;
 };
 
 function doPart2(input: string) {
-  const score = scorePlants(input, 50_000_000_000)
-  console.log(`Total score is ${score}`);
+  const score = scorePlants(input, 50_000_000_000);
+  return score;
 };
 
 main();

@@ -1,7 +1,23 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import lodash from 'lodash';
 import { InfiniteGrid } from '../../util/grid';
 import { Point2D } from '../../util/point';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(3, 2018);
+  const part1Expected = 109785;
+  const part2Expected = 504;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 class Claim {
   constructor(
@@ -20,7 +36,6 @@ class Claim {
     }
   }
 }
-
 const claimRegex = /#(\d+) @ (\d+),(\d+): (\d+)x(\d+)/;
 const toClaim = (line: string): Claim => {
   const match = claimRegex.exec(line);
@@ -28,12 +43,6 @@ const toClaim = (line: string): Claim => {
     throw new Error("Unable to match line!");
   const [id, x, y, w, h] = match.slice(1, 6).map(v => parseInt(v, 10));
   return new Claim(id, new Point2D(x, y), new Point2D(x + w -1, y + h -1));
-};
-
-const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 109785
-  doPart2(allInput); // 504
 };
 
 function doPart1(input: string) {
@@ -47,8 +56,8 @@ function doPart1(input: string) {
   const duplicates = Array
     .from(grid.data.values())
     .filter(value => value.length > 1);
-
-  console.log(`The total overlapping square inches is ${duplicates.length}`);
+  
+  return duplicates.length;
 };
 
 function doPart2(input: string) {
@@ -66,8 +75,9 @@ function doPart2(input: string) {
   const uniqeDups = Array.from(new Set(duplicates.flatMap(v => v)));
   const all = claims.map(c => c.id)
 
-  const diff = lodash.difference(all, uniqeDups);
-  console.log(`Found claim with id : ${diff[0]}`);
-}
+  const [ diff ] = lodash.difference(all, uniqeDups);
+
+  return diff;
+};
 
 main();

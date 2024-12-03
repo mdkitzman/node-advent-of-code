@@ -1,13 +1,23 @@
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { InfiniteGrid, generateCoords } from '../../util/grid';
 import { Point2D } from '../../util/point';
 
 const gridSize = 300;
 
-const main = async () => {
-  const allInput = '7803';
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
-  doPart1(allInput); // 20,51
-  doPart2(allInput); // 230,272,17
+const main = async () => {
+  const allInput = await getPuzzleInput(11, 2018);
+  const part1Expected = "20,51";
+  const part2Expected = "230,272,17";
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 const computePowerLevel = (serial: number, x:number, y: number): number => {
@@ -62,8 +72,9 @@ function doPart1(input: string) {
       largest = [areaSum, new Point2D(x,y)];
     }
   }
-  const [bestArea,bestPoint] = largest;
-  console.log(`The largest is at ${bestPoint.x},${bestPoint.y} with a total of ${bestArea}`);
+  const [,bestPoint] = largest;
+
+  return `${bestPoint.x},${bestPoint.y}`;
 };
 
 function doPart2(input: string) {
@@ -80,8 +91,9 @@ function doPart2(input: string) {
       }
     }
   }
-  const [bestArea,bestWindow, bestPoint] = largest;
-  console.log(`The largest is at ${bestPoint.x},${bestPoint.y} at window size ${bestWindow} with a total of ${bestArea}`);
+  const [,bestWindow, bestPoint] = largest;
+
+  return `${bestPoint.x},${bestPoint.y},${bestWindow}`;
 };
 
 main();

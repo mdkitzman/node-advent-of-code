@@ -1,14 +1,24 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { DateTime } from 'luxon';
 import Guard from './guard';
 
-type GuardMap = Record<number, Guard>;
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 35184
-  doPart2(allInput); // 37886
+  const allInput = await getPuzzleInput(4, 2018);
+  const part1Expected = 35184;
+  const part2Expected = 37886;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
+
+type GuardMap = Record<number, Guard>;
 
 const getGuardSchedules = (input: string): GuardMap => {
   const statusReg = /\[(\d{4}-\d{2}\-\d{2} \d{2}:\d{2})\] (Guard #(\d+) begins shift|falls asleep|wakes up)/;
@@ -57,13 +67,15 @@ const getGuardSchedules = (input: string): GuardMap => {
 function doPart1(input: string) {
   const datastore = getGuardSchedules(input);
   const [guard] = Object.values(datastore).sort((a, b) => b.minutesSlept - a.minutesSlept);
-  console.log(`The result is ${guard.id * guard.sleepiestMinute.minute}`);
+  const result = guard.id * guard.sleepiestMinute.minute;
+  return result;
 };
 
 function doPart2(input: string) {
   const datastore = getGuardSchedules(input);
   const [guard] = Object.values(datastore).sort((a, b) => b.sleepiestMinute.count - a.sleepiestMinute.count);
-  console.log(`The result is ${guard.id * guard.sleepiestMinute.minute}`);
+  const result = guard.id * guard.sleepiestMinute.minute;
+  return result;
 };
 
 main();

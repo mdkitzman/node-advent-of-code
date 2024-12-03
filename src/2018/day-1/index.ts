@@ -1,18 +1,27 @@
-import fs  from 'fs';
-import { sum, infiniteLoop } from '../../util/arrayUtils';
+import { getPuzzleInput } from '../../aocClient';
+import { infiniteLoop, sum } from '../../util/arrayUtils';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 479
-  doPart2(allInput); // 66105
+  const allInput = await getPuzzleInput(1, 2018);
+  const part1Expected = 479;
+  const part2Expected = 66105;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 function doPart1(input: string) {
-  const total = input
+  return input
     .split('\n')
     .map(val => parseInt(val, 10))
     .reduce(sum, 0);
-  console.log(`Resulting frequency: ${total}`);
 };
 
 function doPart2(input: string) {
@@ -25,7 +34,7 @@ function doPart2(input: string) {
       break;
     seen.add(frequency);
   }
-  console.log(`Final frequency after repeat is: ${frequency}`);
+  return frequency;
 };
 
 main();

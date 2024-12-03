@@ -1,4 +1,5 @@
-import fs  from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { max, min, sum } from '../../util/arrayUtils';
 import { Point2D } from '../../util/point';
 import lodash from 'lodash';
@@ -8,10 +9,19 @@ import { alphabet, ALPHABET, digits } from '../../util/stringUtils';
 
 const letters = (alphabet+ALPHABET+digits).split('');
 
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
-  doPart1(allInput); // 3660
-  doPart2(allInput, 10_000); // 35928
+  const allInput = await getPuzzleInput(6, 2018);
+  const part1Expected = 3660;
+  const part2Expected = 35928;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
 type LabeldPoint = {
@@ -77,11 +87,12 @@ function doPart1(input: string) {
     .values(groupCount)
     .filter(count => lodash.isFinite(count))
     .reduce(max);
-  
-  console.log(`Largest area is ${largest}`); 
+
+  return largest;
 };
 
-function doPart2(input: string, maxDistanceSum: number) {
+function doPart2(input: string) {
+  const maxDistanceSum = 10_000;
   const points = input
     .split('\n')
     .map(line => line.split(', ').map(val => parseInt(val, 10)))
@@ -108,7 +119,8 @@ function doPart2(input: string, maxDistanceSum: number) {
     }
   }
   const regionSize = grid.data.size
-  console.log(`Largest area is ${regionSize}`); 
+  
+  return regionSize;
 };
 
 main();
