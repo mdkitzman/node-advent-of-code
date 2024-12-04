@@ -40,6 +40,10 @@ export class Point2D {
     this.y += p.y;
   }
 
+  toAdded(p: Point2D): Point2D {
+    return new Point2D(this.x + p.x, this.y + p.y);
+  }
+
   get coordinates() {
     return [this.x, this.y];
   }
