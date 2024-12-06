@@ -1,7 +1,5 @@
-import { range } from "lodash";
 import { Point2D, cardinalNeighbors } from "./point";
 import { cloneDeep } from 'lodash'
-import { max, min } from "./arrayUtils";
 
 /**
  * Will generate coordinate values for n-dimensions from the origin
@@ -37,9 +35,19 @@ const minMax = (a: number[], acc: number[]): number[] => ([
 const toPair = (key: 'x'|'y') => (p: Point2D): number[] => ([p[key], p[key]]);
 
 export class Grid<T> {
-  public readonly data = new Map<string, T>();
+  public _data = new Map<string, T>();
   
   constructor(){}
+
+  clone() {
+    const aClone = new Grid<T>();
+    aClone._data = new Map(this._data);
+    return aClone;
+  }
+
+  public get data() {
+    return this._data;
+  }
 
   static toPoint(key:string) {
     const [x, y] = key.split(',').map(Number);

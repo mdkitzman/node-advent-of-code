@@ -1,5 +1,9 @@
 export class Point2D {
   constructor(public x: number, public y: number) {}
+  
+  static fromPoint(point: Point2D) {
+    return new Point2D(point.x, point.y);
+  }
 
   equals(other: Point2D): boolean {
     return this.x === other.x && this.y === other.y;
