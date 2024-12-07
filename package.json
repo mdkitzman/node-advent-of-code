@@ -32,7 +32,7 @@
     "graphology": "0.25.4",
     "graphology-shortest-path": "2.1.0",
     "graphology-traversal": "0.3.1",
-    "graphology-types": "0.24.7",
+    "graphology-types": "0.24.8",
     "infix-to-postfix": "0.0.3",
     "lodash": "4.17.21",
     "luxon": "3.5.0",
