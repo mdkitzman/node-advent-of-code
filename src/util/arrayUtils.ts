@@ -9,7 +9,16 @@ export const max = (prev: number, cur: number) => Math.max(prev, cur)
 export const min = (prev: number, cur: number) => Math.min(prev, cur)
 
 export const toCharCodes = (input: string): number[] => input.split('').map(c => c.charCodeAt(0));
-export const chunk = <T>(arr: T[], n: number): T[][] => arr.length ? [arr.slice(0, n), ...chunk(arr.slice(n), n)] : [];
+export const chunk = <T>(arr: T[], n:number): T[][] => {
+  return arr.reduce(function (r, a, i) {
+    if (i % n) {
+        r[r.length - 1].push(a);
+    } else {
+        r.push([a]);
+    }
+    return r;
+  }, [] as T[][]);
+}
 
 export const minMax = (arr: number[]): [number, number] => [
   Math.min(...arr),
@@ -126,3 +135,5 @@ const chooseRecurse = <T>(arr: T[], k: number, prefix:T[] = []):T[][] => {
  * @author https://stackoverflow.com/a/74115113
  */
 export const choose = <T>(arr: T[], k:number): T[][] => chooseRecurse(arr, k);
+// because I always forget that this is called 'choose'
+export const combinations = choose;
