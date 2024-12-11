@@ -27,6 +27,8 @@ export function* generateRange(start: number, end: number) {
     yield i;
   }
 }
+// Get the number of digits (base 10) of a number
+export const digitCount = (num: number) => Math.floor(Math.log10(num))+1;
 
 export const quadratic = (a:number, b:number): number => {
   // d(x) := x * (a - x) > b, (inverted parabola)
