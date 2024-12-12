@@ -5,6 +5,15 @@ export class Point2D {
     return new Point2D(point.x, point.y);
   }
 
+  /**
+   * Expects the passed in value to be in the format of `x,y`
+   * @param str 
+   */
+  static fromString(str: string) {
+    const [x,y] = str.split(",").map(v => parseInt(v, 10));
+    return new Point2D(x,y);
+  }
+
   equals(other: Point2D): boolean {
     return this.x === other.x && this.y === other.y;
   }
