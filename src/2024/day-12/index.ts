@@ -1,5 +1,5 @@
 import { getPuzzleInput } from '../../aocClient';
-import { sum } from '../../util/arrayUtils';
+import { sum, windowed } from '../../util/arrayUtils';
 import { Grid } from '../../util/grid';
 import { cardinalNeighbors, Point2D } from '../../util/point';
 import timeFn from '../../util/timeFn';
@@ -57,62 +57,31 @@ const perimeter = (plot: Set<string>) => {
 
 const area = (plot: Set<string>) => plot.size;
 
-type Bounds = {
-  top: number,
-  bottom: number,
-  left: number;
-  right:number;
-};
-
+const orderedNeighbors = [
+  [0, -1],
+  [1,  0],
+  [0,  1],
+  [-1, 0],
+  [0, -1],
+];
 const surfaceCount = (plot: Set<string>): number => {
-  const points = Array
-    .from(plot)
-    .map(Point2D.fromString);
+  const cornerCount = (p:Point2D) => {
+    const outsideCorner = ([p1, p2]: Point2D[]) => !plot.has(p.toAdded(p1).toString()) && !plot.has(p.toAdded(p2).toString());
+    const insideCorner = ([p1, p2]: Point2D[]) => plot.has(p.toAdded(p1).toString()) && plot.has(p.toAdded(p2).toString()) && !plot.has(p.toAdded(p1.toAdded(p2)).toString());
+    const isCorner = (neighbors: Point2D[]) => outsideCorner(neighbors) || insideCorner(neighbors);
     
-  const [left, right] = points.map(({x}) => [x,x]).reduce(minMax);
-  const [top, bottom] = points.map(({y}) => [y,y]).reduce(minMax);
-
-  const tops: boolean[] = [];
-  const bottoms: boolean[] = [];
-  const lefts: boolean[] = [];
-  const rights: boolean[] = [];
-
-  const transitionCounter = (arr: boolean[]) => 
-    arr
-    .map(b => [b])
-    .reduce((acc, [b]) => {
-      if (b !== acc[acc.length - 1]) {
-        acc.push(b)
-      }
-      return acc;
-    }, [false])
-    .flat()
-    .filter(b => b === true)
-    .length;
-
-  // scan from top to bottom, left to right for the top and bottom edges
-  for(let y = top; y <= bottom; y++) {
-    for(let x = left; x <= right; x++) {
-      const hasP = plot.has(`${x},${y}`)
-      tops.push(hasP && !plot.has(`${x},${y-1}`));
-      bottoms.push(hasP && !plot.has(`${x},${y+1}`));
-    }
-    tops.push(false);
-    bottoms.push(false);
+    const neighbors = orderedNeighbors.map(([x, y]) => new Point2D(x,y));
+    return windowed(2, neighbors)
+      .map(isCorner)
+      .filter(hasCorner => hasCorner)
+      .length
   }
 
-  // scan from left to right, top to bottom for lefts and right edges 
-  for(let x = left; x <= right; x++) {
-    for(let y = top; y <= bottom; y++) {
-      const hasP = plot.has(`${x},${y}`)
-      lefts.push(hasP && !plot.has(`${x-1},${y}`));
-      rights.push(hasP && !plot.has(`${x+1},${y}`));
-    }
-    lefts.push(false);
-    rights.push(false);
-  }
-  
-  return [tops, lefts, rights, bottoms].map(transitionCounter).reduce(sum);
+  return Array
+    .from(plot)
+    .map(Point2D.fromString)
+    .map(cornerCount)
+    .reduce(sum);
 }
 
 const getGardenPlots = (input:string) => {
