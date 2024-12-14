@@ -1,20 +1,34 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { multiply, sum } from '../../util/arrayUtils';
 import infixToPostfix from 'infix-to-postfix';
 import rpn from 'rpn';
 
-const part1 = (input:string) => {  
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(18, 2020);
+  const part1Expected = 9535936849815;
+  const part2Expected = 472171581333710;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
+function doPart1(input: string) {
   const evaluate = (input:string):number => {
     return rpn(infixToPostfix(input));
   }
 
   const total = input.split('\n').map(evaluate).reduce(sum)
-
-  console.log(`Part 1 : The sum of values is ${total}`);
+  return total;
 };
 
-const part2 = (input:string) => {
-  
+function doPart2(input: string) {
   const reduce = (part:(number|string)[]) => {
     const sums:number[] = [part[0] as number];
     for (let i = 1; i < part.length; i += 2) {
@@ -57,14 +71,7 @@ const part2 = (input:string) => {
   }
 
   const total = input.split('\n').map(wrapAddition).reduce(sum);
+  return total;
+};
 
-  console.log(`Part 2 :The sum of values is ${total}`)
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-18/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-18/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 9535936849815
-  part2(allInput); // 472171581333710
-})();
+main();

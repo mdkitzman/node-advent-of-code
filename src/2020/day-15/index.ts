@@ -1,4 +1,20 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(15, 2020);
+  const part1Expected = 959;
+  const part2Expected = 116590;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const makeIterator = (initialVal:number[]) => {
   const seen:Map<number, number[]> = new Map();
@@ -34,7 +50,7 @@ const makeIterator = (initialVal:number[]) => {
   }  
 }
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const starters = input.split(',').map(k => parseInt(k, 10));
   const itr = makeIterator(starters);
 
@@ -42,11 +58,11 @@ const part1 = (input:string) => {
   for(let i = 0; i < 2020; i++){
     val = itr().next().value;
   }
-    
-  console.log(`Part 1 : The last number spoken was ${val}`);
+
+  return val;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const starters = input.split(',').map(k => parseInt(k, 10));
   const itr = makeIterator(starters);
   
@@ -54,14 +70,8 @@ const part2 = (input:string) => {
   for(let i = 0; i < 30_000_000; i++){
     val = itr().next().value;
   }
-    
-  console.log(`Part 2 : The last number spoken was ${val}`);
-}
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-15/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-15/test', { encoding: 'utf-8'});
+  return val;
+};
 
-  part1(allInput); // 959
-  part2(allInput); // 116590
-})();
+main();

@@ -1,5 +1,22 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { sum, anyTrue } from '../../util/arrayUtils';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(7, 2020);
+  const part1Expected = 119;
+  const part2Expected = 155802;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
 interface Contents {
   [bagColor:string]:number
 }
@@ -20,7 +37,7 @@ const parseInput = (input:string): InputLine[] =>
     return {color, contents};
   });
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const bags = parseInput(input);
   const needle = "shiny gold";
   
@@ -38,11 +55,10 @@ const part1 = (input:string) => {
     .filter(line => line.color !== needle)
     .map(line => find(line.color) ? 1 : 0)
     .reduce(sum, 0);
-
-  console.log(`Part 1 : found ${num} bags that can contain a "${needle}" bag`);
+  return num;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const bags = parseInput(input);
   
   const countBags = (color:string):number => {
@@ -53,14 +69,7 @@ const part2 = (input:string) => {
     return found;
   }
   const num = countBags("shiny gold") - 1;
+  return num;
+};
 
-  console.log(`Part 2 : found ${num} bags in a "shiny gold" bag`);
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-7/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-7/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 119
-  part2(allInput); // 155802
-})();
+main();

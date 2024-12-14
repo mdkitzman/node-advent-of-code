@@ -1,19 +1,27 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 
-const part1 = (input:string) => {
-  const [ingredients, alergens] = input.split(' (')
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
-  console.log(`Part 1 : `);
+const main = async () => {
+  const allInput = await getPuzzleInput(21, 2020);
+  const part1Expected = null;
+  const part2Expected = null;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
 };
 
-const part2 = (input:string) => {
-  console.log(`Part 2 : `)
-}
+function doPart1(input: string) {
+  return 0;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-21/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-21/test', { encoding: 'utf-8'});
+function doPart2(input: string) {
+  return 0;
+};
 
-  part1(test);
-  part2(test);
-})();
+main();

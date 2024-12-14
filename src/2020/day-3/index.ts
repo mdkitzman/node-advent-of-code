@@ -1,5 +1,21 @@
-import { promises as fs } from 'fs';
-import { sum, multiply } from '../../util/arrayUtils';
+import { getPuzzleInput } from '../../aocClient';
+import { multiply, sum } from '../../util/arrayUtils';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(3, 2020);
+  const part1Expected = 209;
+  const part2Expected = 1574890240;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const treeCount = (input:string, slope:{x:number,y:number}):number => {
   return input.split('\n')
@@ -11,13 +27,13 @@ const treeCount = (input:string, slope:{x:number,y:number}):number => {
     .reduce(sum, 0);
 }
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const trees = treeCount(input, {x:3, y:1});
-  
-  console.log(`Part 1 : We hit ${trees} trees`);
+
+  return trees;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const slopes = [
     {x:1, y:1},
     {x:3, y:1},
@@ -26,13 +42,7 @@ const part2 = (input:string) => {
     {x:1, y:2},
   ];
   const mult = slopes.map(slope => treeCount(input, slope)).reduce(multiply, 1);
-  console.log(`Part 2 : multiplying the tree counts for multiple slopes is ${mult}`)
-}
+  return mult;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-3/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-3/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 209
-  part2(allInput); // 1574890240
-})();
+main();

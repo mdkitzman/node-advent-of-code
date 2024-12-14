@@ -1,7 +1,22 @@
-import { assert } from 'console';
-import { promises as fs } from 'fs';
 import { difference } from 'lodash';
+import { getPuzzleInput } from '../../aocClient';
 import { max } from '../../util/arrayUtils';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(5, 2020);
+  const part1Expected = 965;
+  const part2Expected = 524;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const binSearch = (input:string, max:number):number => {
   let [low, high] = [0, max];
@@ -18,7 +33,6 @@ const binSearch = (input:string, max:number):number => {
         break;
     }
   });
-  assert(low === high);
   return low;
 };
 
@@ -36,25 +50,17 @@ const seatIds = (input:string) => input.split('\n')
     return seatID;
   });
 
-const part1 = (input:string) => {
-  const maxSeat = seatIds(input).reduce(max, 0);  
-
-  console.log(`Part 1 : maxSeat id is ${maxSeat}`);
+function doPart1(input: string) {
+  const maxSeat = seatIds(input).reduce(max, 0);
+  return maxSeat;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const ids = seatIds(input);
   const diff = difference([...Array(128*8).keys()], ids)
     .filter(num => num >= 128) 
     .filter(num => num < (128 * 8 - 128));
+  return diff[0];
+};
 
-  console.log(`Part 2 : My seat id is ${diff[0]}`)
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-5/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-5/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 965
-  part2(allInput); // 524
-})();
+main();

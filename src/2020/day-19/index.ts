@@ -1,5 +1,21 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import nearley from "nearley";
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(19, 2020);
+  const part1Expected = 147;
+  const part2Expected = null;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const matchingLineCount = (input:string, grammar) => {
   grammar.ParserStart = "0";
@@ -20,24 +36,17 @@ const matchingLineCount = (input:string, grammar) => {
   return validResults;
 }
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const grammar = require("./grammar.js");
   const validResults = matchingLineCount(input.split('\n\n')[1], grammar);
-  
-  console.log(`Part 1 : There are ${validResults} matching lines`);
+  return validResults;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const grammar = require("./test-grammar2.js");
   const validResults = matchingLineCount(input.split('\n\n')[1], grammar);
 
-  console.log(`Part 2 : There are ${validResults} matching lines`)
-}
+  return validResults;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-19/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-19/input2', { encoding: 'utf-8'});
-
-  part1(allInput); // 147
-  part2(test); // !274 .. too big
-})();
+main();

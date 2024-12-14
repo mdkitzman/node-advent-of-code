@@ -1,5 +1,22 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { cloneDeep } from 'lodash';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(8, 2020);
+  const part1Expected = 1137;
+  const part2Expected = 1125;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
 type instruction = [string, number, number];
 enum ExitCode { OK, LOOP };
 
@@ -35,15 +52,13 @@ const execute = (instructions:instruction[]):[ExitCode, number] => {
   } while(true);
 }
 
-const part1 = (input:string) => {
-  
+function doPart1(input: string) {
   const instructions:instruction[] = input.split('\n').map(line => line.split(' ')).map(([opp, num], index) => [opp, parseInt(num, 10), index]);
   const [_, accumulator] = execute(instructions);
-
-  console.log(`Part 1 : Accumulator is ${accumulator} before repeating`);
+  return accumulator;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const instructions:instruction[] = input.split('\n').map(line => line.split(' ')).map(([opp, num], index) => [opp, parseInt(num, 10), index]);
   const numInstructions = instructions.length;
 
@@ -59,13 +74,7 @@ const part2 = (input:string) => {
       break;
     }
   }
-  console.log(`Part 2 : Accumulator is ${accumulator}`);
-}
+  return accumulator;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-8/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-8/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 1137
-  part2(allInput); // 1125
-})();
+main();

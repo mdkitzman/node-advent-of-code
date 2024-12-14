@@ -1,15 +1,31 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { bitAnd, sum } from '../../util/arrayUtils';
 
-const part1 = (input:string) => {
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(6, 2020);
+  const part1Expected = 6297;
+  const part2Expected = 3158;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
+function doPart1(input: string) {
   const count = input.split(/\s\s/g)
     .map(group => 
       new Set(group.split('\n').flat().map(ch => ch.split('')).flat()).size
     ).reduce(sum, 0);
-  console.log(`Part 1 : count is ${count}`);
+  return count;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const _a = 'a'.charCodeAt(0);
   const toBit = (ltr:string):number => 1 << (ltr.charCodeAt(0) - _a);
 
@@ -27,14 +43,7 @@ const part2 = (input:string) => {
       return count;
     })
     .reduce(sum, 0);
+  return count;
+};
 
-  console.log(`Part 2 : count is ${count}`);
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-6/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-6/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 6297
-  part2(allInput); // 3158
-})();
+main();

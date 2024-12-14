@@ -1,36 +1,43 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { ConwaySpace } from './cube';
 
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(17, 2020);
+  const part1Expected = 375;
+  const part2Expected = 2192;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
 const pointMapper = (neighborCount:number, isActive:boolean):boolean => {
-  if(isActive){
-    return (neighborCount === 2 || neighborCount === 3);
-  } else {
-    return neighborCount === 3;
-  }    
+  return isActive
+    ? (neighborCount === 2 || neighborCount === 3)
+    : neighborCount === 3
 }
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const cube = new ConwaySpace(input, 3);
   for(let i = 0; i < 6; i++) {
     cube.cycle(pointMapper);
   }
-  
-  console.log(`Part 1 : There are ${cube.activeCount} cubes`);
+  return cube.activeCount;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const cube = new ConwaySpace(input, 4);
   for(let i = 0; i < 6; i++) {
     cube.cycle(pointMapper);
   }
 
-  console.log(`Part 2 : There are ${cube.activeCount} cubes`)
-}
+  return cube.activeCount;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-17/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-17/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 375
-  part2(allInput); // 2192
-})();
+main();

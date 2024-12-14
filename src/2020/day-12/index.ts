@@ -1,4 +1,20 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(12, 2020);
+  const part1Expected = 445;
+  const part2Expected = 42495;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 enum Direction { N=0, E=1, S=2, W=3 };
 const dirDeltas:Point[] = [ 
@@ -21,7 +37,7 @@ const move = (point:Point, dir:Direction, amount:number):Point => {
 
 const manhattan = (point:Point):number =>  Math.abs(point[0]) + Math.abs(point[1]);
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   let dir = Direction.E;
   let ship:Point = [0, 0];
   
@@ -49,12 +65,10 @@ const part1 = (input:string) => {
           break;
       }
     });
-  
-  console.log(`Part 1 : The Manhattan distance is ${manhattan(ship)}, ending at ${ship}`);
+  return manhattan(ship);
 };
 
-const part2 = (input:string) => {
-  
+function doPart2(input: string) {
   let ship:Point = [0, 0];
   let waypoint:Point = [10, 1]
 
@@ -89,14 +103,7 @@ const part2 = (input:string) => {
           break;
       }
     });
-  
-  console.log(`Part 2 : The Manhattan distance is ${manhattan(ship)}, ending at ${ship}`);
-}
+  return manhattan(ship);
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-12/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-12/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 445
-  part2(allInput); // 42495
-})();
+main();

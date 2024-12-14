@@ -1,5 +1,21 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
 import { sum } from '../../util/arrayUtils';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(2, 2020);
+  const part1Expected = 445;
+  const part2Expected = 491;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const getConfigs = (input:string) => {
   const splitter = /([0-9]+)-([0-9]+) ([a-z]): (.+)/;
@@ -11,18 +27,17 @@ const getConfigs = (input:string) => {
   return configs;
 }
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const correct = getConfigs(input)
     .map(config => {
       const count = config.password.split('').filter(ch => ch === config.letter).length;
       return (config.low <= count) && (count <= config.high) ? 1 : 0;
     })
     .reduce(sum, 0)
-  
-  console.log(`Part 1 : ${correct} passwords are correct`);
+  return correct;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const correct = getConfigs(input)
     .map(config => {
       return config.password.split('')
@@ -31,14 +46,8 @@ const part2 = (input:string) => {
         .length === 1
         ? 1 : 0;
     })
-    .reduce(sum, 0)
-  console.log(`Part 2 : ${correct} passwords are correct`)
-}
+    .reduce(sum, 0);
+  return correct;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-2/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-2/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 445
-  part2(allInput); // 491
-})();
+main();

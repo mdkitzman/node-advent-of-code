@@ -1,7 +1,23 @@
 import { assert } from 'console';
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { zip } from 'lodash';
 import { multiply } from '../../util/arrayUtils';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(20, 2020);
+  const part1Expected = 64802175715999;
+  const part2Expected = null;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 enum Side { TOP, LEFT, BOTTOM, RIGHT };
 interface TileNeighbors {
@@ -168,7 +184,7 @@ class Tile {
   }
 }
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const tiles:Tile[] = input.replace(/#/g, '1').replace(/\./g, '0').split('\n\n').map(line => new Tile(line))
   const assignedTiles:Tile[] = [tiles.pop()!];
 
@@ -227,17 +243,11 @@ const part1 = (input:string) => {
   assert(bottomRight.length === 1, `Bottom rigth has length ${bottomRight.length}`);
 
   const result = [topLeft, topRight, bottomLeft, bottomRight].map(t => t[0].id).reduce(multiply);
-  console.log(`Part 1 : the result is ${result}`);
+  return result;
 };
 
-const part2 = (input:string) => {
-  console.log(`Part 2 : `)
-}
+function doPart2(input: string) {
+  return 0;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-20/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-20/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 64802175715999
-  part2(test);
-})();
+main();

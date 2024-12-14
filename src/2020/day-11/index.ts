@@ -1,6 +1,22 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { inRange } from 'lodash';
 import { neighborArray } from '../../util/point';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(11, 2020);
+  const part1Expected = 2334;
+  const part2Expected = 2100;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 enum Item {
   floor = '.',
@@ -56,13 +72,9 @@ const fillSeats = (grid:Item[][], seatFinder:SeatSeeker, occupiedTolerance:numbe
   return occupiedSeats;
 }
 
-const print = (grid:Item[][]):string => {
-  return grid.map(row => row.join('')).join('\n');
-};
-
 const inGrid = (width:number, height:number) => (row:number, col:number) => inRange(row, 0, height) && inRange(col, 0, width);
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   let grid = seatGrid(input);
   const width = grid[0].length;
   const height = grid.length;
@@ -77,10 +89,10 @@ const part1 = (input:string) => {
 
   const occupiedSeats = fillSeats(grid, visibleSeats, 4);
 
-  console.log(`Part 1 : found ${occupiedSeats} occupied seats`);
+  return occupiedSeats;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   let grid = seatGrid(input);
   const width = grid[0].length;
   const height = grid.length;
@@ -106,13 +118,7 @@ const part2 = (input:string) => {
 
   const occupiedSeats = fillSeats(grid, visibleSeats, 5);
 
-  console.log(`Part 2 : found ${occupiedSeats} occupied seats`);
-}
+  return occupiedSeats;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-11/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-11/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 2334
-  part2(allInput); // 2100
-})();
+main();

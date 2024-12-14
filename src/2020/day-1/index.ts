@@ -1,6 +1,22 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 
-const part1 = (input:string) => {
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(1, 2020);
+  const part1Expected = 437931;
+  const part2Expected = 157667328;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
+function doPart1(input: string) {
   const numbers = input.split('\n').map(val => parseInt(val, 10));
   let mult:number|undefined;
   for(let i = 0; mult === undefined && i < numbers.length; i++){
@@ -10,10 +26,10 @@ const part1 = (input:string) => {
       }
     }
   }
-  console.log(`Part 1 : the value is ${mult}`);
+  return mult;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const numbers = input.split('\n').map(val => parseInt(val, 10));
   let mult:number|undefined;
   for(let i = 0; mult === undefined && i < numbers.length; i++){
@@ -25,14 +41,7 @@ const part2 = (input:string) => {
       }
     }
   }
-  console.log(`Part 2 : the value is ${mult}`);
-  
-}
+  return mult;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-1/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-1/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 437931
-  part2(allInput); // 157667328
-})();
+main();

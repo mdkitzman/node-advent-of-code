@@ -1,6 +1,21 @@
-import { promises as fs } from 'fs';
 import { difference } from 'lodash';
-import { allTrue } from '../../util/arrayUtils';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(4, 2020);
+  const part1Expected = 233;
+  const part2Expected = 111;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const reqFields = ['byr','iyr','eyr','hgt','hcl','ecl','pid'];
 const inRange = (min:number, max:number) => (val:number):boolean => min <= val && val <= max;
@@ -34,16 +49,15 @@ const validators:{[k:string]:(v:string)=>boolean} = {
   'cid': (_:string):boolean => true,
 };
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const validPpassports = input
     .split(/\s\s/).map(line => line.replace(/\n/g, ' '))
     .filter(validFieldCount)
     .length;
-  
-  console.log(`Part 1 : There are ${validPpassports} valid passports`);
+  return validPpassports;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const validPpassports = input
     .split(/\s\s/).map(line => line.replace(/\n/g, ' '))
     .filter(validFieldCount)
@@ -51,17 +65,10 @@ const part2 = (input:string) => {
       return passport.split(' ')
         .map(entry => entry.split(':'))
         .map(([key, value]) => validators[key](value))
-        .reduce(allTrue, true);
+        .every(t => t)
     })
-    .length;
+    .length
+  return validPpassports;
+};
 
-  console.log(`Part 2 : There are ${validPpassports} valid passports`);
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-4/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-4/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 233
-  part2(allInput); // 111
-})();
+main();

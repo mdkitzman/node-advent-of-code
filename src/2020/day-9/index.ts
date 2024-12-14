@@ -1,5 +1,21 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { anyTrue, sum } from '../../util/arrayUtils';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(9, 2020);
+  const part1Expected = 3199139634;
+  const part2Expected = 438559930;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 const hasSum = (haystack:number[], needle:number):boolean => 
   haystack.map(num => haystack.indexOf(needle - num) > -1).reduce(anyTrue, false);
@@ -16,16 +32,15 @@ const invalidNum = (numbers:number[], preamble:number):[number, number] => {
   return [iNeedle, numbers[iNeedle]];
 }
 
-const part1 = (input:string, preamble:number) => {
+function doPart1(input: string) {
   const numbers = input.split('\n').map(num => parseInt(num, 10));
-  const [iNeedle] = invalidNum(numbers, preamble);
-  
-  console.log(`Part 1 : The first number that fails is ${numbers[iNeedle]}`);
+  const [iNeedle] = invalidNum(numbers, 25);
+  return numbers[iNeedle];
 };
 
-const part2 = (input:string, preamble:number) => {
+function doPart2(input: string) {
   const numbers = input.split('\n').map(num => parseInt(num, 10));
-  const [iNeedle, invalidValue] = invalidNum(numbers, preamble);
+  const [iNeedle, invalidValue] = invalidNum(numbers, 25);
 
   const considerations = numbers.splice(0, iNeedle);
   let sumRange:number|undefined;
@@ -38,14 +53,7 @@ const part2 = (input:string, preamble:number) => {
       }
     }
   }
+  return sumRange;
+};
 
-  console.log(`Part 2 : The sum of the range is ${sumRange}`)
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-9/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-9/test', { encoding: 'utf-8'});
-
-  part1(allInput, 25); // 3199139634
-  part2(allInput, 25); // 438559930
-})();
+main();

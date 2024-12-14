@@ -1,9 +1,24 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { sum } from '../../util/arrayUtils';
 import { leftpad } from '../../util/stringUtils';
 
-const part1 = (input:string) => {
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
+const main = async () => {
+  const allInput = await getPuzzleInput(14, 2020);
+  const part1Expected = 9967721333886;
+  const part2Expected = null;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
+function doPart1(input: string) {
   let mask:string[] = [];
   let memory:{[k:number]:number} = {};
   const memInstRegex = /mem\[(\d+)\] = (\d+)/;
@@ -26,10 +41,10 @@ const part1 = (input:string) => {
   
   const total = Object.values(memory).reduce(sum, 0);
 
-  console.log(`Part 1 : Sum of memory is ${total}`);
+  return total;
 };
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   let mask:string[] = [];
   let memory:{[k:number]:number} = {};
   const memInstRegex = /mem\[(\d+)\] = (\d+)/;
@@ -59,14 +74,7 @@ const part2 = (input:string) => {
   
   const total = Object.values(memory).reduce(sum, 0);
 
+  return total;
+};
 
-  console.log(`Part 2 : `)
-}
-
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-14/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-14/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 9967721333886
-  part2(test);
-})();
+main();

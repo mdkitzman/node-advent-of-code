@@ -1,7 +1,23 @@
-import { promises as fs } from 'fs';
-import { multiply, sum } from '../../util/arrayUtils';
+import { getPuzzleInput } from '../../aocClient';
+import { sum } from '../../util/arrayUtils';
+import timeFn from '../../util/timeFn';
 
-const part1 = (input:string) => {
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(10, 2020);
+  const part1Expected = 1755;
+  const part2Expected = 4049565169664;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
+function doPart1(input: string) {
   const adapters = input.split('\n').map(line => parseInt(line, 10)).sort((a, b) => a - b);
   
   const diffs = adapters.map((jolt, index, arr) => index > 0 ? jolt - arr[index-1] : jolt)
@@ -10,7 +26,7 @@ const part1 = (input:string) => {
   const ones = diffs.filter(diff => diff === 1).length;
   const threes = diffs.filter(diff => diff === 3).length;
 
-  console.log(`Part 1 : Found ${ones} one step and ${threes} three step adapters.  Multiplied is ${ones * threes}`);
+  return ones * threes;
 };
 
 type AdapterSum = {
@@ -18,7 +34,7 @@ type AdapterSum = {
   sum:number
 }
 
-const part2 = (input:string) => {
+function doPart2(input: string) {
   const adapters = input.split('\n').map(line => parseInt(line, 10)).sort((a, b) => a - b);
   
   const sums:AdapterSum[]  = [{
@@ -43,14 +59,7 @@ const part2 = (input:string) => {
   }
   
   const combos = sums.pop()!.sum;
-    
-  console.log(`Part 2 : Found ${combos} combos`)
-}
+  return combos;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-10/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-10/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 1755
-  part2(allInput); // 4049565169664
-})();
+main();

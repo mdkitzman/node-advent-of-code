@@ -1,7 +1,23 @@
-import { promises as fs } from 'fs';
+import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn';
 import { isEmpty } from 'lodash';
 import { allTrue, multiply, sum } from '../../util/arrayUtils';
 import { inRange } from '../../util/numberUtils';
+
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
+
+const main = async () => {
+  const allInput = await getPuzzleInput(16, 2020);
+  const part1Expected = 21980;
+  const part2Expected = 1439429522627;
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
 
 type Field = {
   name:string;
@@ -39,19 +55,19 @@ const parseInput = (input:string):{fields:Field[], tickets:number[][]} => {
 const invalidValues = (fields:Field[], ticket:number[]):number[] => ticket.filter(ticketValue => !fields.some(c => c.valueValid(ticketValue)));
 const ticketInvalid = (fields:Field[], ticket:number[]):boolean => invalidValues(fields, ticket).length > 0
 
-const part1 = (input:string) => {
+function doPart1(input: string) {
   const { fields, tickets } = parseInput(input);
   
   const invalidvalues = tickets.filter((_, index) => index > 0)
     .filter(ticket => ticketInvalid(fields, ticket))
     .map(ticket => invalidValues(fields, ticket))
-    .flat();
+    .flat()
+    .reduce(sum, 0);
 
-  console.log(`Part 1 : Error rate is ${invalidvalues.reduce(sum, 0)}`);
+  return invalidvalues;
 };
 
-const part2 = (input:string) => {
-
+function doPart2(input: string) {
   const { fields, tickets } = parseInput(input);
   const validTickets = tickets.filter(ticket => !ticketInvalid(fields, ticket));
 
@@ -86,15 +102,10 @@ const part2 = (input:string) => {
   const myTicket = tickets[0];
   const departureValues = Object.entries(reducedFieldMap)
     .filter(([fieldName, _]) => fieldName.startsWith("departure"))
-    .map(([_, column]) => myTicket[column]);
+    .map(([_, column]) => myTicket[column])
+    .reduce(multiply);
 
-  console.log(`Part 2 : The result is ${departureValues.reduce(multiply)}`);
-}
+  return departureValues;
+};
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-16/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-16/test', { encoding: 'utf-8'});
-
-  part1(allInput); // 21980
-  part2(allInput); // 1439429522627
-})();
+main();

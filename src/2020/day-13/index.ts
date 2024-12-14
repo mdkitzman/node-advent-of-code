@@ -1,9 +1,24 @@
-import { promises as fs } from 'fs';
-import { multiply } from 'lodash';
+import { getPuzzleInput } from '../../aocClient';
+import { multiply } from '../../util/arrayUtils';
 import { absoluteModulo } from '../../util/numberUtils';
+import timeFn from '../../util/timeFn';
 
-const part1 = (input:string) => {
+const timedPart1 = timeFn(doPart1)
+const timedPart2 = timeFn(doPart2);
 
+const main = async () => {
+  const allInput = await getPuzzleInput(13, 2020);
+  const part1Expected = 2995;
+  const part2Expected = BigInt(1012171816131114);
+  
+  const part1 = timedPart1(allInput);
+  console.log('Part 1', part1 === part1Expected ? '✅' : '❌', part1);
+  
+  const part2 = timedPart2(allInput);
+  console.log('Part 2', part2 === part2Expected ? '✅' : '❌', part2);
+};
+
+function doPart1(input: string) {
   const lines = input.split('\n');
   const departureTime = parseInt(lines[0], 10);
 
@@ -18,14 +33,8 @@ const part1 = (input:string) => {
     ,Number.MAX_SAFE_INTEGER);
   
   const time = waitTime(bestLine);
-
-  console.log(`Part 1 : Waiting for bus ${bestLine} for ${time} : result of multiplying them is ${bestLine * time}`);
+  return time * bestLine;
 };
-
-const part2 = (input:string) => {
-  const busLines = input.split('\n')[1]
-    .split(',')
-    .map(bus => bus === 'x' ? 1: parseInt(bus, 10));
 
 // returns x where (a * x) % b == 1
 // https://rosettacode.org/wiki/Modular_inverse
@@ -41,7 +50,7 @@ const getInverse = (a:number, mod:number):number => {
 
 // Chinese Remainder Theorem
 const crt = (busLines:number[]):BigInt => {
-  // x =- a (mod n)
+  // x - a (mod n)
   // x - some unknown, constant value of t
   // a - bus number MINUS offset % bus number
   // n - cycle length (= bus number)
@@ -62,15 +71,12 @@ const crt = (busLines:number[]):BigInt => {
   return sum % BigInt(N);
 };
 
-  
-  
-  console.log(`Part 2 : Earliest time is ${crt(busLines)}`);
-}
+function doPart2(input: string) {
+  const busLines = input.split('\n')[1]
+    .split(',')
+    .map(bus => bus === 'x' ? 1: parseInt(bus, 10));
 
-(async () => {
-  const allInput = await fs.readFile('./src/2020/day-13/input', { encoding: 'utf-8'});
-  const test = await fs.readFile('./src/2020/day-13/test', { encoding: 'utf-8'});
+  return crt(busLines);
+};
 
-  part1(allInput); // 2995
-  part2(allInput); // 1012171816131114
-})();
+main();
