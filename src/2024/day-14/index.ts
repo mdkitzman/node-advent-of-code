@@ -4,6 +4,7 @@ import { neighborArray, Point2D } from '../../util/point';
 import timeFn from '../../util/timeFn';
 import { multiply } from '../../util/arrayUtils';
 import { absoluteModulo } from '../../util/numberUtils';
+import { Grid } from '../../util/grid';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
@@ -90,6 +91,14 @@ function doPart2(input: string) {
     const step = startingPoints.map(movePointInGrid(stepCount, gridSize));
     const newPoints = new Set(step.map(p => p.toString()));
     maybeTree = mightBeTree(newPoints);
+   /* Un-comment to see a pretty tree */
+   /*
+    if (maybeTree) {
+      const display = new Grid<string>();
+      step.forEach(p => display.set(p, "#"));
+      console.log(display.print(v => v ? v : " ", "high"));
+    }
+    */
   } while (!maybeTree);
 
   return stepCount;
