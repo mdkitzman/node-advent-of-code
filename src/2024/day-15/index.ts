@@ -47,14 +47,10 @@ const getMoveset = (input: string) => {
 }
 
 const wideBox = ["[", "]"];
-const simulate = (warehouse: Grid<string>, moves: Point2D[]) => {
-  const [[pRobot]] = warehouse.iterable().filter(([,ch]) => ch === "@");
-  warehouse.delete(pRobot);
-  // Explicitly moves boxes!
+const moveBoxesIn = (warehouse: Grid<string>) => {
   const moveBoxes = (dir: Point2D, pos: Point2D) => {
     const thisVal = warehouse.get(pos);
-    assert([undefined, "[","]","O"].includes(thisVal));
-
+    
     if (thisVal === undefined)
       return;
 
@@ -68,9 +64,6 @@ const simulate = (warehouse: Grid<string>, moves: Point2D[]) => {
       }
     }
     
-    if (thisVal === "O") {
-      assert(pointsToMove.length === 1);
-    }
     // move any boxes in our way
     pointsToMove.forEach(p => moveBoxes(dir, p.toAdded(dir)));
     pointsToMove.forEach(p => {
@@ -80,9 +73,13 @@ const simulate = (warehouse: Grid<string>, moves: Point2D[]) => {
       warehouse.delete(p);
     });
   }
+  return moveBoxes;
+}
 
+const canMoveBoxesIn = (warehouse: Grid<string>) => {
   const canMoveBoxes = (dir: Point2D, pos: Point2D) => {
     const thisVal = warehouse.get(pos);
+    
     if (thisVal === "#") 
       return false;
     if (thisVal === undefined)
@@ -99,6 +96,15 @@ const simulate = (warehouse: Grid<string>, moves: Point2D[]) => {
     }
     return pointsToCheck.every(p => canMoveBoxes(dir, p.toAdded(dir)));
   }
+  return canMoveBoxes;
+};
+
+const runBoxMovingSimulation = (warehouse: Grid<string>, moves: Point2D[]) => {
+  const [[pRobot]] = warehouse.iterable().filter(([,ch]) => ch === "@");
+  warehouse.delete(pRobot);
+
+  const canMoveBoxes = canMoveBoxesIn(warehouse);
+  const moveBoxes = moveBoxesIn(warehouse);
 
   for (const moveDir of moves) {
     const wantedMove = pRobot.toAdded(moveDir);
@@ -115,7 +121,7 @@ function doPart1(input: string) {
   const warehouse = getWarehouseLayout(wInput);
   const moves = getMoveset(mInput);
 
-  simulate(warehouse, moves);
+  runBoxMovingSimulation(warehouse, moves);
   
   return warehouse.iterable()
     .filter(([,str]) => str === "O")
@@ -136,7 +142,7 @@ function doPart2(input: string) {
   const warehouse = getWarehouseLayout(wInput, doubler);
   const moves = getMoveset(mInput);
 
-  simulate(warehouse, moves);
+  runBoxMovingSimulation(warehouse, moves);
   
   return warehouse.iterable()
     .filter(([,str]) => str === "[")
