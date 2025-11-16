@@ -1,8 +1,8 @@
-import fs  from 'fs';
-import { sum } from '../../util/arrayUtils';
+import { sum } from '../../util/arrayUtils.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(1, 2022);
   doPart1(allInput); // 70509
   doPart2(allInput); // 208567
 };

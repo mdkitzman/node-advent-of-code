@@ -1,5 +1,5 @@
 import Iter from 'es-iter';
-import { allTrue } from '../../util/arrayUtils';
+import { allTrue } from '../../util/arrayUtils.ts';
 
 const unit = [-1, 0, 1];
 

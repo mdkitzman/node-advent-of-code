@@ -1,9 +1,9 @@
-import fs, { link }  from 'fs';
-import { chunk } from '../../util/arrayUtils';
-import { Device } from './device';
+import { getPuzzleInput } from '../../aocClient.ts';
+import { chunk } from '../../util/arrayUtils.ts';
+import { Device } from './device.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(10, 2022);
   doPart1(allInput); // 13440
   doPart2(allInput); // PBZGRAZA
 };

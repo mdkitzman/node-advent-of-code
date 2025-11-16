@@ -1,6 +1,7 @@
 import fs from 'fs';
 import Iter from 'es-iter';
-import { IntComp, readProgram } from '../intcode-computer';
+import { IntComp, readProgram } from '../intcode-computer.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const doPart1 = async (input: string) => {
   const memory:number[] = readProgram(input);
@@ -34,7 +35,7 @@ const doPart2 = async (input: string) => {
 };
 
 const main = async () => {
-  const allInput = await fs.promises.readFile('./src/2019/day-2/input', { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(2, 2019);
   doPart1(allInput); // 4330636
   doPart2(allInput); // 6086
 };

@@ -1,11 +1,12 @@
 import fs, { WriteStream }  from 'fs';
-import { IntComp } from '../intcode-computer';
+import { IntComp } from '../intcode-computer.ts';
 import Iter from 'es-iter';
-import { max } from '../../util/arrayUtils';
-import { EventEmitter } from 'stream';
+import { max } from '../../util/arrayUtils.ts';
+import EventEmitter from 'events';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile('./src/2019/day-7/input', { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(7, 2019);
   
   await doPart1(allInput); // 880726
   await doPart2(allInput); // 4931744

@@ -1,9 +1,12 @@
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import fs  from 'fs';
-import { sum } from '../../util/arrayUtils';
-import { PainterRobot } from './painter-robot';
+import { sum } from '../../util/arrayUtils.ts';
+import { PainterRobot } from './painter-robot.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(11, 2019);
   await doPart1(allInput); // 2021
   await doPart2(allInput); // LBJHEKLH
 };

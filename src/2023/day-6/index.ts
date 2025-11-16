@@ -1,9 +1,35 @@
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import fs  from 'fs';
-import timeFn from '../../util/timeFn';
-import { zip } from 'lodash';
-import { generateRange, quadratic } from '../../util/numberUtils';
-import { multiply, sum } from '../../util/arrayUtils';
-import { parseAllNumbers, parseNumber } from '../../util/stringUtils';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import timeFn from '../../util/timeFn.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { zip } from 'lodash-es';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { generateRange, quadratic } from '../../util/numberUtils.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { multiply, sum } from '../../util/arrayUtils.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { parseAllNumbers, parseNumber } from '../../util/stringUtils.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

@@ -1,5 +1,5 @@
 import EventEmitter from "events";
-import { sum } from "../../util/arrayUtils";
+import { sum } from '../../util/arrayUtils.ts';
 
 class BingoNumber {
   public selected: boolean = false;

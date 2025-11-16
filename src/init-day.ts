@@ -1,4 +1,6 @@
 import { Command } from 'commander';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import {
   promises as fs,
   createWriteStream,
@@ -6,9 +8,11 @@ import {
   Stats
 } from 'fs';
 import { Readable } from 'stream';
-import { getReadme, getPuzzleInput } from './aocClient';
-import { template } from 'lodash';
+import { getReadme, getPuzzleInput } from './aocClient.ts';
+import { template } from 'lodash-es';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const toNumber = (val: string, prev: number): number => parseInt(val, 10);
 
@@ -28,19 +32,19 @@ type Options = {
 };
 
 const run = async ({ day, year}: Options) => {
-  const newPath = `${__dirname}/${year}/day-${day}`;
+  const newPath = join(__dirname, `${year}/day-${day}`);
   
   try {
     await fs.mkdir(newPath, { recursive: true });
   } catch (err) {
     return console.error({err}, 'Unable to make new directory 😭');
   }
-  const newFilePath = `${newPath}/index.ts`;
-  const readmePath = `${newPath}/README.md`;
+  const newFilePath = join(newPath, 'index.ts');
+  const readmePath = join(newPath, 'README.md');
 
   await Promise.all([
     ensureFile(newFilePath, async () => {
-      const fileData = await fs.readFile(`${__dirname}/day-template.ts`, { encoding: 'utf-8'});
+      const fileData = await fs.readFile(join(__dirname, 'day-template.ts'), { encoding: 'utf-8'});
       const compiled = template(fileData)({ day, year });
 
       Readable.from(compiled).pipe(createWriteStream(newFilePath));

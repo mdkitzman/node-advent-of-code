@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { sum } from '../../util/arrayUtils';
+import { sum } from '../../util/arrayUtils.ts';
 
 export default class Guard {
   public sleepSchedule: DateTime[][] = [];

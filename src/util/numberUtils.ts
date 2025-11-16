@@ -1,4 +1,4 @@
-import { leftpad } from "./stringUtils";
+import { leftpad } from './stringUtils.ts';
 
 export const inRange = (min:number, max:number) => (val:number):boolean => min <= val && val <= max;
 export const dec2bin = (dec:number, byteSize = 8):string => leftpad((dec >>> 0).toString(2), byteSize);

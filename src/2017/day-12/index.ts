@@ -1,8 +1,8 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
 import Graph from 'graphology';
 import {bfsFromNode} from 'graphology-traversal'
-import { subGraphCount } from '../../util/hash';
+import { subGraphCount } from '../../util/hash.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

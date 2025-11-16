@@ -1,9 +1,10 @@
 import fs from 'fs';
-import { min } from '../../util/arrayUtils';
-import { Point2D } from '../../util/point';
+import { min } from '../../util/arrayUtils.ts';
+import { Point2D } from '../../util/point.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile('./src/2019/day-3/input', { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(3, 2019);
   
   const [wire1, wire2] = getWires(allInput);
   const intersectionPoints = findIntersections(wire1, wire2);

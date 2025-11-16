@@ -1,7 +1,27 @@
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import fs  from 'fs';
-import { countBy, range } from 'lodash';
-import safeRecord from '../../util/safe-record';
-import { minMax, windowed } from '../../util/arrayUtils'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { countBy, range } from 'lodash-es';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import safeRecord from '../../util/safe-record.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { minMax, windowed } from '../../util/arrayUtils.ts'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});

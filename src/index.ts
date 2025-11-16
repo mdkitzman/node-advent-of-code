@@ -1,11 +1,17 @@
-#!/usr/bin/env ts-node-script
+#!/usr/bin/env node
 import 'dotenv/config';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { readFileSync } from 'fs';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import figlet from 'figlet';
-import * as APPS from './applications'
+import * as APPS from './applications.ts'
 
-const pkg = require(`${__dirname}/../package.json`); // from local lib
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'));
 const banner = chalk.red(figlet.textSync(pkg.name, { horizontalLayout: 'full', font: 'Rectangles' }));
 const program = new Command();
 program.version(pkg.version);

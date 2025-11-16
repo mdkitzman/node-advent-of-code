@@ -1,6 +1,6 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import lodash from 'lodash';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import lodash from 'lodash-es';
 import Iter from 'es-iter';
 
 const timedPart1 = timeFn(doPart1)

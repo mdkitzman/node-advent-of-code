@@ -1,8 +1,8 @@
 import { assert } from 'console';
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { zip } from 'lodash';
-import { multiply } from '../../util/arrayUtils';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { zip } from 'lodash-es';
+import { multiply } from '../../util/arrayUtils.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

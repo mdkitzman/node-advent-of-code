@@ -1,5 +1,5 @@
-import { Grid } from "./grid";
-import { Point2D } from "./point";
+import { Grid } from './grid.ts';
+import { Point2D } from './point.ts';
 
 const split = (input:string, delim = "\n") => input.split(delim);
 

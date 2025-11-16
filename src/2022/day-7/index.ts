@@ -1,8 +1,8 @@
-import fs  from 'fs';
-import { getDirectory, walkDirs, Directory } from './dir';
+import { getPuzzleInput } from '../../aocClient.ts';
+import { getDirectory, walkDirs, type Directory } from './dir.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(7, 2022);
   const directory = getDirectory(allInput);
   doPart1(directory); // 1182909
   doPart2(directory); // 2832508

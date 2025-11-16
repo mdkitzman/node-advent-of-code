@@ -1,5 +1,5 @@
-import { diff, max, min, multiply, sum } from "../../util/arrayUtils"
-import { Packet, PacketType } from "./packet-parser"
+import { diff, max, min, multiply, sum } from '../../util/arrayUtils.ts'
+import { Packet, PacketType } from './packet-parser.ts'
 
 export const evaluatePacket = (packet:Packet): number => {
   switch(packet.header.type) {

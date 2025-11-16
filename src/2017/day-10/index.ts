@@ -1,6 +1,6 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { knotNumbers, knotHash } from '../../util/hash';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { knotNumbers, knotHash } from '../../util/hash.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

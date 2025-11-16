@@ -1,7 +1,7 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { inRange } from 'lodash';
-import { neighborArray } from '../../util/point';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { inRange } from 'lodash-es';
+import { neighborArray } from '../../util/point.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

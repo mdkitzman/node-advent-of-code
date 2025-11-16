@@ -1,11 +1,11 @@
-import fs  from 'fs';
-import { Point3D } from '../../util/point';
+import { Point3D } from '../../util/point.ts';
 import Iter from 'es-iter';
-import { sum } from '../../util/arrayUtils';
-import { lcm } from '../../util/numberUtils';
+import { sum } from '../../util/arrayUtils.ts';
+import { lcm } from '../../util/numberUtils.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(12, 2019);
 
   doPart1(allInput); // 7179
   doPart2(allInput); // 428576638953552
@@ -79,12 +79,15 @@ function getMoons(input: string) {
 type Dim = 'x'|'y'|'z';
 
 class Moon {
-  constructor(
-    public readonly pos: Point3D,
-    public readonly velocity: Point3D = new Point3D(0,0,0),
-    private readonly originalPos: Point3D = pos,
-  ){}
+  public readonly pos: Point3D;
+  public readonly velocity: Point3D;
+  private readonly originalPos: Point3D;
 
+  constructor(pos: Point3D, velocity?: Point3D) {
+    this.pos = pos;
+    this.velocity = velocity || new Point3D(0,0,0);
+    this.originalPos = pos;
+  }
   get energy(): number {
     return absSum(this.pos) * absSum(this.velocity);
   }

@@ -1,10 +1,10 @@
-import { groupBy } from 'lodash';
-import { getPuzzleInput } from '../../aocClient';
-import { neighborArray, Point2D } from '../../util/point';
-import timeFn from '../../util/timeFn';
-import { multiply } from '../../util/arrayUtils';
-import { absoluteModulo } from '../../util/numberUtils';
-import { Grid } from '../../util/grid';
+import { groupBy } from 'lodash-es';
+import { getPuzzleInput } from '../../aocClient.ts';
+import { neighborArray, Point2D } from '../../util/point.ts';
+import timeFn from '../../util/timeFn.ts';
+import { multiply } from '../../util/arrayUtils.ts';
+import { absoluteModulo } from '../../util/numberUtils.ts';
+import { Grid } from '../../util/grid.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

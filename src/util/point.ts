@@ -1,5 +1,11 @@
 export class Point2D {
-  constructor(public x: number, public y: number) {}
+  x: number;
+  y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
   
   static fromPoint(point: Point2D) {
     return new Point2D(point.x, point.y);
@@ -67,10 +73,15 @@ export class Point2D {
 }
 
 export class Point3D {
-  constructor(
-    public x: number,
-    public y: number,
-    public z: number,) {}
+  x: number;
+  y: number;
+  z: number;
+
+  constructor(x: number, y: number, z: number) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
   
   equals(other: Point3D): boolean {
     return this.x === other.x && this.y === other.y && this.z === other.z;

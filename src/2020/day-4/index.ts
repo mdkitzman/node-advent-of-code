@@ -1,6 +1,6 @@
-import { difference } from 'lodash';
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
+import { difference } from 'lodash-es';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

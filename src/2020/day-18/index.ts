@@ -1,6 +1,6 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { multiply, sum } from '../../util/arrayUtils';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { multiply, sum } from '../../util/arrayUtils.ts';
 import infixToPostfix from 'infix-to-postfix';
 import rpn from 'rpn';
 

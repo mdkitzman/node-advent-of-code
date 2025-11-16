@@ -1,7 +1,7 @@
-import timeFn from '../../util/timeFn';
-import { allTrue, pairwise } from '../../util/arrayUtils';
-import { inRange } from '../../util/numberUtils';
-import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn.ts';
+import { allTrue, pairwise } from '../../util/arrayUtils.ts';
+import { inRange } from '../../util/numberUtils.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

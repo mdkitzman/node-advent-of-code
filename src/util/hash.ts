@@ -1,7 +1,7 @@
 import Graph from "graphology";
 import { bfsFromNode } from "graphology-traversal";
-import { toCharCodes } from "./arrayUtils";
-import { leftpad } from "./stringUtils";
+import { toCharCodes } from './arrayUtils.ts';
+import { leftpad } from './stringUtils.ts';
 
 export const knotNumbers = (lengths:number[], numbers = [...Array(256).keys()], curPos:number = 0, skip:number = 0):[number[], number, number] => {
   // Very much taken from https://www.reddit.com/r/adventofcode/comments/7irzg5/2017_day_10_solutions/

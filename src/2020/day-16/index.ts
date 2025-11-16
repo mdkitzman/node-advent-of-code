@@ -1,8 +1,8 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { isEmpty } from 'lodash';
-import { allTrue, multiply, sum } from '../../util/arrayUtils';
-import { inRange } from '../../util/numberUtils';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { isEmpty } from 'lodash-es';
+import { allTrue, multiply, sum } from '../../util/arrayUtils.ts';
+import { inRange } from '../../util/numberUtils.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

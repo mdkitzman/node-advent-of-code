@@ -1,12 +1,12 @@
-import fs  from 'fs';
-import { sum, chunk } from '../../util/arrayUtils';
-import { alphabet, ALPHABET, cut } from '../../util/stringUtils';
+import { sum, chunk } from '../../util/arrayUtils.ts';
+import { alphabet, ALPHABET, cut } from '../../util/stringUtils.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const letterValue: Record<string, number> = Object.fromEntries((alphabet+ALPHABET).split('').map((ltr, i) => [ltr, i+1]));
 const cutInHalf = (str:string) => cut(str, str.length/2);
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(3, 2022);
   doPart1(allInput); // 7716
   doPart2(allInput); // 2973
 };

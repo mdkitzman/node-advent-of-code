@@ -1,8 +1,31 @@
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import fs  from 'fs';
-import { pipe } from '../../util/pipe';
-import { chunk, min } from '../../util/arrayUtils';
-import { generateRange, inRange } from '../../util/numberUtils';
-import timeFn from '../../util/timeFn';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { pipe } from '../../util/pipe.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { chunk, min } from '../../util/arrayUtils.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { generateRange, inRange } from '../../util/numberUtils.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import timeFn from '../../util/timeFn.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

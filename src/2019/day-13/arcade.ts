@@ -1,6 +1,6 @@
-import { InfiniteGrid } from "../../util/grid";
-import { Point2D } from "../../util/point";
-import { IntComp } from "../intcode-computer";
+import { InfiniteGrid } from '../../util/grid.ts';
+import { Point2D } from '../../util/point.ts';
+import { IntComp } from '../intcode-computer.ts';
 
 export enum TileType {
   EMPTY,

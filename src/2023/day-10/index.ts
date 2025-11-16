@@ -1,8 +1,31 @@
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import fs  from 'fs';
-import timeFn from '../../util/timeFn';
-import { Grid } from '../../util/grid';
-import { Point2D, cardinalNeighbors } from '../../util/point';
-import { gridBuilder } from '../../util/inputParsers';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import timeFn from '../../util/timeFn.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { Grid } from '../../util/grid.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { Point2D, cardinalNeighbors } from '../../util/point.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { gridBuilder } from '../../util/inputParsers.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

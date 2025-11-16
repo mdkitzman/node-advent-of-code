@@ -1,5 +1,5 @@
-import { Point2D, cardinalNeighbors } from "./point";
-import { cloneDeep } from 'lodash'
+import { Point2D, cardinalNeighbors } from './point.ts';
+import { cloneDeep } from 'lodash-es'
 
 /**
  * Will generate coordinate values for n-dimensions from the origin
@@ -133,10 +133,13 @@ export class Grid<T> {
 }
 
 export class InfiniteGrid<T> extends Grid<T> {
+  private defaultValue: T;
+
   constructor(
-    private defaultValue: T,
+    defaultValue: T,
   ){
     super();
+    this.defaultValue = defaultValue;
   }
 
   public get(point: Point2D): T {

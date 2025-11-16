@@ -1,8 +1,9 @@
 import fs  from 'fs';
-import { IntComp } from '../intcode-computer';
+import { IntComp } from '../intcode-computer.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile('./src/2019/day-5/input', { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(5, 2019);
   await doPart1(allInput); // input value 1 => 7259358
   await doPart2(allInput); // input value 5 => 11826654
 };

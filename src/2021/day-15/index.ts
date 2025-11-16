@@ -1,9 +1,35 @@
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import fs  from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import Graph from 'graphology';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import dijkstra from 'graphology-shortest-path/dijkstra';
-import { sum } from '../../util/arrayUtils';
-import { Grid } from '../../util/grid';
-import { Point2D } from '../../util/point';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { sum } from '../../util/arrayUtils.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { Grid } from '../../util/grid.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { Point2D } from '../../util/point.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const main = async () => {
   const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});

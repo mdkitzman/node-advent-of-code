@@ -1,5 +1,5 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
 import crypto from 'crypto';
 
 const timedPart1 = timeFn(doPart1)

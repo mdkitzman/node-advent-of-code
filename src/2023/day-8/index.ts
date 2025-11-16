@@ -1,7 +1,27 @@
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import fs  from 'fs';
-import timeFn from '../../util/timeFn';
-import { infiniteLoop } from '../../util/arrayUtils';
-import { lcm } from '../../util/numberUtils';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import timeFn from '../../util/timeFn.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { infiniteLoop } from '../../util/arrayUtils.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { lcm } from '../../util/numberUtils.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 type NodeMap = Map<string, [string,string]>;
 
 const timedPart1 = timeFn(doPart1)

@@ -1,7 +1,7 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { Point2D } from '../../util/point';
-import { Board, ELF, GOBLIN, playGame, SPACE, WALL } from './game';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { Point2D } from '../../util/point.ts';
+import { Board, ELF, GOBLIN, playGame, SPACE, WALL } from './game.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

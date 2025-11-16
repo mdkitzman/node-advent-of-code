@@ -1,8 +1,9 @@
-import { isEqual } from 'lodash';
-import { chunk, allTrue } from './../../util/arrayUtils';
+import { isEqual } from 'lodash-es';
+import { chunk, allTrue } from './../../util/arrayUtils.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const input = '235741-706948';
+  const input = await getPuzzleInput(4, 2019);
   doPart1(input); // 1178
   doPart2(input); // 763
 };

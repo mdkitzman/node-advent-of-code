@@ -1,9 +1,9 @@
-import fs  from 'fs';
+import { getPuzzleInput } from "../../aocClient.ts";
 
 const moveRgx = /move (\d+) from (\d) to (\d)/;
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(5, 2022);
   doPart1(allInput); // TGWSMRBPN
   doPart2(allInput); // TZLTLWRNF
 };

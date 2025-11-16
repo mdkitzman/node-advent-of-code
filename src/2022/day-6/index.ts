@@ -1,9 +1,9 @@
-import { readFile }  from 'fs/promises';
-import { windowed } from '../../util/arrayUtils';
-import { uniq } from 'lodash';
+import { getPuzzleInput } from '../../aocClient.ts';
+import { windowed } from '../../util/arrayUtils.ts';
+import { uniq } from 'lodash-es';
 
 const main = async () => {
-  const allInput = await readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(6, 2022);
   doPart1(allInput); // 1848
   doPart2(allInput); // 2308
 };

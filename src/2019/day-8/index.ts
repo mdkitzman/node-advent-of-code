@@ -1,10 +1,11 @@
 import fs  from 'fs';
-import { chunk } from '../../util/arrayUtils';
-import { InfiniteGrid } from '../../util/grid';
-import { Point2D } from '../../util/point';
+import { chunk } from '../../util/arrayUtils.ts';
+import { InfiniteGrid } from '../../util/grid.ts';
+import { Point2D } from '../../util/point.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile('./src/2019/day-8/input', { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(8, 2019);
   doPart1(allInput, 25, 6); // 1950
   doPart2(allInput, 25, 6); // FKAHL
 };

@@ -1,7 +1,7 @@
 import { assert } from 'console';
-import fs  from 'fs';
-import { InfiniteGrid } from '../../util/grid';
-import { Point2D, neighborArray } from '../../util/point';
+import { InfiniteGrid } from '../../util/grid.ts';
+import { Point2D, neighborArray } from '../../util/point.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const test = `R 4
 U 4
@@ -13,7 +13,7 @@ L 5
 R 2`
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(9, 2022);
   doPart1(allInput); // 6087
   doPart2(allInput);
 };

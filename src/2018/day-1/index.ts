@@ -1,6 +1,6 @@
-import { getPuzzleInput } from '../../aocClient';
-import { infiniteLoop, sum } from '../../util/arrayUtils';
-import timeFn from '../../util/timeFn';
+import { getPuzzleInput } from '../../aocClient.ts';
+import { infiniteLoop, sum } from '../../util/arrayUtils.ts';
+import timeFn from '../../util/timeFn.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

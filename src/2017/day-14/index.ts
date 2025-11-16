@@ -1,9 +1,9 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
 import Graph from 'graphology';
-import { knotHash, subGraphCount } from '../../util/hash';
-import { sum } from '../../util/arrayUtils';
-import { dec2bin } from '../../util/numberUtils';
+import { knotHash, subGraphCount } from '../../util/hash.ts';
+import { sum } from '../../util/arrayUtils.ts';
+import { dec2bin } from '../../util/numberUtils.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

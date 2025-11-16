@@ -1,11 +1,11 @@
-import fs  from 'fs';
-import { Grid } from '../../util/grid';
-import { Point2D } from '../../util/point';
+import { Grid } from '../../util/grid.ts';
+import { Point2D } from '../../util/point.ts';
 import Iter from 'es-iter';
-import { anyTrue, max, multiply } from '../../util/arrayUtils';
+import { anyTrue, max, multiply } from '../../util/arrayUtils.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(8, 2022);
   const grid = new Grid<number>();
   
   allInput

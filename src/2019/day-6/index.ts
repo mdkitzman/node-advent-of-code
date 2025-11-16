@@ -1,10 +1,12 @@
 import fs  from 'fs';
 import Graph from 'graphology';
 import { dfsFromNode } from "graphology-traversal";
-import { bidirectional } from 'graphology-shortest-path/unweighted';
+import unweighted from 'graphology-shortest-path';
+import { getPuzzleInput } from '../../aocClient.ts';
+const { bidirectional } = unweighted;
 
 const main = async () => {
-  const allInput = await fs.promises.readFile('./src/2019/day-6/input', { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(6, 2019);
   const graph = new Graph({
     allowSelfLoops: false,
     multi: false,

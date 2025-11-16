@@ -1,9 +1,35 @@
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import fs  from 'fs';
-import timeFn from '../../util/timeFn';
-import { doubleLines } from '../../util/inputParsers';
-import { reduce } from 'lodash';
-import { sum } from '../../util/arrayUtils';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import timeFn from '../../util/timeFn.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { doubleLines } from '../../util/inputParsers.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { reduce } from 'lodash-es';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import { sum } from '../../util/arrayUtils.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 import { assert } from 'console';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

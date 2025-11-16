@@ -1,8 +1,8 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import lodash from 'lodash';
-import { InfiniteGrid } from '../../util/grid';
-import { Point2D } from '../../util/point';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import lodash from 'lodash-es';
+import { InfiniteGrid } from '../../util/grid.ts';
+import { Point2D } from '../../util/point.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

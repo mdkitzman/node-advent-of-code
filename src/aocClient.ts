@@ -1,7 +1,13 @@
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { readFileSync } from 'fs';
 import parse from 'node-html-parser';
 import { NodeHtmlMarkdown } from 'node-html-markdown';;
 
-const pkg = require("../package.json");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'));
 
 function throwErr(msg: string){
   throw new Error(msg);

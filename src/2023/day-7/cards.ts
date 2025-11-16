@@ -1,8 +1,8 @@
 import { countBy, memoize } from "lodash";
 import { isEqual } from "lodash";
-import { leftpad } from "../../util/stringUtils";
-import { max } from "../../util/arrayUtils";
-import wildPermutations from '../../util/permutation';
+import { leftpad } from '../../util/stringUtils.ts';
+import { max } from '../../util/arrayUtils.ts';
+import wildPermutations from '../../util/permutation.ts';
 
 type HandTest = (hand:string)=>boolean;
 

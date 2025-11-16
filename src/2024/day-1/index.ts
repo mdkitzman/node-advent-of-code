@@ -1,8 +1,8 @@
 import fs  from 'fs';
-import timeFn from '../../util/timeFn';
-import { zip, unzip, groupBy } from 'lodash';
-import { sum } from '../../util/arrayUtils';
-import { getPuzzleInput } from '../../aocClient';
+import timeFn from '../../util/timeFn.ts';
+import { zip, unzip, groupBy } from 'lodash-es';
+import { sum } from '../../util/arrayUtils.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

@@ -1,6 +1,6 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { sum } from '../../util/arrayUtils';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { sum } from '../../util/arrayUtils.ts';
 
 const initial = /initial state: (.+)/;
 const mutator = /(.{5}) => (.)/

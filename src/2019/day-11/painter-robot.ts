@@ -1,7 +1,7 @@
-import { Point2D } from '../../util/point';
-import { InfiniteGrid } from '../../util/grid';
-import { absoluteModulo } from '../../util/numberUtils';
-import { IntComp, readProgram } from '../intcode-computer';
+import { Point2D } from '../../util/point.ts';
+import { InfiniteGrid } from '../../util/grid.ts';
+import { absoluteModulo } from '../../util/numberUtils.ts';
+import { IntComp, readProgram } from '../intcode-computer.ts';
 
 type GridValue = {
   painted: boolean;

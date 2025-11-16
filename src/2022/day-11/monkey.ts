@@ -16,8 +16,9 @@ export class Monkey extends EventEmitter{
   private inspectItem: (a:number)=> number;
   private test: (a: number) => boolean;
   private nextMonkeys: [number, number];
+  private relieve: Relief;
   
-  constructor(monkeyInput: string, private relieve: Relief = identity){
+  constructor(monkeyInput: string, relieve: Relief = identity){
     super();
     // get our id
     const lines = monkeyInput.split('\n');

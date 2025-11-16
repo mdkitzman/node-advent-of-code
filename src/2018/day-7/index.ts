@@ -1,9 +1,9 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
 import Graph from 'graphology';
-import { min } from '../../util/arrayUtils';
-import lodash  from 'lodash';
-import { ALPHABET } from '../../util/stringUtils';
+import { min } from '../../util/arrayUtils.ts';
+import lodash  from 'lodash-es';
+import { ALPHABET } from '../../util/stringUtils.ts';
 
 const stepRegex = /Step (\S) must be finished before step (\S) can begin./;
 

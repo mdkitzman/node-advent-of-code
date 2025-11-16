@@ -1,6 +1,6 @@
-import fs  from 'fs';
-import { zip } from 'lodash';
-import { sum } from '../../util/arrayUtils';
+import { zip } from 'lodash-es';
+import { sum } from '../../util/arrayUtils.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const CORRECT = 1;
 const UNKNOWN = 0;
@@ -10,7 +10,7 @@ type Packet = number|number[];
 type CmpResult = 1 | 0 | -1;
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(13, 2022);
   doPart1(allInput); // 5330
   doPart2(allInput); // 27648
 };

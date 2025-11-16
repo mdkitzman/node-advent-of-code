@@ -1,5 +1,6 @@
 import fs from 'fs';
-import { sum } from '../../util/arrayUtils';
+import { sum } from '../../util/arrayUtils.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const fuelNeeded = (mass: number): number => Math.floor(mass/3) - 2;
 
@@ -24,7 +25,7 @@ const doPart2 = (moduleMasses: number[]) => {
 };
 
 const main = async () => {
-  const allInput = await fs.promises.readFile('./src/2019/day-1/input', { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(1, 2019);
   const moduleMasses = allInput.split('\n').map(line => parseInt(line, 10));
   doPart1(moduleMasses); // 3560353
   doPart2(moduleMasses); // 5337642

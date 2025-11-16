@@ -1,11 +1,11 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { max, min, sum } from '../../util/arrayUtils';
-import { Point2D } from '../../util/point';
-import lodash from 'lodash';
-import { InfiniteGrid } from '../../util/grid';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { max, min, sum } from '../../util/arrayUtils.ts';
+import { Point2D } from '../../util/point.ts';
+import lodash from 'lodash-es';
+import { InfiniteGrid } from '../../util/grid.ts';
 import Iter from 'es-iter';
-import { alphabet, ALPHABET, digits } from '../../util/stringUtils';
+import { alphabet, ALPHABET, digits } from '../../util/stringUtils.ts';
 
 const letters = (alphabet+ALPHABET+digits).split('');
 

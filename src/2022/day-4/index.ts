@@ -1,5 +1,5 @@
-import fs from "fs";
-import { inRange } from "../../util/numberUtils";
+import { getPuzzleInput } from '../../aocClient.ts';
+import { inRange } from '../../util/numberUtils.ts';
 
 const ranges = /(\d+)-(\d+),(\d+)-(\d+)/;
 
@@ -9,7 +9,7 @@ type Range = {
 };
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: "utf-8" });
+  const allInput = await getPuzzleInput(4, 2022);
   doPart1(allInput); // 571
   doPart2(allInput); // 917
 };

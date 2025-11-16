@@ -1,7 +1,7 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { InfiniteGrid, generateCoords } from '../../util/grid';
-import { Point2D } from '../../util/point';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { InfiniteGrid, generateCoords } from '../../util/grid.ts';
+import { Point2D } from '../../util/point.ts';
 
 const gridSize = 300;
 

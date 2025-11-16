@@ -1,8 +1,8 @@
-import { split } from 'lodash';
-import { getPuzzleInput } from '../../aocClient';
-import { chunk, sum } from '../../util/arrayUtils';
-import { digitCount } from '../../util/numberUtils';
-import timeFn from '../../util/timeFn';
+import { split } from 'lodash-es';
+import { getPuzzleInput } from '../../aocClient.ts';
+import { chunk, sum } from '../../util/arrayUtils.ts';
+import { digitCount } from '../../util/numberUtils.ts';
+import timeFn from '../../util/timeFn.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

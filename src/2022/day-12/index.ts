@@ -1,9 +1,10 @@
 import { assert } from 'console';
-import fs  from 'fs';
 import Graph from 'graphology';
-import dijkstra from 'graphology-shortest-path/dijkstra';
-import { min, windowed } from '../../util/arrayUtils';
-import { cardinalNeighbors, Point2D } from '../../util/point';
+import shortestPath from 'graphology-shortest-path';
+import { min } from '../../util/arrayUtils.ts';
+import { cardinalNeighbors } from '../../util/point.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
+const { dijkstra } = shortestPath;
 
 const test = `Sabqponm
 abcryxxl
@@ -12,7 +13,7 @@ acctuvwj
 abdefghi`
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(12, 2022);
   doPart1(allInput); // 361
   doPart2(allInput); // 176 - too low
 };

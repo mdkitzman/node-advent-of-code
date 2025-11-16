@@ -1,7 +1,7 @@
-import { getPuzzleInput } from '../../aocClient';
-import { sum } from '../../util/arrayUtils';
-import { parseAllNumbers } from '../../util/stringUtils';
-import timeFn from '../../util/timeFn';
+import { getPuzzleInput } from '../../aocClient.ts';
+import { sum } from '../../util/arrayUtils.ts';
+import { parseAllNumbers } from '../../util/stringUtils.ts';
+import timeFn from '../../util/timeFn.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

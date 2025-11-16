@@ -1,7 +1,7 @@
 import fs  from 'fs';
-import { intersection, range } from 'lodash';
-import { inRange } from '../../util/numberUtils';
-import { Point2D } from '../../util/point';
+import { intersection, range } from 'lodash-es';
+import { inRange } from '../../util/numberUtils.ts';
+import { Point2D } from '../../util/point.ts';
 
 const main = async () => {
   const allInput = 'target area: x=282..314, y=-80..-45';

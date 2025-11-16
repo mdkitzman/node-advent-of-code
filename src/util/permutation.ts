@@ -1,5 +1,5 @@
 import { intersection } from "lodash";
-import { min } from "./arrayUtils";
+import { min } from './arrayUtils.ts';
 
 /**
  * Scopes the generation of permutations of a set possibilites with wild replacements

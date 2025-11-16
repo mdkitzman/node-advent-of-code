@@ -1,8 +1,11 @@
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import fs  from 'fs';
-import { IntComp, readProgram } from '../intcode-computer';
+import { IntComp, readProgram } from '../intcode-computer.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(9, 2019);
   await doPart1(allInput); // 4234906522
   await doPart2(allInput); // 60962
 };

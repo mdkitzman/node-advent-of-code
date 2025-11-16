@@ -1,8 +1,8 @@
-import { getPuzzleInput } from '../../aocClient';
-import { sum } from '../../util/arrayUtils';
-import { InfiniteGrid } from '../../util/grid';
-import { neighborArray, Point2D } from '../../util/point';
-import timeFn from '../../util/timeFn';
+import { getPuzzleInput } from '../../aocClient.ts';
+import { sum } from '../../util/arrayUtils.ts';
+import { InfiniteGrid } from '../../util/grid.ts';
+import { neighborArray, Point2D } from '../../util/point.ts';
+import timeFn from '../../util/timeFn.ts';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);

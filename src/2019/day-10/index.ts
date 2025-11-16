@@ -1,9 +1,12 @@
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import fs  from 'fs';
-import { Point2D, rotate } from '../../util/point';
-import { groupBy, orderBy, uniq } from 'lodash';
+import { Point2D, rotate } from '../../util/point.ts';
+import { groupBy, orderBy, uniq } from 'lodash-es';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(10, 2019);
   const best = doPart1(allInput);
   console.log(`Found the best asteroid at (${best.asteroid.x}, ${best.asteroid.y}) with ${best.visibleCount} asteroids`); // 292
   const p = doPart2(allInput, best.asteroid);

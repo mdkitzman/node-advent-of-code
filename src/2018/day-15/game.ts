@@ -1,7 +1,7 @@
-import { Grid } from "../../util/grid";
-import { Point2D, cardinalNeighbors } from "../../util/point";
+import { Grid } from '../../util/grid.ts';
+import { Point2D, cardinalNeighbors } from '../../util/point.ts';
 import { Grid as AStarGrid, Astar } from 'fast-astar';
-import { sum } from "../../util/arrayUtils";
+import { sum } from '../../util/arrayUtils.ts';
 
 export const WALL = "#";
 export const SPACE = ".";

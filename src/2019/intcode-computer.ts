@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import { SafeArray } from '../util/arrayUtils';
+import { SafeArray } from '../util/arrayUtils.ts';
 
 export const readProgram = (input: string) => input.split(',').map(ch => parseInt(ch, 10));
 
@@ -41,7 +41,7 @@ export class IntComp extends EventEmitter {
 
   private nextOperation(memory:number[], index: number): Operation {
     const code = memory[index].toString(10).slice(-2);
-    const opCode = parseInt(code, 10);
+    const opCode = parseInt(code, 10) as OpCode;
     return this.opcodeMap.get(opCode) || this.terminate;
   }
 
@@ -161,21 +161,23 @@ export class IntComp extends EventEmitter {
   }
 }
 
-enum ParamMode {
-  ADDRESS = 0,
-  IMMEDIEATE = 1,
-  RELATIVE = 2,
-};
+const ParamMode = {
+  ADDRESS: 0 as const,
+  IMMEDIEATE: 1 as const,
+  RELATIVE: 2 as const,
+} as const;
+type ParamMode = typeof ParamMode[keyof typeof ParamMode];
 
-enum OpCode {
-  ADD = 1,
-  MULTIPLY,
-  INPUT,
-  OUTPUT,
-  JMPIFTRUE,
-  JMPIFFALSE,
-  LESSTHAN,
-  EQUALS,
-  RELATIVE_BASE_OFFSET,
-  TERMINATE = 99
-}
+const OpCode = {
+  ADD: 1 as const,
+  MULTIPLY: 2 as const,
+  INPUT: 3 as const,
+  OUTPUT: 4 as const,
+  JMPIFTRUE: 5 as const,
+  JMPIFFALSE: 6 as const,
+  LESSTHAN: 7 as const,
+  EQUALS: 8 as const,
+  RELATIVE_BASE_OFFSET: 9 as const,
+  TERMINATE: 99 as const,
+} as const;
+type OpCode = typeof OpCode[keyof typeof OpCode];

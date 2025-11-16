@@ -1,10 +1,10 @@
-import fs  from 'fs';
-import { identity } from 'lodash';
-import { lcm } from '../../util/numberUtils';
-import { Monkey, Relief } from './monkey';
+import { identity } from 'lodash-es';
+import { lcm } from '../../util/numberUtils.ts';
+import { Monkey, type Relief } from './monkey.ts';
+import { getPuzzleInput } from '../../aocClient.ts';
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(11, 2022);
   doPart1(allInput); // 121450
   doPart2(allInput); // 28244037010
 };

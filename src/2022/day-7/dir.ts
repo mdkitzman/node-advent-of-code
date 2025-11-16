@@ -1,5 +1,5 @@
-import { set } from 'lodash';
-import { sum } from '../../util/arrayUtils';
+import { set } from 'lodash-es';
+import { sum } from '../../util/arrayUtils.ts';
 
 export type Directory = {
   [k: string]: number | Directory;

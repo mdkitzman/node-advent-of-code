@@ -1,6 +1,6 @@
-import { getPuzzleInput } from '../../aocClient';
-import timeFn from '../../util/timeFn';
-import { cloneDeep } from 'lodash';
+import { getPuzzleInput } from '../../aocClient.ts';
+import timeFn from '../../util/timeFn.ts';
+import { cloneDeep } from 'lodash-es';
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
