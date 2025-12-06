@@ -26,10 +26,12 @@
     "@types/node": "22.13.8",
     "chalk": "4.1.2",
     "commander": "9.4.1",
+    "cytoscape": "3.33.1",
     "dotenv": "16.4.5",
     "es-iter": "1.1.2",
     "fast-astar": "1.0.6",
     "figlet": "1.8.0",
+    "graphlib": "2.1.8",
     "graphology": "0.25.4",
     "graphology-shortest-path": "2.1.0",
     "graphology-traversal": "0.3.1",
@@ -43,5 +45,8 @@
     "rpn": "4.0.0",
     "ts-node": "10.9.2",
     "typescript": "5.7.2"
+  },
+  "devDependencies": {
+    "@types/graphlib": "2.1.12"
   }
 }

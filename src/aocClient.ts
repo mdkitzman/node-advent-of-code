@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
-import parse from 'node-html-parser';
+import { parse } from 'node-html-parser';
 import { NodeHtmlMarkdown } from 'node-html-markdown';;
 
 const __filename = fileURLToPath(import.meta.url);
