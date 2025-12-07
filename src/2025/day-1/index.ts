@@ -4,7 +4,7 @@ import { absoluteModulo } from '../../util/numberUtils.ts';
 const main = async () => {
   const allInput = await getPuzzleInput(1, 2025);
   const part1Expected = 1123;
-  const part2Expected = null;
+  const part2Expected = 6695;
 
   const [landedOnZero, passedZeroCount] = solve(allInput);
   
@@ -16,22 +16,34 @@ const main = async () => {
 };
 
 const mapToRotationValue = (line: string): number => {
-  const [,op, val] = line.match(/(R|L)(\d+)/) || [];
-  const value = op === 'R' ? Number(val) : -Number(val);
+  const amount = parseInt(line.slice(1), 10);
+  const direction = line[0];
+  // if it starts with R, it's a positive rotation, otherwise negative
+  const value = direction === 'R' ? Number(amount) : -Number(amount);
   return value;
 }
 
 function solve(input: string) {
   let passedZeroCount = 0;
   let landedOnZero = 0;
+  let currentPosition = 50;
+
   input.split('\n')
     .map(mapToRotationValue)
-    .reduce((acc, curr) => {
-      passedZeroCount += Math.floor((acc + Math.abs(curr)) / 100);
-      const next = absoluteModulo(acc + curr, 100);
-      if (next === 0) landedOnZero++;
-      return next;
-    }, 50);
+    .forEach(rotationAmount => {
+      for (let step = 0; step < Math.abs(rotationAmount); step++) {
+        currentPosition = absoluteModulo(
+          currentPosition + (rotationAmount > 0 ? 1 : -1),
+          100
+        );
+        if (currentPosition === 0) {
+          passedZeroCount += 1;
+        }
+      }
+      if (currentPosition === 0) {
+        landedOnZero += 1;
+      }
+    });
     return [landedOnZero, passedZeroCount ];
 }
 
