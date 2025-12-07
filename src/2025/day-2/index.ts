@@ -36,24 +36,16 @@ function solve(input: string, isInvalidId: (id: string) => boolean) {
     .reduce(sum, 0);
 }
 
+const isARepeatedSequence = (s: string, len: number = s.length / 2) => {
+  const first = s.substring(0, len);
+  return first.repeat(s.length / len) === s;
+}
+
 function doPart1(input: string) {
-  return solve(input, (id) => {
-    if (id.length % 2 !== 0) {
-      return false;
-    }
-    if (id.substring(0, id.length / 2) !== id.substring(id.length / 2)) {
-      return false;
-    }
-    return true;
-  })
+  return solve(input, isARepeatedSequence)
 };
 
 function doPart2(input: string) {
-  const isARepeatedSequence = (s: string, len: number) => {
-    const first = s.substring(0, len);
-    const expected = first.repeat(s.length / len);
-    return expected === s;
-  }
   return solve(input, (id) => {
     for(let seqLen = 1; seqLen <= id.length / 2; seqLen++) {
       if (isARepeatedSequence(id, seqLen)) {
