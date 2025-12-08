@@ -137,3 +137,12 @@ const chooseRecurse = <T>(arr: T[], k: number, prefix:T[] = []):T[][] => {
 export const choose = <T>(arr: T[], k:number): T[][] => chooseRecurse(arr, k);
 // because I always forget that this is called 'choose'
 export const combinations = choose;
+
+/**
+ * Transposes the elements of a 2D array
+ * @param matrix 
+ * @returns 
+ */
+export const transpose = <T>(matrix: T[][]): T[][] => {
+  return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
+}

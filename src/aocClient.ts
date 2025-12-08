@@ -31,7 +31,12 @@ export const getReadme = async (day: number, year: number): Promise<string> => {
 }
 
 export const getPuzzleInput = async (day: number, year: number): Promise<string> => {
+  const data = await getRawPuzzleInput(day, year);
+  return data.trim();
+}
+
+export const getRawPuzzleInput = async (day: number, year: number): Promise<string> => {
   const res = await fetch(`https://adventofcode.com/${year}/day/${day}/input`, { headers });
   const data = await res.text();
-  return data.trim();
+  return data;
 }

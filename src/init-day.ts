@@ -16,12 +16,13 @@ const __dirname = dirname(__filename);
 
 const toNumber = (val: string, prev: number): number => parseInt(val, 10);
 
-const ensureFile = async (filePath: string, fn: ()=>Promise<void>): Promise<void> => {
+const ensureFile = async (filePath: string, fn: ()=>Promise<void>, force = false): Promise<void> => {
   let stats: Stats | null = null;
   try {
     stats = await fs.stat(filePath); 
   } catch (err) {}
-  if (!stats || !stats.isFile()) {
+  const noFileExists = !stats || !stats.isFile();
+  if (noFileExists || force) {
     await fn();
   }
 };
@@ -52,7 +53,7 @@ const run = async ({ day, year}: Options) => {
     ensureFile(readmePath, async () => {
       const mdData = await getReadme(day, year);
       writeFileSync(readmePath, mdData)
-    }),
+    }, true),
   ]);
 }
 
