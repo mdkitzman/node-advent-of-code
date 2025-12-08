@@ -59,8 +59,12 @@ export class Point2D {
     this.y += p.y;
   }
 
-  toAdded(p: Point2D): Point2D {
-    return new Point2D(this.x + p.x, this.y + p.y);
+  toAdded(p: Point2D|[number, number]): Point2D {
+    if (p instanceof Point2D) {
+      return new Point2D(this.x + p.x, this.y + p.y);
+    } else {
+      return new Point2D(this.x + p[0], this.y + p[1]);
+    }
   }
 
   get coordinates() {
