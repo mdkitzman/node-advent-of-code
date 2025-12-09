@@ -1,3 +1,45 @@
+import { sum } from "./arrayUtils.ts";
+
+type Tuple<T, N extends number> = N extends 0 ? never[] : {
+    0: T;
+    length: N;
+} & ReadonlyArray<T>;
+
+export const linearDistance = <N extends number, T extends Tuple<number, N>>(p1: T, p2: T): number => {
+  const squaresSummed = p1
+    .map((val, idx) => Math.pow(val - p2[idx], 2))
+    .reduce(sum, 0);
+  return Math.sqrt(squaresSummed);
+}
+
+export const manhattenDistance = <N extends number, T extends Tuple<number, N>>(p1: T, p2: T): number => {
+  return p1
+    .map((val, idx) => Math.abs(val - p2[idx]))
+    .reduce(sum, 0);
+}
+
+// Clockwise rotation of point `p`, `radians` degrees around point `origin`
+// i.e. rotate((1,1), Math.PI / 2, (3,4)) rotates point (1,1) around (3,4) by pi / 2 radians (90 degrees)
+export const rotate = (p: Point2D, radians: number, origin: Point2D): Point2D => {
+  const sin = Math.sin(radians);
+  const cos = Math.cos(radians);
+  const x = cos * (origin.x - p.x) - sin * (origin.y - p.y) + origin.x;
+  const y = sin * (origin.x - p.x) + cos * (origin.y - p.y) + origin.y;
+  return new Point2D(Math.round(x), Math.round(y));
+}
+
+export const neighborArray: [number, number][] = [
+  [-1, -1], [0, -1], [+1, -1],
+  [-1,  0],          [+1,  0],
+  [-1, +1], [0, +1], [+1, +1],
+];
+
+export const cardinalNeighbors: [number, number][] = [
+            [0, -1],
+  [-1,  0],          [+1,  0],
+            [0, +1]
+];
+
 export class Point2D {
   x: number;
   y: number;
@@ -25,11 +67,11 @@ export class Point2D {
   }
 
   distanceTo(p: Point2D): number {
-    return Math.sqrt(Math.pow(this.x - p.x, 2) + Math.pow(this.y - p.y, 2));
+    return linearDistance(this.coordinates, p.coordinates);
   }
 
   manhattenDistance(p: Point2D): number {
-    return Math.abs(this.x - p.x) + Math.abs(this.y - p.y);
+    return manhattenDistance(this.coordinates, p.coordinates);
   }
 
   slope(p: Point2D): number {
@@ -67,7 +109,7 @@ export class Point2D {
     }
   }
 
-  get coordinates() {
+  get coordinates(): Tuple<number, 2> {
     return [this.x, this.y];
   }
 
@@ -90,26 +132,20 @@ export class Point3D {
   equals(other: Point3D): boolean {
     return this.x === other.x && this.y === other.y && this.z === other.z;
   }
+
+  distanceTo(p: Point3D): number {
+    return linearDistance(this.coordinates, p.coordinates);
+  }
+
+  manhattenDistance(p: Point3D): number {
+    return manhattenDistance(this.coordinates, p.coordinates);
+  }
+
+  toString() {
+    return `${this.x},${this.y},${this.z}`
+  }
+
+  get coordinates(): Tuple<number, 3> {
+    return [this.x, this.y, this.z];
+  }
 }
-
-// Clockwise rotation of point `p`, `radians` degrees around point `origin`
-// i.e. rotate((1,1), Math.PI / 2, (3,4)) rotates point (1,1) around (3,4) by pi / 2 radians (90 degrees)
-export const rotate = (p: Point2D, radians: number, origin: Point2D): Point2D => {
-  const sin = Math.sin(radians);
-  const cos = Math.cos(radians);
-  const x = cos * (origin.x - p.x) - sin * (origin.y - p.y) + origin.x;
-  const y = sin * (origin.x - p.x) + cos * (origin.y - p.y) + origin.y;
-  return new Point2D(Math.round(x), Math.round(y));
-}
-
-export const neighborArray: [number, number][] = [
-  [-1, -1], [0, -1], [+1, -1],
-  [-1,  0],          [+1,  0],
-  [-1, +1], [0, +1], [+1, +1],
-];
-
-export const cardinalNeighbors: [number, number][] = [
-            [0, -1],
-  [-1,  0],          [+1,  0],
-            [0, +1]
-];
