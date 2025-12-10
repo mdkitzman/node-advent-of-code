@@ -39,6 +39,18 @@ export class Grid<T> {
   
   constructor(){}
 
+  static fromInput = <T>(input: string, parseValue: (char: string, pos: Point2D) => T): Grid<T> => {
+    const grid = new Grid<T>();
+    input.split('\n')
+      .forEach((line, y) => {
+        line.split('').forEach((char, x) => {
+          const p = new Point2D(x,y);
+          grid.set(p, parseValue(char, p));
+        });
+      });
+    return grid;
+  }
+
   clone() {
     const aClone = new Grid<T>();
     aClone._data = new Map(this._data);

@@ -19,15 +19,12 @@ const main = async () => {
 };
 
 const getGrid = (input:string) => {
-  const grid = new Grid<string>();
   let start = new Point2D(0,0);
-  input.split('\n')
-    .forEach((line, y) => {
-      line.split('').forEach((char, x) => {
-        if (char === 'S') start = new Point2D(x,y);
-        grid.set(new Point2D(x,y), char);
-      });
-    });
+  const grid = Grid.fromInput(input, (char, p) => {
+    if (char === 'S') start = p;
+    return char
+  });
+  
   return [grid, start] as const;
 }
 
