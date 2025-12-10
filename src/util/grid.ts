@@ -34,8 +34,27 @@ const minMax = (a: number[], acc: number[]): number[] => ([
 
 const toPair = (key: 'x'|'y') => (p: Point2D): number[] => ([p[key], p[key]]);
 
+export const floodFiller = <T>(grid: Grid<T>, fillValue:T)=> {
+  const boundingBox = grid.dimensions;
+  return (start: Point2D) => {
+    const getCandidates = () => {
+      return cardinalNeighbors
+        .map(([x,y]) => candidate.toAdded(new Point2D(x,y)))
+        .filter(p => !grid.get(p) && p.containedIn(boundingBox))
+    }
+    let candidate:Point2D;
+    const candidates: Point2D[] = [start];
+    do {
+      candidate = candidates.pop()!;
+      grid.set(candidate, fillValue);
+      candidates.push(...getCandidates());
+    } while (candidates.length > 0);
+  }
+};
+
+
 export class Grid<T> {
-  public _data = new Map<string, T>();
+  public _data: Record<string, T> = {};
   
   constructor(){}
 
@@ -53,7 +72,7 @@ export class Grid<T> {
 
   clone() {
     const aClone = new Grid<T>();
-    aClone._data = new Map(this._data);
+    aClone._data = { ...this._data };
     return aClone;
   }
 
@@ -67,35 +86,35 @@ export class Grid<T> {
   }
 
   public get(point: Point2D): T | undefined {
-    return this.data.get(point.toString())!;
+    return this.data[point.toString()];
   }
 
   public set(point: Point2D, value: T): void {
-    this.data.set(point.toString(), value);
+    this.data[point.toString()] = value;
   }
 
   public delete(point: Point2D) {
-    this.data.delete(point.toString());
+    delete this.data[point.toString()];
   }
 
   public iterable(): Array<[Point2D, T]> {
-    return Array
-      .from(this.data.entries())
+    return Object.entries(this.data)
       .map(([key, value]) => [Grid.toPoint(key), value as T]);
   }
 
+  public floodFill(start: Point2D, fillValue: T) {
+    floodFiller(this, fillValue)(start);
+  }
+
   public forEach(action:(key: Point2D, value: T)=>void) {
-    Array
-      .from(this.data.entries())
+    Object.entries(this.data)
       .forEach(([key, value]) => 
         action(Grid.toPoint(key), value as T)
       );
   }
 
   public get dimensions() {
-    const points = Array
-    .from(this.data.keys())
-    .map(Grid.toPoint);
+    const points = Object.keys(this.data).map(Grid.toPoint);
     
     const [left, right] = points.map(toPair('x')).reduce(minMax);
     const [top, bottom] = points.map(toPair('y')).reduce(minMax);
@@ -125,7 +144,7 @@ export class Grid<T> {
       .map(y => {
         let row = '';
         for (let x = left; x <= right; x++) {
-          const value:T|undefined = this.data.get(`${x},${y}`);
+          const value:T|undefined = this.data[`${x},${y}`];
           row += printValue(value);
         }
         return row;
@@ -155,10 +174,9 @@ export class InfiniteGrid<T> extends Grid<T> {
   }
 
   public get(point: Point2D): T {
-    const key = point.toString();
-    if (!this.data.has(key)) {
-      this.data.set(key, cloneDeep(this.defaultValue));  
+    if (!super.get(point)) {
+      super.set(point, cloneDeep(this.defaultValue));  
     }
-    return this.data.get(key)!;
+    return super.get(point)!;
   }
 }

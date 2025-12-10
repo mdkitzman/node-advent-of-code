@@ -74,6 +74,10 @@ export class Point2D {
     return manhattenDistance(this.coordinates, p.coordinates);
   }
 
+  containedIn({ top, left, right, bottom }: { top: number; left: number; right: number; bottom: number; }): boolean {
+    return this.x >= left && this.x <= right && this.y >= top && this.y <= bottom;
+  }
+
   slope(p: Point2D): number {
     // This slope is assuming a top-left origin
     const deltaX = p.x - this.x;
