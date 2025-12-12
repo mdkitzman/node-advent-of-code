@@ -1,41 +1,14 @@
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import fs  from 'fs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import timeFn from '../../util/timeFn.ts';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import { zip } from 'lodash-es';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import { generateRange, quadratic } from '../../util/numberUtils.ts';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import { multiply, sum } from '../../util/arrayUtils.ts';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import { parseAllNumbers, parseNumber } from '../../util/stringUtils.ts';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { multiply, zip } from "lodash-es";
+import { getPuzzleInput } from "../../aocClient.ts";
+import { generateRange, quadratic } from "../../util/numberUtils.ts";
+import timeFn from "../../util/timeFn.ts";
+import { parseAllNumbers, parseNumber } from "../../util/stringUtils.ts";
 
 const timedPart1 = timeFn(doPart1)
 const timedPart2 = timeFn(doPart2);
 
 const main = async () => {
-  const allInput = await fs.promises.readFile(`${__dirname}/input`, { encoding: 'utf-8'});
+  const allInput = await getPuzzleInput(6, 2023);
   
   timedPart1(allInput);
   timedPart2(allInput);
